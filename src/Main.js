@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import TeamDropdown from './TeamDropdown.js'
 
-//const teamDataURL = '//tuc-tpl.herokuapp.com/teams';
+const teamDataURL = '//tuc-tpl.herokuapp.com/teams';
 
 class Main extends Component {
 
@@ -16,13 +16,20 @@ class Main extends Component {
 		// this is where we make the .getJSON call to get the teams from the URL
 		console.log("this is where we make the .getJSON call to get the teams from the URL");
 
-		
-		this.setState({
-			teams: [
-				{ value: '123', label: 'TEAM 123'},
-				{ value: '456', label: 'TEAM 456'}
-			]
-		});
+		fetch(teamDataURL, { method: 'get' })
+			.then(response => response.json())
+			.then(responseJson => {
+				const dropdownArray = responseJson.map(val => ({
+					value: val.id,
+					label: val.teamName
+				}));
+				this.setState({
+					teams: dropdownArray
+				});
+			})
+			.catch(err => {
+				console.log(err);
+			});
 	}
 
 	teamChanged(teamObject) {
