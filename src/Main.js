@@ -13,9 +13,6 @@ class Main extends Component {
 	}
 
 	componentDidMount() {
-		// this is where we make the .getJSON call to get the teams from the URL
-		console.log("this is where we make the .getJSON call to get the teams from the URL");
-
 		fetch(teamDataURL, { method: 'get' })
 			.then(response => response.json())
 			.then(responseJson => {
