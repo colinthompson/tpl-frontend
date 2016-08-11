@@ -14,6 +14,7 @@ class Main extends Component {
 			selectedTeam: ''
 		}
 		this.teamChanged = this.teamChanged.bind(this);
+		this.clearSelectedTeam = this.clearSelectedTeam.bind(this);
 	}
 
 	componentDidMount() {
@@ -57,21 +58,32 @@ class Main extends Component {
 	}
 
 	teamChanged(teamObject) {
-		console.log(teamObject);
 		this.setState({ selectedTeam: teamObject.value })
+	}
+
+	clearSelectedTeam() {
+		this.setState({ selectedTeam: ''})
 	}
 
 	render() {
 		const filteredPlayers = this.state.players.filter(player => (player.teamId === this.state.selectedTeam));
 		return (
 			<div>
-				<TeamDropdown teamChanged={this.teamChanged} teams={this.state.teams} />
-				<PlayersList players={ filteredPlayers } />
+				{ this.state.selectedTeam === '' ?
+					<SelectTeam teamChanged={this.teamChanged} teams={this.state.teams} />  :
+					<ShowTeam clearTeam={this.clearSelectedTeam} players={filteredPlayers} />
+				}
 			</div>
 		)
 	}
 
-
 }
+
+const SelectTeam = (props) => <TeamDropdown teamChanged={props.teamChanged} teams={props.teams} />;
+const ShowTeam = (props) => (<div>
+															<div onClick={props.clearTeam}>Select New Team</div>
+															<PlayersList players={ props.players } />
+														</div>);
+
 
 export default Main;

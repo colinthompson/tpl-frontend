@@ -7,7 +7,6 @@ class TeamDropdown extends Component {
 		const { teams, teamChanged } = this.props;	  	
     	return (
     		<div>
-    			<h3>Teams</h3>
     			<Dropdown options={teams} onChange={teamChanged} placeholder="Select a team" />
     		</div>
     	)
