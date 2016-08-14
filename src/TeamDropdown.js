@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import Dropdown from 'react-dropdown'
+import { observer } from 'mobx-react';
 
+@observer
 class TeamDropdown extends Component {
 
 	render() {

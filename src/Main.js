@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import TeamDropdown from './TeamDropdown.js';
 import PlayersList from './PlayersList.js';
+import { observer } from 'mobx-react';
 
 const teamDataURL = '//tuc-tpl.herokuapp.com/teams';
 
+@observer
 class Main extends Component {
 
 	constructor(props) {
