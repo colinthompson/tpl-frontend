@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 
-
 @observer
 class PlayersList extends Component {
   
@@ -11,7 +10,7 @@ class PlayersList extends Component {
       return (
         <ul>
           { players.map(playerValue => 
-              <li key={playerValue.id}>
+              <li key={playerValue.playerId}>
                 {`${playerValue.playerName} (${playerValue.gender})`}
               </li> 
           )}

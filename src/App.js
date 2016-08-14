@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
+import Main from './components/Main.js'
+import { TeamStore } from './stores/team-store';
 import './www/style/App.css';
-import { observer } from 'mobx-react';
-import Main from './Main.js'
 
-@observer
+const teamStore = new TeamStore();
+
 class App extends Component {
   render() {
-    return <Main />;
+    return <Main teamStore={teamStore} />;
   }
 }
 
