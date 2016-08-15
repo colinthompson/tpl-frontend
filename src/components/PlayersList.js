@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { observer } from 'mobx-react';
 import RaisedButton from 'material-ui/RaisedButton';
 
 const style = {
@@ -7,7 +6,6 @@ const style = {
   width: '40%'
 };
 
-@observer
 class PlayersList extends Component {
   
   render() {
@@ -16,9 +14,8 @@ class PlayersList extends Component {
       return (
         <div>
           { players.map(playerValue => 
-              <div>
+              <div key={playerValue.playerId}>
               <RaisedButton 
-                key={playerValue.playerId} 
                 label={playerValue.nickname} 
                 primary={playerValue.gender === 'Male'}
                 secondary={playerValue.gender === 'Female'}
