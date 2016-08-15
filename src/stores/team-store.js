@@ -1,5 +1,7 @@
+import React from 'react';
 import * as superagent from 'superagent';
 import { observable, computed, action } from 'mobx';
+import { MenuItem } from 'material-ui';
 
 //const STORAGE_PREFIX = 'tuc-tpl.';
 
@@ -66,6 +68,16 @@ export class TeamStore {
 		const teamsArray = this.getTeams().map(val => {
 			return {	value: val.teamId,	label: val.teamName	}
 		});
+		return teamsArray;
+	}
+
+	@computed get teamsMenuItems() {
+		const teamsArray = this.getTeams().map(val =>  
+			<MenuItem
+				value={val.teamId}
+				key={`key-${val.teamId}`}
+				primaryText={val.teamName} />
+		);
 		return teamsArray;
 	}
 
