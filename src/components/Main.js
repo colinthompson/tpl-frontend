@@ -48,7 +48,7 @@ class Main extends Component {
 
 const SelectTeam = (props) =>	(<DropDownMenu
   										value=''
-  										style={{width: "40%"}}
+  										style={{width: "100%"}}
   										onChange={props.onTeamChange} >
   											<MenuItem
   												value=''
