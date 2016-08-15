@@ -59,6 +59,7 @@ export class TeamStore {
 	@observable selectedTeam = '';
 	@observable pendingRequestCount = 0;
 	@observable hasLoadedInitialData = false;
+	@observable eventLog = [];
 
 	@computed get isLoading() {
 		return this.pendingRequestCount > 0;
@@ -90,6 +91,10 @@ export class TeamStore {
 		}
 	}
 
+	@computed get eventLogList() {
+		return this.eventLog.slice(-5);
+	}
+
 	@action loadTeams() {
 		superagent
 			.get('//tuc-tpl.herokuapp.com/teams')
@@ -110,6 +115,10 @@ export class TeamStore {
 				}
 				this.hasLoadedInitialData = true;
 			}))
+	}
+
+	@action addEvent(nextEvent) {
+		this.eventLog = this.eventLog.concat(nextEvent);
 	}
 
 	getTeams() {

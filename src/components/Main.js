@@ -7,6 +7,7 @@ import { DropDownMenu, MenuItem } from "material-ui";
 import { observer } from 'mobx-react';
 import { action } from 'mobx';
 import PlayersList from './PlayersList.js';
+import Scoreboard from './Scoreboard.js';
 
 const muiTheme = getMuiTheme({
 	palette: {
@@ -29,7 +30,7 @@ class Main extends Component {
 				<div>
 					{ teamStore.selectedTeam === '' ?
 						<SelectTeam onTeamChange={this.onTeamChange} teamsMenuItems={teamStore.teamsMenuItems} />  :
-						<ShowTeam clearSelectedTeam={this.clearSelectedTeam} playersList={teamStore.playersList} />
+						<ShowTeam teamStore={teamStore} clearSelectedTeam={this.clearSelectedTeam} playersList={teamStore.playersList} eventLog={teamStore.eventLogList} />
 					}	
 				</div>
 			</MuiThemeProvider>
@@ -37,12 +38,12 @@ class Main extends Component {
 	}
 
 	@action clearSelectedTeam = () => {
-  		this.props.teamStore.selectedTeam = '';
-  	}
+  	this.props.teamStore.selectedTeam = '';
+  }
 
-  	@action onTeamChange = (event, index, value) => {
-  		this.props.teamStore.selectedTeam = value;
-  	}
+  @action onTeamChange = (event, index, value) => {
+  	this.props.teamStore.selectedTeam = value;
+  }
 
 }
 
@@ -58,7 +59,8 @@ const SelectTeam = (props) =>	(<DropDownMenu
   									</DropDownMenu>);
 const ShowTeam = (props) =>		(<div>
 									<RaisedButton onTouchTap={props.clearSelectedTeam} label="Reset" fullWidth={true} />
-									<PlayersList players={ props.playersList } />
+                  <Scoreboard eventLog={props.eventLog} />
+									<PlayersList teamStore={ props.teamStore } players={ props.playersList } />
 								</div>);
 
 export default Main;

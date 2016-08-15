@@ -10,22 +10,46 @@ class PlayersList extends Component {
   
   render() {
     const { players } = this.props;
-      
-      return (
+ 
+    const malePlayers = players.filter(player => player.gender === 'Male');
+    const femalePlayers = players.filter(player => player.gender === 'Female')
+
+    return (
+      <div>
         <div>
-          { players.map(playerValue => 
-              <div key={playerValue.playerId}>
-              <RaisedButton 
-                label={playerValue.nickname} 
-                primary={playerValue.gender === 'Male'}
-                secondary={playerValue.gender === 'Female'}
-                style={style}
-                />
-              </div>
-          )}
+        { malePlayers.map(playerValue => 
+            <div key={playerValue.playerId} >
+            <RaisedButton 
+              label={playerValue.nickname} 
+              primary={playerValue.gender === 'Male'}
+              secondary={playerValue.gender === 'Female'}
+              style={style}
+              onTouchTap={this.handleOnTouchTap.bind(this, playerValue)}
+              />
+            </div>
+        )}
         </div>
-      )
-    }
+        <div>
+        { femalePlayers.map(playerValue => 
+            <div key={playerValue.playerId}>
+            <RaisedButton 
+              label={playerValue.nickname} 
+              primary={playerValue.gender === 'Male'}
+              secondary={playerValue.gender === 'Female'}
+              style={style}
+              onTouchTap={this.handleOnTouchTap.bind(this, playerValue)}
+              />
+            </div>
+        )}
+        </div>
+      </div>
+    )
+  }
+
+  handleOnTouchTap(playerValue){
+    this.props.teamStore.addEvent(playerValue.nickname);
+  }
+
 }
 
 PlayersList.propTypes = {
