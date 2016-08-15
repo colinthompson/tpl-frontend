@@ -1,5 +1,11 @@
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
+import RaisedButton from 'material-ui/RaisedButton';
+
+const style = {
+  margin: 5,
+  width: '40%'
+};
 
 @observer
 class PlayersList extends Component {
@@ -8,13 +14,19 @@ class PlayersList extends Component {
     const { players } = this.props;
       
       return (
-        <ul>
+        <div>
           { players.map(playerValue => 
-              <li key={playerValue.playerId}>
-                {`${playerValue.playerName} (${playerValue.gender})`}
-              </li> 
+              <div>
+              <RaisedButton 
+                key={playerValue.playerId} 
+                label={playerValue.nickname} 
+                primary={playerValue.gender === 'Male'}
+                secondary={playerValue.gender === 'Female'}
+                style={style}
+                />
+              </div>
           )}
-        </ul>
+        </div>
       )
     }
 }
