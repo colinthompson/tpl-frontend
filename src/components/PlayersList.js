@@ -17,6 +17,29 @@ class PlayersList extends Component {
     return (
       <div>
         <div>
+          <RaisedButton
+            label="Goal"
+            onTouchTap={this.handleGameEventTap.bind(this, "Goal")}
+            />
+          <RaisedButton
+            label="TA"
+            onTouchTap={this.handleGameEventTap.bind(this, "TA")}
+            />
+          <RaisedButton
+            label="Drop"
+            onTouchTap={this.handleGameEventTap.bind(this, "Drop")}
+            />
+          <RaisedButton
+            label="D"
+            onTouchTap={this.handleGameEventTap.bind(this, "D")}
+            />
+          <RaisedButton
+            label="Undo"
+            onTouchTap={this.handleGameEventTap.bind(this, "Undo")}
+            />
+        </div>
+
+
         { malePlayers.map(playerValue => 
             <div key={playerValue.playerId} >
             <RaisedButton 
@@ -28,8 +51,6 @@ class PlayersList extends Component {
               />
             </div>
         )}
-        </div>
-        <div>
         { femalePlayers.map(playerValue => 
             <div key={playerValue.playerId}>
             <RaisedButton 
@@ -41,13 +62,21 @@ class PlayersList extends Component {
               />
             </div>
         )}
-        </div>
       </div>
     )
   }
-
+  
+  handleGameEventTap(eventType){
+    if (eventType === 'Undo') {
+      this.props.teamStore.undoGameEvent();
+    } else {
+      this.props.teamStore.updateGameEventType(eventType);
+    }
+  }
+  
   handleOnTouchTap(playerValue){
-    this.props.teamStore.addEvent(playerValue.nickname);
+    const gameEvent = this.props.teamStore.createNewGameEvent(this.props.teamStore, playerValue, "");
+    this.props.teamStore.addGameEvent(gameEvent);
   }
 
 }

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { observer } from 'mobx-react';
 
 const style = {
   margin: 5,
@@ -6,22 +7,26 @@ const style = {
   'backgroundColor': '#FF9800'
 };
 
+
+@observer
 class Scoreboard extends Component {
   
   render() {
 
-    const { eventLog } = this.props;
+    const { gameLog } = this.props;
+
+    const gameEventArray = gameLog.map((val, idx) => 
+      <span key={idx}>
+        {val.player.nickname}/{val.eventType}
+      </span>
+    );
 
     return (
       <div style={style}>
-        {
-          eventLog.join(' ')
-
-        }
+          {gameEventArray}
       </div>
     )
   }
 }
-
 
 export default Scoreboard;

@@ -30,7 +30,7 @@ class Main extends Component {
 				<div>
 					{ teamStore.selectedTeam === '' ?
 						<SelectTeam onTeamChange={this.onTeamChange} teamsMenuItems={teamStore.teamsMenuItems} />  :
-						<ShowTeam teamStore={teamStore} clearSelectedTeam={this.clearSelectedTeam} playersList={teamStore.playersList} eventLog={teamStore.eventLogList} />
+						<ShowTeam teamStore={teamStore} clearSelectedTeam={this.clearSelectedTeam} playersList={teamStore.playersList} gameLog={teamStore.gameLogList} />
 					}	
 				</div>
 			</MuiThemeProvider>
@@ -38,12 +38,12 @@ class Main extends Component {
 	}
 
 	@action clearSelectedTeam = () => {
-  	this.props.teamStore.selectedTeam = '';
-  }
+  		this.props.teamStore.selectedTeam = '';
+  	}
 
-  @action onTeamChange = (event, index, value) => {
-  	this.props.teamStore.selectedTeam = value;
-  }
+	@action onTeamChange = (event, index, value) => {
+  		this.props.teamStore.selectedTeam = value;
+	}
 
 }
 
@@ -59,7 +59,7 @@ const SelectTeam = (props) =>	(<DropDownMenu
   									</DropDownMenu>);
 const ShowTeam = (props) =>		(<div>
 									<RaisedButton onTouchTap={props.clearSelectedTeam} label="Reset" fullWidth={true} />
-                  <Scoreboard eventLog={props.eventLog} />
+                  					<Scoreboard gameLog={props.gameLog} />
 									<PlayersList teamStore={ props.teamStore } players={ props.playersList } />
 								</div>);
 

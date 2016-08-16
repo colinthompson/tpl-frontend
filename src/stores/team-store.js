@@ -51,6 +51,16 @@ class Player {
 		this.gender = gender;
 		this.nickname = nickname;
 	}
+}
+
+class GameEvent {
+	@observable player;
+	@observable eventType;
+
+	constructor(store, player, eventType) {
+		this.player = player;
+		this.eventType = eventType;
+	}
 
 }
 
@@ -59,7 +69,7 @@ export class TeamStore {
 	@observable selectedTeam = '';
 	@observable pendingRequestCount = 0;
 	@observable hasLoadedInitialData = false;
-	@observable eventLog = [];
+	@observable gameLog = [];
 
 	@computed get isLoading() {
 		return this.pendingRequestCount > 0;
@@ -91,8 +101,8 @@ export class TeamStore {
 		}
 	}
 
-	@computed get eventLogList() {
-		return this.eventLog.slice(-5);
+	@computed get gameLogList() {
+		return this.gameLog.slice(-5);
 	}
 
 	@action loadTeams() {
@@ -117,8 +127,22 @@ export class TeamStore {
 			}))
 	}
 
-	@action addEvent(nextEvent) {
-		this.eventLog = this.eventLog.concat(nextEvent);
+	@action addGameEvent(nextEvent) {
+		this.gameLog = this.gameLog.concat(nextEvent);
+	}
+
+	@action createNewGameEvent(store, player, eventType){
+		return new GameEvent(store, player, eventType);
+	}
+
+	@action updateGameEventType(eventType) {
+		if (this.gameLog.length > 0){
+			this.gameLog[this.gameLog.length - 1].eventType = eventType;
+		}
+	}
+
+	@action undoGameEvent() {
+		this.gameLog.pop();
 	}
 
 	getTeams() {
@@ -130,3 +154,7 @@ export class TeamStore {
 	}
 
 }
+
+
+
+ 
