@@ -138,11 +138,65 @@ export class TeamStore {
 	@action updateGameEventType(eventType) {
 		if (this.gameLog.length > 0){
 			this.gameLog[this.gameLog.length - 1].eventType = eventType;
+
+			// if the event is a "Goal", then set the assister and 2nd assister
+			if (eventType === 'Goal') {
+				const goalEvent = this.gameLog[this.gameLog.length - 1];
+				if (this.gameLog.length > 1) {
+					const previousEvent = this.gameLog[this.gameLog.length - 2];
+					if (previousEvent.eventType === '' && previousEvent.player !== goalEvent.player){
+						previousEvent.eventType = 'Assist';
+						if (this.gameLog.length > 2) {
+							const previous2Event = this.gameLog[this.gameLog.length - 3];
+							if (previous2Event.eventType === '' && previous2Event.player !== goalEvent.player) {
+								previous2Event.eventType = '2nd Assist';
+							}
+						}
+					}
+				}
+			} else {
+				// recorded a non goal.  So if previous are assist and 2nd assists, wipe them out
+				if (this.gameLog.length > 1) {
+					const previousGameEvent = this.gameLog[this.gameLog.length - 2];
+					if (previousGameEvent.eventType === 'Assist') {
+						previousGameEvent.eventType = '';
+						if (this.gameLog.length > 2) {
+							const previous2GameEvent = this.gameLog[this.gameLog.length - 3];
+							if (previous2GameEvent.eventType === '2nd Assist') {
+								previous2GameEvent.eventType = '';
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 
 	@action undoGameEvent() {
-		this.gameLog.pop();
+		// if the one that is being popped is a "Goal" event, then check the previous two events.
+		// If the previous one is an assist, clear it
+		// If the 2nd previous one is a 2nd assist, clear it
+		if (this.gameLog.length === 0) return;
+		const poppedGameEvent = this.gameLog.pop();
+		if (poppedGameEvent.eventType === 'Goal') {
+			if (this.gameLog.length > 0) {
+				const previousGameEvent = this.gameLog[this.gameLog.length - 1];
+				if (previousGameEvent.eventType === 'Assist') {
+					previousGameEvent.eventType = '';
+					if (this.gameLog.length > 1) {
+						const previous2GameEvent = this.gameLog[this.gameLog.length - 2];
+						if (previous2GameEvent.eventType === '2nd Assist') {
+							previous2GameEvent.eventType = '';
+						}
+					}
+				}
+			}	
+		} 
+	}
+
+	@action resetToMain() {
+		this.selectedTeam = '';
+		this.gameLog = [];
 	}
 
 	getTeams() {

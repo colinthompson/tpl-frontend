@@ -38,7 +38,7 @@ class Main extends Component {
 	}
 
 	@action clearSelectedTeam = () => {
-  		this.props.teamStore.selectedTeam = '';
+  		this.props.teamStore.resetToMain();
   	}
 
 	@action onTeamChange = (event, index, value) => {
