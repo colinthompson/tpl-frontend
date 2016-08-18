@@ -70,6 +70,8 @@ export class TeamStore {
 	@observable pendingRequestCount = 0;
 	@observable hasLoadedInitialData = false;
 	@observable gameLog = [];
+	@observable trackingPlayersList = [];
+	@observable subPlayersList = [];
 
 	@computed get isLoading() {
 		return this.pendingRequestCount > 0;
@@ -103,6 +105,14 @@ export class TeamStore {
 
 	@computed get gameLogList() {
 		return this.gameLog.slice(-5);
+	}
+
+	@computed get trackingPlayersArray() {
+		return this.trackingPlayersList.slice();
+	}
+
+	@computed get subPlayersArray() {
+		return this.subPlayersList.slice();
 	}
 
 	@action loadTeams() {
@@ -194,9 +204,17 @@ export class TeamStore {
 		} 
 	}
 
+	@action selectTeam(teamId) {
+		this.subPlayersList = this.findTeamById(teamId).getPlayers().slice();
+		this.trackingPlayersList = this.findTeamById(teamId).getPlayers().slice();
+		this.selectedTeam = teamId;
+	}
+
 	@action resetToMain() {
 		this.selectedTeam = '';
 		this.gameLog = [];
+		this.trackingPlayersList = [];
+		this.subPlayersList = [];
 	}
 
 	getTeams() {

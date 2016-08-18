@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
+import { DropDownMenu, MenuItem } from "material-ui";
 
 const style = {
   margin: 5,
@@ -9,7 +10,15 @@ const style = {
 class PlayersList extends Component {
   
   render() {
-    const { players } = this.props;
+    const { players, subs } = this.props;
+
+console.log("-----" + subs); 
+    const subsMenuItems = subs.map(val =>  
+      <MenuItem
+        value={val.playerId}
+        key={`key-${val.playerId}`}
+        primaryText={val.nickname} />
+    );
  
     const malePlayers = players.filter(player => player.gender === 'Male');
     const femalePlayers = players.filter(player => player.gender === 'Female')
@@ -37,6 +46,16 @@ class PlayersList extends Component {
             label="Undo"
             onTouchTap={this.handleGameEventTap.bind(this, "Undo")}
             />
+          <DropDownMenu
+            value=''
+            style={{width: "30%"}}
+            >
+              <MenuItem
+                value=''
+                key='key-0'
+                primaryText='Select Sub' />
+              {subsMenuItems}
+          </DropDownMenu>
         </div>
 
 
