@@ -222,7 +222,6 @@ export class TeamStore {
 	@action resetToMain() {
 		this.selectedTeam = '';
 		this.gameLog = [];
-		this.allPlayersList = [];
 		this.trackingPlayersList = [];
 		this.subPlayersList = [];
 	}
