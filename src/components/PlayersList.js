@@ -11,8 +11,7 @@ class PlayersList extends Component {
   
   render() {
     const { players, subs } = this.props;
-
-console.log("-----" + subs); 
+    
     const subsMenuItems = subs.map(val =>  
       <MenuItem
         value={val.playerId}

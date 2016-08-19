@@ -44,12 +44,14 @@ class Player {
 	@observable playerName;
 	@observable gender;
 	@observable nickname;
+	@observable teamId;
 
-	constructor(store, playerId, playerName, gender, nickname) {
+	constructor(store, playerId, playerName, gender, nickname, teamId) {
 		this.playerId = playerId;
 		this.playerName = playerName;
 		this.gender = gender;
 		this.nickname = nickname;
+		this.teamId = teamId;
 	}
 }
 
@@ -72,6 +74,7 @@ export class TeamStore {
 	@observable gameLog = [];
 	@observable trackingPlayersList = [];
 	@observable subPlayersList = [];
+	allPlayersList = [];
 
 	@computed get isLoading() {
 		return this.pendingRequestCount > 0;
@@ -127,8 +130,9 @@ export class TeamStore {
 					for (const teamData of data) {
 						const team = new Team(this, teamData.id, teamData.teamName);
 						for (const playerData of teamData.players) {
-							const player = new Player(this, playerData.id, playerData.playerName, playerData.gender, playerData.nickname);
+							const player = new Player(this, playerData.id, playerData.playerName, playerData.gender, playerData.nickname, teamData.id);
 							team.addPlayer(player);
+							this.allPlayersList = this.allPlayersList.concat(player);
 						}
 						this.teams = this.teams.concat(team);
 					}
@@ -205,14 +209,20 @@ export class TeamStore {
 	}
 
 	@action selectTeam(teamId) {
-		this.subPlayersList = this.findTeamById(teamId).getPlayers().slice();
-		this.trackingPlayersList = this.findTeamById(teamId).getPlayers().slice();
+		//this.subPlayersList = this.findTeamById(teamId).getPlayers().slice();
+		//this.trackingPlayersList = this.findTeamById(teamId).getPlayers().slice();
+
+		this.trackingPlayersList = this.allPlayersList.filter(player => player.teamId === teamId);
+		this.subPlayersList = this.allPlayersList.filter(player => player.teamId !== teamId);
+
 		this.selectedTeam = teamId;
+
 	}
 
 	@action resetToMain() {
 		this.selectedTeam = '';
 		this.gameLog = [];
+		this.allPlayersList = [];
 		this.trackingPlayersList = [];
 		this.subPlayersList = [];
 	}
