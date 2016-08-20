@@ -11,7 +11,7 @@ class PlayersList extends Component {
   
   render() {
     const { players, subs } = this.props;
-    
+
     const subsMenuItems = subs.map(val =>  
       <MenuItem
         value={val.playerId}
@@ -48,6 +48,7 @@ class PlayersList extends Component {
           <DropDownMenu
             value=''
             style={{width: "30%"}}
+            onChange={this.handleSubListChanged.bind(this)}
             >
               <MenuItem
                 value=''
@@ -82,6 +83,10 @@ class PlayersList extends Component {
         )}
       </div>
     )
+  }
+
+  handleSubListChanged(event, index, value) {
+    this.props.teamStore.moveSubPlayerToTrackPlayer(value);
   }
   
   handleGameEventTap(eventType){

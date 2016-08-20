@@ -209,14 +209,23 @@ export class TeamStore {
 	}
 
 	@action selectTeam(teamId) {
-		//this.subPlayersList = this.findTeamById(teamId).getPlayers().slice();
-		//this.trackingPlayersList = this.findTeamById(teamId).getPlayers().slice();
-
 		this.trackingPlayersList = this.allPlayersList.filter(player => player.teamId === teamId);
 		this.subPlayersList = this.allPlayersList.filter(player => player.teamId !== teamId);
-
 		this.selectedTeam = teamId;
+	}
 
+	@action moveSubPlayerToTrackPlayer(playerId) {
+		const playerIndex = this.subPlayersList.findIndex(player => player.playerId === playerId);
+		if (playerIndex === -1) return;
+		const movePlayer = this.subPlayersList.splice(playerIndex, 1);
+		this.trackingPlayersList = this.trackingPlayersList.concat(movePlayer);
+	}
+
+	@action moveTrackPlayerToSubPlayer(playerId) {
+		const playerIndex = this.trackingPlayersList.findIndex(player => player.playerId === playerId);
+		if (playerIndex === -1) return;
+		const movePlayer = this.trackingPlayersList.splice(playerIndex, 1);
+		this.subPlayersList = this.subPlayersList.concat(movePlayer);
 	}
 
 	@action resetToMain() {
