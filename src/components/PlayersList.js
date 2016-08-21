@@ -2,11 +2,6 @@ import React, { Component } from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import { DropDownMenu, MenuItem } from "material-ui";
 
-const style = {
-  margin: 5,
-  width: '40%'
-};
-
 class PlayersList extends Component {
   
   render() {
@@ -23,64 +18,81 @@ class PlayersList extends Component {
     const femalePlayers = players.filter(player => player.gender === 'Female')
 
     return (
-      <div>
-        <div>
-          <RaisedButton
-            label="Goal"
-            onTouchTap={this.handleGameEventTap.bind(this, "Goal")}
-            />
-          <RaisedButton
-            label="TA"
-            onTouchTap={this.handleGameEventTap.bind(this, "TA")}
-            />
-          <RaisedButton
-            label="Drop"
-            onTouchTap={this.handleGameEventTap.bind(this, "Drop")}
-            />
-          <RaisedButton
-            label="D"
-            onTouchTap={this.handleGameEventTap.bind(this, "D")}
-            />
-          <RaisedButton
-            label="Undo"
-            onTouchTap={this.handleGameEventTap.bind(this, "Undo")}
-            />
-          <DropDownMenu
-            value=''
-            style={{width: "30%"}}
-            onChange={this.handleSubListChanged.bind(this)}
-            >
-              <MenuItem
-                value=''
-                key='key-0'
-                primaryText='Select Sub' />
-              {subsMenuItems}
-          </DropDownMenu>
+      <div className="ui grid container">
+
+        <div className="row">
+          <div className="four wide column">
+            <RaisedButton label="Goal" onTouchTap={this.handleGameEventTap.bind(this, "Goal")} />
+          </div>
+          <div className="four wide column">
+            <RaisedButton label="TA" onTouchTap={this.handleGameEventTap.bind(this, "TA")} />
+          </div>
+          <div className="four wide column">
+            <RaisedButton label="Drop" onTouchTap={this.handleGameEventTap.bind(this, "Drop")} />
+          </div>
+          <div className="four wide column">
+            <RaisedButton label="D" onTouchTap={this.handleGameEventTap.bind(this, "D")} />
+          </div>
+        </div>
+
+        <div className="row">
+          <div className="eight wide column">
+            <DropDownMenu className="dropdown"
+              value=''
+              onChange={this.handleSubListChanged.bind(this)}>
+                <MenuItem value='' key='key-0' primaryText='Add Sub' />
+                {subsMenuItems}
+            </DropDownMenu>
+          </div>
+          <div className="four wide column">
+            <RaisedButton label="Undo" onTouchTap={this.handleGameEventTap.bind(this, "Undo")} />
+          </div>
+          <div className="four wide column">
+            <RaisedButton label="Reset" onTouchTap={this.handleGameEventTap.bind(this, "Reset")} />
+          </div>
         </div>
 
 
-        { malePlayers.map(playerValue => 
-            <div key={playerValue.playerId} >
-            <RaisedButton 
-              label={playerValue.nickname} 
-              primary={playerValue.gender === 'Male'}
-              secondary={playerValue.gender === 'Female'}
-              style={style}
-              onTouchTap={this.handleOnTouchTap.bind(this, playerValue)}
-              />
+        <div className="row">
+          <div className="six wide column">
+            { malePlayers.map(playerValue => 
+                <div key={playerValue.playerId} >
+                <RaisedButton 
+                  label={playerValue.nickname} 
+                  primary={playerValue.gender === 'Male'}
+                  secondary={playerValue.gender === 'Female'}
+                  className="button"
+                  onTouchTap={this.handleOnTouchTap.bind(this, playerValue)}
+                  />
+                </div>
+            )}
+          </div>
+          <div className="six wide column">
+            { femalePlayers.map(playerValue => 
+                <div key={playerValue.playerId}>
+                <RaisedButton 
+                  label={playerValue.nickname} 
+                  primary={playerValue.gender === 'Male'}
+                  secondary={playerValue.gender === 'Female'}
+                  className="button" 
+                  onTouchTap={this.handleOnTouchTap.bind(this, playerValue)}
+                  />
+                </div>
+            )}
+          </div>
+          <div className="four wide column">
+            <div>
+              <RaisedButton className="button" label="Opp Score +" />  
             </div>
-        )}
-        { femalePlayers.map(playerValue => 
-            <div key={playerValue.playerId}>
-            <RaisedButton 
-              label={playerValue.nickname} 
-              primary={playerValue.gender === 'Male'}
-              secondary={playerValue.gender === 'Female'}
-              style={style}
-              onTouchTap={this.handleOnTouchTap.bind(this, playerValue)}
-              />
+            <div>          
+              <RaisedButton className="button" label="Opp Score -" />
             </div>
-        )}
+          </div>
+
+        </div>
+
+        
+        
       </div>
     )
   }
@@ -90,6 +102,10 @@ class PlayersList extends Component {
   }
   
   handleGameEventTap(eventType){
+    if (eventType === "Reset") {
+      this.props.teamStore.resetToMain();
+    }
+
     if (eventType === 'Undo') {
       this.props.teamStore.undoGameEvent();
     } else {

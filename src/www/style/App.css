@@ -22,3 +22,20 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+/*
+.column {
+  background-color: rgba(86, 61, 124, .1)
+}
+*/
+
+.button {
+  margin: 3px;
+  width: 95%;
+}
+
+.dropdown {
+  margin: 0px;
+  padding: 0px;
+  height: 200px;
+}
