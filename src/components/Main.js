@@ -56,7 +56,7 @@ const SelectTeam = (props) =>	(<DropDownMenu
   												primaryText='Select Team' />
   											{props.teamsMenuItems}
   									</DropDownMenu>);
-const ShowTeam = (props) =>		(<div>
+const ShowTeam = (props) =>		(<div className="ui grid container">
 									<Scoreboard gameLog={props.gameLog} />
 									<PlayersList teamStore={ props.teamStore } players={ props.playersList } subs={props.subsList} />
 								</div>);

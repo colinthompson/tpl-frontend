@@ -1,13 +1,6 @@
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 
-const style = {
-  margin: 5,
-  width: '100%',
-  'backgroundColor': '#FF9800'
-};
-
-
 @observer
 class Scoreboard extends Component {
   
@@ -22,8 +15,11 @@ class Scoreboard extends Component {
     );
 
     return (
-      <div style={style}>
-          {gameEventArray}
+      <div className="sixteen wide column scoreboardDiv">
+        { gameEventArray.length === 0 ?
+          "Ready..."  :
+          gameEventArray
+        }
       </div>
     )
   }

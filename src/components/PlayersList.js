@@ -20,6 +20,108 @@ class PlayersList extends Component {
     return (
       <div className="ui grid container">
 
+        <div className="four wide column">
+          <div className="actionButton" onTouchTap={this.handleGameEventTap.bind(this, "Goal")}>Goal
+          </div>
+        </div>
+        <div className="four wide column">
+          <div className="actionButton" onTouchTap={this.handleGameEventTap.bind(this, "TA")}>TA
+          </div>
+        </div>
+        <div className="four wide column">
+          <div className="actionButton" onTouchTap={this.handleGameEventTap.bind(this, "Drop")}>Drop
+          </div>
+        </div>
+        <div className="four wide column">
+          <div className="actionButton" onTouchTap={this.handleGameEventTap.bind(this, "D")}>D
+          </div>
+        </div>
+
+        <div className="eight wide column">
+          <div className="actionButton">Add Sub
+          </div>
+        </div>
+        <div className="four wide column">
+          <div className="actionButton" onTouchTap={this.handleGameEventTap.bind(this, "Undo")}>Undo
+          </div>
+        </div>
+        <div className="four wide column">
+          <div className="actionButton" onTouchTap={this.handleGameEventTap.bind(this, "Reset")}>Reset
+          </div>
+        </div>
+
+        <div className="six wide column">
+          { malePlayers.map(playerValue => 
+              <div 
+                key={playerValue.playerId} 
+                className="actionButton maleButton" 
+                onTouchTap={this.handleOnTouchTap.bind(this, playerValue)}>
+                {playerValue.nickname}
+              </div>
+          )}
+        </div>
+        <div className="six wide column">
+          { femalePlayers.map(playerValue => 
+              <div
+                key={playerValue.playerId}
+                className="actionButton femaleButton"
+                onTouchTap={this.handleOnTouchTap.bind(this, playerValue)}>
+                {playerValue.nickname}
+              </div>
+          )}
+        </div>
+        <div className="four wide column">
+          <div className="actionButton rightButton">+
+          </div>        
+          <div className="actionButton rightButton">-
+          </div>
+        </div>
+
+        
+      </div>
+    )
+  }
+
+  handleSubListChanged(event, index, value) {
+    this.props.teamStore.moveSubPlayerToTrackPlayer(value);
+  }
+  
+  handleGameEventTap(eventType){
+    console.log(eventType);
+    if (eventType === "Reset") {
+      this.props.teamStore.resetToMain();
+    }
+
+    if (eventType === 'Undo') {
+      this.props.teamStore.undoGameEvent();
+    } else {
+      this.props.teamStore.updateGameEventType(eventType);
+    }
+  }
+  
+  handleOnTouchTap(playerValue){
+    const gameEvent = this.props.teamStore.createNewGameEvent(this.props.teamStore, playerValue, "");
+    this.props.teamStore.addGameEvent(gameEvent);
+  }
+
+}
+
+PlayersList.propTypes = {
+  players: React.PropTypes.array
+};
+
+PlayersList.defaultProps = {
+  players: []
+};
+
+export default PlayersList;
+
+
+/*
+
+return (
+      <div className="ui grid container">
+
         <div className="row">
           <div className="four wide column">
             <RaisedButton label="Goal" onTouchTap={this.handleGameEventTap.bind(this, "Goal")} />
@@ -95,37 +197,4 @@ class PlayersList extends Component {
         
       </div>
     )
-  }
-
-  handleSubListChanged(event, index, value) {
-    this.props.teamStore.moveSubPlayerToTrackPlayer(value);
-  }
-  
-  handleGameEventTap(eventType){
-    if (eventType === "Reset") {
-      this.props.teamStore.resetToMain();
-    }
-
-    if (eventType === 'Undo') {
-      this.props.teamStore.undoGameEvent();
-    } else {
-      this.props.teamStore.updateGameEventType(eventType);
-    }
-  }
-  
-  handleOnTouchTap(playerValue){
-    const gameEvent = this.props.teamStore.createNewGameEvent(this.props.teamStore, playerValue, "");
-    this.props.teamStore.addGameEvent(gameEvent);
-  }
-
-}
-
-PlayersList.propTypes = {
-  players: React.PropTypes.array
-};
-
-PlayersList.defaultProps = {
-  players: []
-};
-
-export default PlayersList;
+*/
