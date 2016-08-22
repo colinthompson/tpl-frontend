@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import RaisedButton from 'material-ui/RaisedButton';
-import { DropDownMenu, MenuItem } from "material-ui";
 
 class PlayersList extends Component {
   
   render() {
+    const { players } = this.props;
+
+/*
     const { players, subs } = this.props;
 
     const subsMenuItems = subs.map(val =>  
@@ -13,7 +14,8 @@ class PlayersList extends Component {
         key={`key-${val.playerId}`}
         primaryText={val.nickname} />
     );
- 
+*/
+
     const malePlayers = players.filter(player => player.gender === 'Male');
     const femalePlayers = players.filter(player => player.gender === 'Female')
 
@@ -21,60 +23,51 @@ class PlayersList extends Component {
       <div className="ui grid container">
 
         <div className="four wide column">
-          <div className="actionButton" onTouchTap={this.handleGameEventTap.bind(this, "Goal")}>Goal
-          </div>
+          <button className="ui black button mini actionButton" onTouchTap={this.handleGameEventTap.bind(this, "Goal")}>Goal</button>
         </div>
         <div className="four wide column">
-          <div className="actionButton" onTouchTap={this.handleGameEventTap.bind(this, "TA")}>TA
-          </div>
+          <button className="ui black button mini actionButton" onTouchTap={this.handleGameEventTap.bind(this, "TA")}>TA</button>
         </div>
         <div className="four wide column">
-          <div className="actionButton" onTouchTap={this.handleGameEventTap.bind(this, "Drop")}>Drop
-          </div>
+          <button className="ui black button mini actionButton" onTouchTap={this.handleGameEventTap.bind(this, "Drop")}>Drop</button>
         </div>
         <div className="four wide column">
-          <div className="actionButton" onTouchTap={this.handleGameEventTap.bind(this, "D")}>D
-          </div>
+          <button className="ui black button mini actionButton" onTouchTap={this.handleGameEventTap.bind(this, "D")}>D</button>
         </div>
 
         <div className="eight wide column">
-          <div className="actionButton">Add Sub
-          </div>
+          <button className="ui black basic button mini">Add Sub</button>
         </div>
         <div className="four wide column">
-          <div className="actionButton" onTouchTap={this.handleGameEventTap.bind(this, "Undo")}>Undo
-          </div>
+          <button className="ui brown button mini actionButton" onTouchTap={this.handleGameEventTap.bind(this, "Undo")}>Undo</button>
         </div>
         <div className="four wide column">
-          <div className="actionButton" onTouchTap={this.handleGameEventTap.bind(this, "Reset")}>Reset
-          </div>
+          <button className="ui red button mini actionButton" onTouchTap={this.handleGameEventTap.bind(this, "Reset")}>Reset</button>
         </div>
 
-        <div className="six wide column">
+        <div className="six wide column vertical buttons">
           { malePlayers.map(playerValue => 
-              <div 
+              <button 
                 key={playerValue.playerId} 
-                className="actionButton maleButton" 
+                className="ui blue button small playerButton fluid" 
                 onTouchTap={this.handleOnTouchTap.bind(this, playerValue)}>
-                {playerValue.nickname}
-              </div>
+                  {playerValue.nickname}
+              </button>
           )}
         </div>
-        <div className="six wide column">
+        <div className="six wide column vertical buttons">
           { femalePlayers.map(playerValue => 
-              <div
-                key={playerValue.playerId}
-                className="actionButton femaleButton"
+              <button 
+                key={playerValue.playerId} 
+                className="ui pink button small playerButton fluid" 
                 onTouchTap={this.handleOnTouchTap.bind(this, playerValue)}>
-                {playerValue.nickname}
-              </div>
+                  {playerValue.nickname}
+              </button>
           )}
         </div>
-        <div className="four wide column">
-          <div className="actionButton rightButton">+
-          </div>        
-          <div className="actionButton rightButton">-
-          </div>
+        <div className="four wide column vertical buttons">
+          <button className="ui black basic button right floated fluid">+</button>
+          <button className="ui black basic button right floated fluid">-</button>
         </div>
 
         
@@ -87,7 +80,6 @@ class PlayersList extends Component {
   }
   
   handleGameEventTap(eventType){
-    console.log(eventType);
     if (eventType === "Reset") {
       this.props.teamStore.resetToMain();
     }
@@ -99,7 +91,9 @@ class PlayersList extends Component {
     }
   }
   
-  handleOnTouchTap(playerValue){
+  handleOnTouchTap(playerValue, event){
+    //event.target.classList.add('primary');
+    //event.target.classList.remove('basic');
     const gameEvent = this.props.teamStore.createNewGameEvent(this.props.teamStore, playerValue, "");
     this.props.teamStore.addGameEvent(gameEvent);
   }
