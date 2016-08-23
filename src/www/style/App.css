@@ -45,12 +45,6 @@ select.ui.dropdown {
   width: 80px;
 }
 
-.scoreboardDiv {
-  border: 1px solid #ccc!important;
-  margin: 5px;
-  height: 60px;
-}
-
 .ui.button {
   margin-bottom: 2px;
 }
@@ -63,3 +57,21 @@ select.ui.dropdown {
   padding-left: 2px;
   padding-right: 2px;
 }
+
+.scoreboardDiv {
+  border: 1px solid #ccc!important;
+  margin: 5px;
+  height: 60px;
+}
+
+.floatDiv {
+  font-size: 9px;
+  float: left;
+  height: 55px;
+  margin: 2px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 50px;
+}
+

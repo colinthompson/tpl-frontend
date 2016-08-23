@@ -9,9 +9,9 @@ class Scoreboard extends Component {
     const { gameLog } = this.props;
 
     const gameEventArray = gameLog.map((val, idx) => 
-      <span key={idx}>
-        {val.player.nickname}/{val.eventType}
-      </span>
+      <div className="floatDiv" key={idx}>
+        {val.player.nickname}<br />{val.eventType}
+      </div>
     );
 
     return (
