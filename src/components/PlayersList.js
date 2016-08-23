@@ -35,14 +35,11 @@ class PlayersList extends Component {
           <button className="ui black button mini actionButton" onTouchTap={this.handleGameEventTap.bind(this, "D")}>D</button>
         </div>
 
-        <div className="eight wide column">
+        <div className="twelve wide column">
           <button className="ui black basic button mini">Add Sub</button>
         </div>
-        <div className="four wide column">
+        <div className="three wide column">
           <button className="ui brown button mini actionButton" onTouchTap={this.handleGameEventTap.bind(this, "Undo")}>Undo</button>
-        </div>
-        <div className="four wide column">
-          <button className="ui red button mini actionButton" onTouchTap={this.handleGameEventTap.bind(this, "Reset")}>Reset</button>
         </div>
 
         <div className="six wide column vertical buttons">
@@ -66,8 +63,10 @@ class PlayersList extends Component {
           )}
         </div>
         <div className="four wide column vertical buttons">
-          <button className="ui black basic button right floated fluid">+</button>
-          <button className="ui black basic button right floated fluid">-</button>
+          <button className="ui black button rightButton">+</button>
+          <button className="ui black button rightButton">-</button>
+          <button className="ui red button rightButton" onTouchTap={this.handleGameEventTap.bind(this, "Reset")}>Reset</button>
+
         </div>
 
         
