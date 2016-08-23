@@ -3,18 +3,30 @@ import React, { Component } from 'react';
 class PlayersList extends Component {
   
   render() {
-    const { players } = this.props;
-
-/*
     const { players, subs } = this.props;
 
-    const subsMenuItems = subs.map(val =>  
-      <MenuItem
+    /*
+    const subsList = subs.map(val =>
+      {
+        const obj = {};
+        obj.value = val.playerId;
+        obj.label = val.nickname;
+        return obj;
+      }
+    );
+    */
+
+    /*
+    <MenuItem
         value={val.playerId}
         key={`key-${val.playerId}`}
         primaryText={val.nickname} />
+    */
+
+    const subsList = subs.map(val =>
+      <option value={val.playerId} key={val.playerId}>{val.nickname}</option>
     );
-*/
+
 
     const malePlayers = players.filter(player => player.gender === 'Male');
     const femalePlayers = players.filter(player => player.gender === 'Female')
@@ -36,7 +48,10 @@ class PlayersList extends Component {
         </div>
 
         <div className="twelve wide column">
-          <button className="ui black basic button mini">Add Sub</button>
+          <select className="ui fluid dropdown" onChange={this.handleSubListChanged.bind(this)}>
+            <option value="">Add Sub</option>
+            {subsList}
+          </select>
         </div>
         <div className="three wide column">
           <button className="ui brown button mini actionButton" onTouchTap={this.handleGameEventTap.bind(this, "Undo")}>Undo</button>
@@ -74,8 +89,8 @@ class PlayersList extends Component {
     )
   }
 
-  handleSubListChanged(event, index, value) {
-    this.props.teamStore.moveSubPlayerToTrackPlayer(value);
+  handleSubListChanged(event) {
+    this.props.teamStore.moveSubPlayerToTrackPlayer(event.target.value);
   }
   
   handleGameEventTap(eventType){
