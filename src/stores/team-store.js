@@ -74,6 +74,8 @@ export class TeamStore {
 	@observable gameLog = [];
 	@observable trackingPlayersList = [];
 	@observable subPlayersList = [];
+	@observable removeMode = false;
+
 	allPlayersList = [];
 
 	@computed get isLoading() {
@@ -233,6 +235,10 @@ export class TeamStore {
 		this.gameLog = [];
 		this.trackingPlayersList = [];
 		this.subPlayersList = [];
+	}
+
+	@action setRemoveMode(value) {
+		this.removeMode = value;
 	}
 
 	getTeams() {

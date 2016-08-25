@@ -5,35 +5,15 @@ class PlayersList extends Component {
   render() {
     const { players, subs } = this.props;
 
-    /*
-    const subsList = subs.map(val =>
-      {
-        const obj = {};
-        obj.value = val.playerId;
-        obj.label = val.nickname;
-        return obj;
-      }
-    );
-    */
-
-    /*
-    <MenuItem
-        value={val.playerId}
-        key={`key-${val.playerId}`}
-        primaryText={val.nickname} />
-    */
-
     const subsList = subs.map(val =>
       <option value={val.playerId} key={val.playerId}>{val.nickname}</option>
     );
-
 
     const malePlayers = players.filter(player => player.gender === 'Male');
     const femalePlayers = players.filter(player => player.gender === 'Female')
 
     return (
       <div className="ui grid container">
-
         <div className="four wide column">
           <button className="ui black button mini actionButton" onTouchTap={this.handleGameEventTap.bind(this, "Goal")}>Goal</button>
         </div>
@@ -65,6 +45,7 @@ class PlayersList extends Component {
                 onTouchTap={this.handleOnTouchTap.bind(this, playerValue)}>
                   {playerValue.nickname}
               </button>
+
           )}
         </div>
         <div className="six wide column vertical buttons">
@@ -80,13 +61,25 @@ class PlayersList extends Component {
         <div className="four wide column vertical buttons">
           <button className="ui black button rightButton">+</button>
           <button className="ui black button rightButton">-</button>
+          <button className="ui black button rightButton" onTouchTap={this.handleRemoveTap.bind(this)}>
+          { this.props.teamStore.removeMode === true ?
+            "Return"  :
+            "Remove"
+          } 
+          </button>
           <button className="ui red button rightButton" onTouchTap={this.handleGameEventTap.bind(this, "Reset")}>Reset</button>
 
         </div>
 
         
       </div>
+
+
     )
+  }
+
+  handleRemoveTap(event) {
+    this.props.teamStore.setRemoveMode(!this.props.teamStore.removeMode);
   }
 
   handleSubListChanged(event) {
@@ -105,11 +98,13 @@ class PlayersList extends Component {
     }
   }
   
-  handleOnTouchTap(playerValue, event){
-    //event.target.classList.add('primary');
-    //event.target.classList.remove('basic');
-    const gameEvent = this.props.teamStore.createNewGameEvent(this.props.teamStore, playerValue, "");
-    this.props.teamStore.addGameEvent(gameEvent);
+  handleOnTouchTap(playerValue, event){    
+    if (this.props.teamStore.removeMode) {
+      this.props.teamStore.moveTrackPlayerToSubPlayer(playerValue.playerId);
+    } else {
+      const gameEvent = this.props.teamStore.createNewGameEvent(this.props.teamStore, playerValue, "");
+      this.props.teamStore.addGameEvent(gameEvent);
+    }
   }
 
 }
