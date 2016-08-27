@@ -53,6 +53,10 @@ class Player {
 		this.nickname = nickname;
 		this.teamId = teamId;
 	}
+
+	@action setNickname(nickname) {
+		this.nickname = nickname;
+	}
 }
 
 class GameEvent {
@@ -76,7 +80,7 @@ export class TeamStore {
 	@observable subPlayersList = [];
 	@observable removeMode = false;
 
-	allPlayersList = [];
+	@observable allPlayersList = [];
 
 	@computed get isLoading() {
 		return this.pendingRequestCount > 0;
@@ -134,6 +138,7 @@ export class TeamStore {
 						for (const playerData of teamData.players) {
 							const player = new Player(this, playerData.id, playerData.playerName, playerData.gender, playerData.nickname, teamData.id);
 							team.addPlayer(player);
+							console.log(playerData.nickname);
 							this.allPlayersList = this.allPlayersList.concat(player);
 						}
 						this.teams = this.teams.concat(team);
