@@ -16,23 +16,20 @@ class Admin extends Component {
 
 		return (
 			<div>
+				<button className="ui blue button mini" onTouchTap={this.handleUpdateNicknames.bind()}>Update Nicknames</button>
 				{ teamStore.allPlayersList.map(playerValue => 
 					<div key={playerValue.playerId}>
-						{playerValue.playerName}:
+						{playerValue.playerName}: 
 						<input defaultValue={playerValue.nickname} onChange={this.handleNicknameChanged.bind(this, playerValue)}/>
-						<button 
-							className="ui blue button mini"
-							onTouchTap={this.handleOnTouchTap.bind(this, playerValue)}>
-								Update Nickname
-						</button>
+						
 					</div>          
 		        )}
 			</div>
 		)
 	}
 
-	handleOnTouchTap(playerValue, event){
-		console.log(playerValue.nickname);
+	handleUpdateNicknames(){
+		teamStore.updateTeams();
 	}
 
 	handleNicknameChanged(playerValue, event) {

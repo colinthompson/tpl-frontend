@@ -19,9 +19,16 @@ class Team {
 
 	@computed get asJSON() {
 		return {
-			teamId: this.teamId,
+			id: this.teamId,
 			teamName: this.teamName,
-			players: this.players.map(player => player.name)
+			players: this.players.map(player => {
+				return {
+					id: player.playerId,
+					playerName: player.playerName,
+					nickname: player.nickname,
+					gender: player.gender
+				}
+			})
 		}
 	}
 
@@ -138,7 +145,6 @@ export class TeamStore {
 						for (const playerData of teamData.players) {
 							const player = new Player(this, playerData.id, playerData.playerName, playerData.gender, playerData.nickname, teamData.id);
 							team.addPlayer(player);
-							console.log(playerData.nickname);
 							this.allPlayersList = this.allPlayersList.concat(player);
 						}
 						this.teams = this.teams.concat(team);
@@ -146,6 +152,24 @@ export class TeamStore {
 				}
 				this.hasLoadedInitialData = true;
 			}))
+	}
+
+	@action updateTeams() {
+
+		for (const team of this.teams) {
+
+			superagent
+				.put('//tuc-tpl.herokuapp.com/team/' + team.teamId)
+				.set('Accept', 'application/json')
+				.send(team.asJSON)
+				.end(action("updateTeams-callback", (error, result) => {
+					if (error)
+						console.error(error);
+					else {
+					}
+				}))
+		}
+		
 	}
 
 	@action addGameEvent(nextEvent) {
