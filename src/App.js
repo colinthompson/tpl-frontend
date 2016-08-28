@@ -12,8 +12,8 @@ class App extends Component {
   	return (
   		<Router history={hashHistory}>
   			<Route path="/" component={Main} />				
-  			<Route path="trackGame" component={TrackGame} />
-  			<Route path="admin" component={Admin} />
+  			<Route path="trackGame/:leagueId" component={TrackGame} />
+  			<Route path="admin/:leagueId" component={Admin} />
   		</Router>
   	)
 	

@@ -8,18 +8,21 @@ import { MenuItem } from 'material-ui';
 class Team {
 	@observable teamId;
 	@observable teamName;
+	@observable leagueId;
 	
 
 	@observable players = [];
 
-	constructor(store, teamId, teamName) {
+	constructor(store, teamId, teamName, leagueId) {
 		this.teamId = teamId;
 		this.teamName = teamName;
+		this.leagueId = leagueId
 	}
 
 	@computed get asJSON() {
 		return {
 			id: this.teamId,
+			leagueId: this.leagueId,
 			teamName: this.teamName,
 			players: this.players.map(player => {
 				return {
@@ -131,9 +134,9 @@ export class TeamStore {
 		return this.subPlayersList.slice();
 	}
 
-	@action loadTeams() {
+	@action loadTeams(leagueId) {
 		superagent
-			.get('//tuc-tpl.herokuapp.com/teams')
+			.get('//tuc-tpl.herokuapp.com/teams/' + leagueId)
 			.set('Accept', 'application/json')
 			.end(action("loadTeams-callback", (error, results) => {
 				if (error)
@@ -141,7 +144,7 @@ export class TeamStore {
 				else {
 					const data = JSON.parse(results.text);
 					for (const teamData of data) {
-						const team = new Team(this, teamData.id, teamData.teamName);
+						const team = new Team(this, teamData.id, teamData.teamName, teamData.leagueId);
 						for (const playerData of teamData.players) {
 							const player = new Player(this, playerData.id, playerData.playerName, playerData.gender, playerData.nickname, teamData.id);
 							team.addPlayer(player);

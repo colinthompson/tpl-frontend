@@ -21,7 +21,9 @@ const teamStore = new TeamStore();
 class TrackGame extends Component {
 
 	componentWillMount() {
-		teamStore.loadTeams();
+		const { params } = this.props;
+		const leagueId = params.leagueId;
+		teamStore.loadTeams(leagueId);
 	}
 
 	render() {
