@@ -4,13 +4,13 @@ import { observable, computed, action } from 'mobx';
 import { MenuItem } from 'material-ui';
 
 //const STORAGE_PREFIX = 'tuc-tpl.';
+const HOST_URL = '//tuc-tpl.herokuapp.com/';
 
 class Team {
 	@observable teamId;
 	@observable teamName;
 	@observable leagueId;
 	
-
 	@observable players = [];
 
 	constructor(store, teamId, teamName, leagueId) {
@@ -49,6 +49,33 @@ class Team {
 
 }
 
+class Game {
+	@observable gameId;
+	@observable leagueId;
+	@observable date;
+	@observable time;
+	@observable location;
+	@observable homeTeam;
+	@observable homeTeamId;
+	@observable awayTeam;
+	@observable awayTeamId;
+	@observable score;
+
+	constructor(store, gameId, leagueId, date, time, location, homeTeam, homeTeamId, awayTeam, awayTeamId, score) {
+		this.gameId = gameId;
+		this.leagueId = leagueId;
+		this.date = date;
+		this.time = time;
+		this.location = location;
+		this.homeTeam = homeTeam;
+		this.homeTeamId = homeTeamId;
+		this.awayTeam = awayTeam;
+		this.awayTeamId = awayTeamId;
+		this.score = score;
+	}
+
+}
+
 class Player {
 	@observable playerId;
 	@observable playerName;
@@ -80,11 +107,15 @@ class GameEvent {
 
 }
 
+
+
 export class TeamStore {
 	@observable teams = [];
+	@observable games = [];
 	@observable selectedTeam = '';
 	@observable pendingRequestCount = 0;
 	@observable hasLoadedInitialData = false;
+	@observable hasLoadedInitialGameData = false;
 	@observable gameLog = [];
 	@observable trackingPlayersList = [];
 	@observable subPlayersList = [];
@@ -122,6 +153,10 @@ export class TeamStore {
 		}
 	}
 
+	@computed get scheduleGamesArray() {
+		return this.games.slice();
+	}
+
 	@computed get gameLogList() {
 		return this.gameLog.slice(-5);
 	}
@@ -136,7 +171,7 @@ export class TeamStore {
 
 	@action loadTeams(leagueId) {
 		superagent
-			.get('//tuc-tpl.herokuapp.com/teams/' + leagueId)
+			.get(HOST_URL + 'teams/' + leagueId)
 			.set('Accept', 'application/json')
 			.end(action("loadTeams-callback", (error, results) => {
 				if (error)
@@ -157,12 +192,30 @@ export class TeamStore {
 			}))
 	}
 
+	@action loadGames(leagueId) {
+		superagent
+			.get(HOST_URL + 'games/' + leagueId)
+			.set('Accept', 'application/json')
+			.end(action("loadGames-callback", (error, results) => {
+				if (error)
+					console.error(error);
+				else {
+					const data = JSON.parse(results.text);
+					for (const gameData of data) {
+						const game = new Game(this, gameData.id, gameData.leagueId, gameData.date, gameData.time, gameData.location, gameData.homeTeam, gameData.homeTeamId, gameData.awayTeam, gameData.awayTeamId, gameData.score);
+						this.games = this.games.concat(game);
+					}
+				}
+				this.hasLoadedInitialGameData = true;
+			}))
+	}
+
 	@action updateTeams() {
 
 		for (const team of this.teams) {
 
 			superagent
-				.put('//tuc-tpl.herokuapp.com/team/' + team.teamId)
+				.put(HOST_URL + 'team/' + team.teamId)
 				.set('Accept', 'application/json')
 				.send(team.asJSON)
 				.end(action("updateTeams-callback", (error, result) => {

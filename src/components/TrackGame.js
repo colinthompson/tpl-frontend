@@ -7,6 +7,7 @@ import { observer } from 'mobx-react';
 import { action } from 'mobx';
 import PlayersList from './PlayersList.js';
 import Scoreboard from './Scoreboard.js';
+import LeagueSchedule from './LeagueSchedule.js';
 import { TeamStore } from '../stores/team-store';
 
 const muiTheme = getMuiTheme({
@@ -24,6 +25,7 @@ class TrackGame extends Component {
 		const { params } = this.props;
 		const leagueId = params.leagueId;
 		teamStore.loadTeams(leagueId);
+		teamStore.loadGames(leagueId);
 	}
 
 	render() {
@@ -32,7 +34,7 @@ class TrackGame extends Component {
 			<MuiThemeProvider muiTheme={muiTheme}>
 				<div>
 					{ teamStore.selectedTeam === '' ?
-						<SelectTeam onTeamChange={this.onTeamChange} teamsMenuItems={teamStore.teamsMenuItems} />  :
+						<LeagueSchedule teams={teamStore.scheduleGamesArray} onTeamChange={this.onTeamChange} />  :
 						<ShowTeam teamStore={teamStore} playersList={teamStore.trackingPlayersArray} subsList={teamStore.subPlayersArray} gameLog={teamStore.gameLogList} />
 					}	
 				</div>
@@ -44,11 +46,17 @@ class TrackGame extends Component {
   		teamStore.resetToMain();
   	}
 
-	@action onTeamChange = (event, index, value) => {
+	@action onTeamChange = (value) => {
+		console.log(value);
 		teamStore.selectTeam(value);
 	}
 
 }
+/*
+{ teamStore.selectedTeam === '' ?
+						<SelectTeam onTeamChange={this.onTeamChange} teamsMenuItems={teamStore.teamsMenuItems} />  :
+						<ShowTeam teamStore={teamStore} playersList={teamStore.trackingPlayersArray} subsList={teamStore.subPlayersArray} gameLog={teamStore.gameLogList} />
+					}*/
 
 const SelectTeam = (props) =>	(<DropDownMenu
   										value=''
@@ -64,5 +72,6 @@ const ShowTeam = (props) =>		(<div className="ui grid container">
 									<Scoreboard gameLog={props.gameLog} />
 									<PlayersList teamStore={ props.teamStore } players={ props.playersList } subs={props.subsList} />
 								</div>);
+
 
 export default TrackGame;
