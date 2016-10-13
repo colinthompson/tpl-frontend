@@ -37,8 +37,6 @@ class LeagueSchedule extends Component {
 
 }
 
-
-
 LeagueSchedule.propTypes = {
   teams: React.PropTypes.array
 };
