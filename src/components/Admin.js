@@ -25,7 +25,7 @@ class Admin extends Component {
 				{ teamStore.allPlayersList.map(playerValue => 
 					<div className="row" key={playerValue.playerId}>
 						<div className="six wide column">
-							{playerValue.playerName}
+							{playerValue.playerName} 
 						</div>
 						<div className="ten wide column"> 
 							<input defaultValue={playerValue.nickname} onChange={this.handleNicknameChanged.bind(this, playerValue)}/>

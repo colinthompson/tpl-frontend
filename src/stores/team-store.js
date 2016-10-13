@@ -29,7 +29,8 @@ class Team {
 					id: player.playerId,
 					playerName: player.playerName,
 					nickname: player.nickname,
-					gender: player.gender
+					gender: player.gender,
+					leagueId: player.leagueId
 				}
 			})
 		}
@@ -82,13 +83,15 @@ class Player {
 	@observable gender;
 	@observable nickname;
 	@observable teamId;
+	@observable leagueId;
 
-	constructor(store, playerId, playerName, gender, nickname, teamId) {
+	constructor(store, playerId, playerName, gender, nickname, teamId, leagueId) {
 		this.playerId = playerId;
 		this.playerName = playerName;
 		this.gender = gender;
 		this.nickname = nickname;
 		this.teamId = teamId;
+		this.leagueId = leagueId
 	}
 
 	@action setNickname(nickname) {
@@ -181,7 +184,7 @@ export class TeamStore {
 					for (const teamData of data) {
 						const team = new Team(this, teamData.id, teamData.teamName, teamData.leagueId);
 						for (const playerData of teamData.players) {
-							const player = new Player(this, playerData.id, playerData.playerName, playerData.gender, playerData.nickname, teamData.id);
+							const player = new Player(this, playerData.id, playerData.playerName, playerData.gender, playerData.nickname, teamData.id, teamData.leagueId);
 							team.addPlayer(player);
 							this.allPlayersList = this.allPlayersList.concat(player);
 						}
