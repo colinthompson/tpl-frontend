@@ -4,24 +4,35 @@ import { observable, computed, action } from 'mobx';
 import { MenuItem } from 'material-ui';
 
 //const STORAGE_PREFIX = 'tuc-tpl.';
+const HOST_URL = '//tuc-tpl.herokuapp.com/';
 
 class Team {
 	@observable teamId;
 	@observable teamName;
+	@observable leagueId;
 	
-
 	@observable players = [];
 
-	constructor(store, teamId, teamName) {
+	constructor(store, teamId, teamName, leagueId) {
 		this.teamId = teamId;
 		this.teamName = teamName;
+		this.leagueId = leagueId
 	}
 
 	@computed get asJSON() {
 		return {
-			teamId: this.teamId,
+			id: this.teamId,
+			leagueId: this.leagueId,
 			teamName: this.teamName,
-			players: this.players.map(player => player.name)
+			players: this.players.map(player => {
+				return {
+					id: player.playerId,
+					playerName: player.playerName,
+					nickname: player.nickname,
+					gender: player.gender,
+					leagueId: player.leagueId
+				}
+			})
 		}
 	}
 
@@ -39,19 +50,52 @@ class Team {
 
 }
 
+class Game {
+	@observable gameId;
+	@observable leagueId;
+	@observable date;
+	@observable time;
+	@observable location;
+	@observable homeTeam;
+	@observable homeTeamId;
+	@observable awayTeam;
+	@observable awayTeamId;
+	@observable score;
+
+	constructor(store, gameId, leagueId, date, time, location, homeTeam, homeTeamId, awayTeam, awayTeamId, score) {
+		this.gameId = gameId;
+		this.leagueId = leagueId;
+		this.date = date;
+		this.time = time;
+		this.location = location;
+		this.homeTeam = homeTeam;
+		this.homeTeamId = homeTeamId;
+		this.awayTeam = awayTeam;
+		this.awayTeamId = awayTeamId;
+		this.score = score;
+	}
+
+}
+
 class Player {
 	@observable playerId;
 	@observable playerName;
 	@observable gender;
 	@observable nickname;
 	@observable teamId;
+	@observable leagueId;
 
-	constructor(store, playerId, playerName, gender, nickname, teamId) {
+	constructor(store, playerId, playerName, gender, nickname, teamId, leagueId) {
 		this.playerId = playerId;
 		this.playerName = playerName;
 		this.gender = gender;
 		this.nickname = nickname;
 		this.teamId = teamId;
+		this.leagueId = leagueId
+	}
+
+	@action setNickname(nickname) {
+		this.nickname = nickname;
 	}
 }
 
@@ -66,15 +110,21 @@ class GameEvent {
 
 }
 
+
+
 export class TeamStore {
 	@observable teams = [];
+	@observable games = [];
 	@observable selectedTeam = '';
 	@observable pendingRequestCount = 0;
 	@observable hasLoadedInitialData = false;
+	@observable hasLoadedInitialGameData = false;
 	@observable gameLog = [];
 	@observable trackingPlayersList = [];
 	@observable subPlayersList = [];
-	allPlayersList = [];
+	@observable removeMode = false;
+
+	@observable allPlayersList = [];
 
 	@computed get isLoading() {
 		return this.pendingRequestCount > 0;
@@ -106,6 +156,10 @@ export class TeamStore {
 		}
 	}
 
+	@computed get scheduleGamesArray() {
+		return this.games.slice();
+	}
+
 	@computed get gameLogList() {
 		return this.gameLog.slice(-5);
 	}
@@ -118,9 +172,9 @@ export class TeamStore {
 		return this.subPlayersList.slice();
 	}
 
-	@action loadTeams() {
+	@action loadTeams(leagueId) {
 		superagent
-			.get('//tuc-tpl.herokuapp.com/teams')
+			.get(HOST_URL + 'teams/' + leagueId)
 			.set('Accept', 'application/json')
 			.end(action("loadTeams-callback", (error, results) => {
 				if (error)
@@ -128,9 +182,9 @@ export class TeamStore {
 				else {
 					const data = JSON.parse(results.text);
 					for (const teamData of data) {
-						const team = new Team(this, teamData.id, teamData.teamName);
+						const team = new Team(this, teamData.id, teamData.teamName, teamData.leagueId);
 						for (const playerData of teamData.players) {
-							const player = new Player(this, playerData.id, playerData.playerName, playerData.gender, playerData.nickname, teamData.id);
+							const player = new Player(this, playerData.id, playerData.playerName, playerData.gender, playerData.nickname, teamData.id, teamData.leagueId);
 							team.addPlayer(player);
 							this.allPlayersList = this.allPlayersList.concat(player);
 						}
@@ -139,6 +193,42 @@ export class TeamStore {
 				}
 				this.hasLoadedInitialData = true;
 			}))
+	}
+
+	@action loadGames(leagueId) {
+		superagent
+			.get(HOST_URL + 'games/' + leagueId)
+			.set('Accept', 'application/json')
+			.end(action("loadGames-callback", (error, results) => {
+				if (error)
+					console.error(error);
+				else {
+					const data = JSON.parse(results.text);
+					for (const gameData of data) {
+						const game = new Game(this, gameData.id, gameData.leagueId, gameData.date, gameData.time, gameData.location, gameData.homeTeam, gameData.homeTeamId, gameData.awayTeam, gameData.awayTeamId, gameData.score);
+						this.games = this.games.concat(game);
+					}
+				}
+				this.hasLoadedInitialGameData = true;
+			}))
+	}
+
+	@action updateTeams() {
+
+		for (const team of this.teams) {
+
+			superagent
+				.put(HOST_URL + 'team/' + team.teamId)
+				.set('Accept', 'application/json')
+				.send(team.asJSON)
+				.end(action("updateTeams-callback", (error, result) => {
+					if (error)
+						console.error(error);
+					else {
+					}
+				}))
+		}
+		
 	}
 
 	@action addGameEvent(nextEvent) {
@@ -233,6 +323,10 @@ export class TeamStore {
 		this.gameLog = [];
 		this.trackingPlayersList = [];
 		this.subPlayersList = [];
+	}
+
+	@action setRemoveMode(value) {
+		this.removeMode = value;
 	}
 
 	getTeams() {
