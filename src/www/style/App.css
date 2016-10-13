@@ -80,3 +80,6 @@ select.ui.dropdown {
   width: 50px;
 }
 
+.ui.grid {
+  margin: 2px;
+}

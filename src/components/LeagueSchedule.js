@@ -6,22 +6,25 @@ class LeagueSchedule extends Component {
     const { teams } = this.props;
 
     return (
-      
-        <div>
-          { teams.map(teamValue => 
-              <div 
-                key={teamValue.gameId}>
-                  {teamValue.date}{teamValue.time}{teamValue.location}
-                  <button
+        <div className="ui grid container">
+          { teams.map(teamValue =>
+              <div key={teamValue.gameId} className="row">
+                <div className="six wide column">
+                  {teamValue.date}
+                </div>
+                <div className="five wide column">
+                  <button className="ui blue button small playerButton fluid"
                     onTouchTap={this.handleOnTouchTap.bind(this, teamValue.homeTeamId)}>
                     {teamValue.homeTeam}
                   </button>
-                  <button
+                </div>
+                <div className="five wide column">
+                  <button className="ui pink button small playerButton fluid"
                     onTouchTap={this.handleOnTouchTap.bind(this, teamValue.awayTeamId)}>
                     {teamValue.awayTeam}
                   </button>
+                </div>
               </div>
-
           )}
         </div>
 
