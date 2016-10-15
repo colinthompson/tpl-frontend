@@ -6,7 +6,8 @@ class Scoreboard extends Component {
   
   render() {
 
-    const { gameLog } = this.props;
+    const { gameLog, teamName, teamScore, opponentScore } = this.props;
+
 
     const gameEventArray = gameLog.map((val, idx) => 
       <div className="floatDiv" key={idx}>
@@ -15,11 +16,19 @@ class Scoreboard extends Component {
     );
 
     return (
-      <div className="sixteen wide column scoreboardDiv">
-        { gameEventArray.length === 0 ?
-          "Ready..."  :
-          gameEventArray
-        }
+      <div className="row">
+        <div className="sixteen wide column scoreboardDiv">
+          { gameEventArray.length === 0 ?
+            "Ready..."  :
+            gameEventArray
+          }
+        </div>
+        <div className="eight wide column">
+          {teamName}: {teamScore}
+        </div>
+        <div className="eight wide column">
+          Opponent: {opponentScore}
+        </div>
       </div>
     )
   }

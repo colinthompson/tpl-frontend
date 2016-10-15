@@ -29,13 +29,12 @@ class TrackGame extends Component {
 	}
 
 	render() {
-
 		return (
 			<MuiThemeProvider muiTheme={muiTheme}>
 				<div>
 					{ teamStore.selectedTeam === '' ?
-						<LeagueSchedule teams={teamStore.scheduleGamesArray} onTeamChange={this.onTeamChange} />  :
-						<ShowTeam teamStore={teamStore} playersList={teamStore.trackingPlayersArray} subsList={teamStore.subPlayersArray} gameLog={teamStore.gameLogList} removeMode={teamStore.removeMode} />
+						<LeagueSchedule teams={teamStore.scheduleGamesArray}  onTeamChange={this.onTeamChange} />  :
+						<ShowTeam teamStore={teamStore} playersList={teamStore.trackingPlayersArray} subsList={teamStore.subPlayersArray} gameLog={teamStore.gameLogList} removeMode={teamStore.removeMode} teamName={teamStore.selectedTeamName} teamScore={teamStore.teamScore} opponentScore={teamStore.opponentScore} />
 					}	
 				</div>
 			</MuiThemeProvider>
@@ -68,7 +67,7 @@ const SelectTeam = (props) =>	(<DropDownMenu
   											{props.teamsMenuItems}
   									</DropDownMenu>); */
 const ShowTeam = (props) =>		(<div className="ui grid container">
-									<Scoreboard gameLog={props.gameLog} />
+									<Scoreboard gameLog={props.gameLog} teamName={props.teamName} teamScore={props.teamScore} opponentScore={props.opponentScore} />
 									<PlayersList teamStore={ props.teamStore } players={ props.playersList } subs={props.subsList} removeMode={props.removeMode} />
 								</div>);
 

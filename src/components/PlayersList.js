@@ -59,8 +59,8 @@ class PlayersList extends Component {
           )}
         </div>
         <div className="four wide column vertical buttons">
-          <button className="ui black button rightButton fluid">Opp +</button>
-          <button className="ui black button rightButton fluid">Opp -</button>
+          <button className="ui black button rightButton fluid" onTouchTap={this.handleOpponentScoreTap.bind(this, "+")}>Opp +</button>
+          <button className="ui black button rightButton fluid" onTouchTap={this.handleOpponentScoreTap.bind(this, "-")}>Opp -</button>
           <button className="ui black button rightButton fluid" onTouchTap={this.handleRemoveTap.bind(this)}>
           { removeMode === true ?
             "Return"  :
@@ -105,6 +105,10 @@ class PlayersList extends Component {
       const gameEvent = this.props.teamStore.createNewGameEvent(this.props.teamStore, playerValue, "");
       this.props.teamStore.addGameEvent(gameEvent);
     }
+  }
+
+  handleOpponentScoreTap(mode, event) {
+    this.props.teamStore.setOpponentScore(mode);
   }
 
 }

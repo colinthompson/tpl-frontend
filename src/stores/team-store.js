@@ -123,6 +123,8 @@ export class TeamStore {
 	@observable trackingPlayersList = [];
 	@observable subPlayersList = [];
 	@observable removeMode = false;
+	@observable teamScore = 0;
+	@observable opponentScore = 0;
 
 	@observable allPlayersList = [];
 
@@ -153,6 +155,15 @@ export class TeamStore {
 		} else {
 			const mySelectedTeam = this.findTeamById(this.selectedTeam);
 			return mySelectedTeam.getPlayers();
+		}
+	}
+
+	@computed get selectedTeamName() {
+		if (this.selectedTeam === ''){
+			return "";
+		} else {
+			const mySelectedTeam = this.findTeamById(this.selectedTeam);
+			return mySelectedTeam.teamName;
 		}
 	}
 
@@ -241,7 +252,16 @@ export class TeamStore {
 
 	@action updateGameEventType(eventType) {
 		if (this.gameLog.length > 0){
-			this.gameLog[this.gameLog.length - 1].eventType = eventType;
+			const currentGameEvent = this.gameLog[this.gameLog.length - 1];
+			
+			if (currentGameEvent.eventType === "Goal" && eventType !== "Goal") {
+				this.teamScore--;
+			}
+			if (currentGameEvent.eventType !== "Goal" && eventType === "Goal") {
+				this.teamScore++;
+			}
+
+			currentGameEvent.eventType = eventType;
 
 			// if the event is a "Goal", then set the assister and 2nd assister
 			if (eventType === 'Goal') {
@@ -294,7 +314,8 @@ export class TeamStore {
 						}
 					}
 				}
-			}	
+			}
+			this.teamScore--;	
 		} 
 	}
 
@@ -302,6 +323,18 @@ export class TeamStore {
 		this.trackingPlayersList = this.allPlayersList.filter(player => player.teamId === teamId);
 		this.subPlayersList = this.allPlayersList.filter(player => player.teamId !== teamId);
 		this.selectedTeam = teamId;
+		this.removeMode = false;
+		this.teamScre = 0;
+		this.opponentScore = 0;
+	}
+
+	@action setOpponentScore(mode) {
+		if (mode === '+') {
+			this.opponentScore++;
+		} else {
+			this.opponentScore--;
+			if (this.opponentScore < 0) this.opponentScore = 0;
+		}
 	}
 
 	@action moveSubPlayerToTrackPlayer(playerId) {
@@ -326,7 +359,6 @@ export class TeamStore {
 	}
 
 	@action setRemoveMode(value) {
-		console.log("setting removemode to: " + value);
 		this.removeMode = value;
 	}
 
