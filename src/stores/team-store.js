@@ -110,8 +110,6 @@ class GameEvent {
 
 }
 
-
-
 export class TeamStore {
 	@observable teams = [];
 	@observable games = [];
@@ -240,6 +238,10 @@ export class TeamStore {
 				}))
 		}
 		
+	}
+
+	@action pushUnsyncGameEvents() {
+		// TODO
 	}
 
 	@action addGameEvent(nextEvent) {
