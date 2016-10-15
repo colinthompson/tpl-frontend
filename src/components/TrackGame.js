@@ -35,7 +35,7 @@ class TrackGame extends Component {
 				<div>
 					{ teamStore.selectedTeam === '' ?
 						<LeagueSchedule teams={teamStore.scheduleGamesArray} onTeamChange={this.onTeamChange} />  :
-						<ShowTeam teamStore={teamStore} playersList={teamStore.trackingPlayersArray} subsList={teamStore.subPlayersArray} gameLog={teamStore.gameLogList} />
+						<ShowTeam teamStore={teamStore} playersList={teamStore.trackingPlayersArray} subsList={teamStore.subPlayersArray} gameLog={teamStore.gameLogList} removeMode={teamStore.removeMode} />
 					}	
 				</div>
 			</MuiThemeProvider>
@@ -47,7 +47,6 @@ class TrackGame extends Component {
   	}
 
 	@action onTeamChange = (value) => {
-		console.log(value);
 		teamStore.selectTeam(value);
 	}
 
@@ -70,7 +69,7 @@ const SelectTeam = (props) =>	(<DropDownMenu
   									</DropDownMenu>); */
 const ShowTeam = (props) =>		(<div className="ui grid container">
 									<Scoreboard gameLog={props.gameLog} />
-									<PlayersList teamStore={ props.teamStore } players={ props.playersList } subs={props.subsList} />
+									<PlayersList teamStore={ props.teamStore } players={ props.playersList } subs={props.subsList} removeMode={props.removeMode} />
 								</div>);
 
 

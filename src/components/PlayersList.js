@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 class PlayersList extends Component {
   
   render() {
-    const { players, subs } = this.props;
+    const { players, subs, removeMode } = this.props;
 
     const subsList = subs.map(val =>
       <option value={val.playerId} key={val.playerId}>{val.nickname}</option>
@@ -59,15 +59,15 @@ class PlayersList extends Component {
           )}
         </div>
         <div className="four wide column vertical buttons">
-          <button className="ui black button rightButton">+</button>
-          <button className="ui black button rightButton">-</button>
-          <button className="ui black button rightButton" onTouchTap={this.handleRemoveTap.bind(this)}>
-          { this.props.teamStore.removeMode === true ?
+          <button className="ui black button rightButton fluid">Opp +</button>
+          <button className="ui black button rightButton fluid">Opp -</button>
+          <button className="ui black button rightButton fluid" onTouchTap={this.handleRemoveTap.bind(this)}>
+          { removeMode === true ?
             "Return"  :
-            "Remove"
+            "Remove Player"
           } 
           </button>
-          <button className="ui red button rightButton" onTouchTap={this.handleGameEventTap.bind(this, "Reset")}>Reset</button>
+          <button className="ui red button rightButton fluid" onTouchTap={this.handleGameEventTap.bind(this, "Reset")}>Reset</button>
 
         </div>
 

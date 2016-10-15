@@ -326,6 +326,7 @@ export class TeamStore {
 	}
 
 	@action setRemoveMode(value) {
+		console.log("setting removemode to: " + value);
 		this.removeMode = value;
 	}
 
