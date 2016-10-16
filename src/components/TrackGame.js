@@ -46,7 +46,6 @@ class TrackGame extends Component {
   	}
 
 	@action onTeamChange = (teamIdValue, gameIdValue) => {
-		console.log("game: " + gameIdValue);
 		teamStore.selectTeam(teamIdValue, gameIdValue);
 	}
 
