@@ -100,12 +100,30 @@ class Player {
 }
 
 class GameEvent {
+	@observable gameId;
+	@observable teamId;
+	@observable sequence;
 	@observable player;
 	@observable eventType;
+	@observable synchronized;
 
-	constructor(store, player, eventType) {
+	constructor(store, gameId, teamId, sequence, player, eventType, synchronized) {
+		this.gameId = gameId;
+		this.teamId = teamId;
+		this.sequence = sequence;
 		this.player = player;
 		this.eventType = eventType;
+		this.synchronized = synchronized;
+	}
+
+	@computed get asJSON() {
+		return {
+			gameId: this.gameId,
+			teamId: this.teamId,
+			sequence: this.sequence,
+			player: this.player,
+			eventType: this.eventType
+		}
 	}
 
 }
@@ -114,6 +132,7 @@ export class TeamStore {
 	@observable teams = [];
 	@observable games = [];
 	@observable selectedTeam = '';
+	@observable selectedGame = '';
 	@observable pendingRequestCount = 0;
 	@observable hasLoadedInitialData = false;
 	@observable hasLoadedInitialGameData = false;
@@ -123,7 +142,6 @@ export class TeamStore {
 	@observable removeMode = false;
 	@observable teamScore = 0;
 	@observable opponentScore = 0;
-
 	@observable allPlayersList = [];
 
 	@computed get isLoading() {
@@ -181,6 +199,14 @@ export class TeamStore {
 		return this.subPlayersList.slice();
 	}
 
+	@computed get currentGameEventSequence() {
+		if (this.gameLog.length === 0){
+			return 0;
+		} else {
+			return this.gameLog[this.gameLog.length - 1].sequence;
+		}
+	}
+
 	@action loadTeams(leagueId) {
 		superagent
 			.get(HOST_URL + 'teams/' + leagueId)
@@ -222,6 +248,24 @@ export class TeamStore {
 			}))
 	}
 
+	@action loadGameEvents(gameId, teamId) {
+		superagent
+			.get(HOST_URL + 'gameEvents/' + gameId + '/' + teamId)
+			.set('Accept', 'application/json')
+			.end(action("loadGameEvents-callback", (error, results) => {
+				if (error)
+					console.error(error);
+				else {
+					const data = JSON.parse(results.text);
+					for (const gameEventData of data) {
+						const gameEvent = new GameEvent(this, gameEventData.gameId, gameEventData.teamId, gameEventData.sequence, gameEventData.player, gameEventData.eventType, true); 
+						this.gameLog = this.gameLog.concat(gameEvent);
+					}
+				}
+				//this.hasLoadedInitialGameData = true;
+			}))
+	}
+
 	@action updateTeams() {
 
 		for (const team of this.teams) {
@@ -240,16 +284,34 @@ export class TeamStore {
 		
 	}
 
-	@action pushUnsyncGameEvents() {
-		// TODO
+	@action updateGameEvents() {
+		
+		const unsynchronizedGameEvents = this.gameLog.filter(gameEvent => gameEvent.synchronized === false);
+
+		for (const gameEvent of unsynchronizedGameEvents){
+			console.log("updating sequence: " + gameEvent.sequence);
+			superagent
+				.put(HOST_URL + 'gameEvent/' + gameEvent.gameId + '/' + gameEvent.teamId + '/' + gameEvent.sequence)
+				.set('Accept', 'application/json')
+				.send(gameEvent.asJSON)
+				.end(action("updateTeams-callback", (error, result) => {
+					if (error)
+						console.error(error);
+					else {
+						gameEvent.synchronized = true;
+					}
+				}))
+		}
+	
 	}
 
 	@action addGameEvent(nextEvent) {
 		this.gameLog = this.gameLog.concat(nextEvent);
 	}
 
-	@action createNewGameEvent(store, player, eventType){
-		return new GameEvent(store, player, eventType);
+	@action createNewGameEvent(store, player, eventType, synchronized){
+		const nextGameSequence = parseInt(this.currentGameEventSequence) + 1;
+		return new GameEvent(store, this.selectedGame, this.selectedTeam, nextGameSequence, player, eventType, synchronized);
 	}
 
 	@action updateGameEventType(eventType) {
@@ -295,6 +357,7 @@ export class TeamStore {
 					}
 				}
 			}
+			this.updateGameEvents();
 		}
 	}
 
@@ -321,13 +384,15 @@ export class TeamStore {
 		} 
 	}
 
-	@action selectTeam(teamId) {
+	@action selectTeam(teamId, gameId) {
 		this.trackingPlayersList = this.allPlayersList.filter(player => player.teamId === teamId);
 		this.subPlayersList = this.allPlayersList.filter(player => player.teamId !== teamId);
 		this.selectedTeam = teamId;
+		this.selectedGame = gameId;
 		this.removeMode = false;
 		this.teamScre = 0;
 		this.opponentScore = 0;
+		this.loadGameEvents(gameId, teamId);
 	}
 
 	@action setOpponentScore(mode) {
@@ -355,6 +420,9 @@ export class TeamStore {
 
 	@action resetToMain() {
 		this.selectedTeam = '';
+		this.selectedGame = '';
+		this.teamScore = 0;
+		this.opponentScore = 0;
 		this.gameLog = [];
 		this.trackingPlayersList = [];
 		this.subPlayersList = [];

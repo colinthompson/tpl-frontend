@@ -14,13 +14,13 @@ class LeagueSchedule extends Component {
                 </div>
                 <div className="five wide column">
                   <button className="ui blue button small playerButton fluid"
-                    onTouchTap={this.handleOnTouchTap.bind(this, teamValue.homeTeamId)}>
+                    onTouchTap={this.handleOnTouchTap.bind(this, teamValue.homeTeamId, teamValue.gameId)}>
                     {teamValue.homeTeam}
                   </button>
                 </div>
                 <div className="five wide column">
                   <button className="ui pink button small playerButton fluid"
-                    onTouchTap={this.handleOnTouchTap.bind(this, teamValue.awayTeamId)}>
+                    onTouchTap={this.handleOnTouchTap.bind(this, teamValue.awayTeamId, teamValue.gameId)}>
                     {teamValue.awayTeam}
                   </button>
                 </div>
@@ -31,8 +31,8 @@ class LeagueSchedule extends Component {
     )
   }
 
-  handleOnTouchTap(teamIdValue, event){  
-     this.props.onTeamChange(teamIdValue);
+  handleOnTouchTap(teamIdValue, gameIdValue, event){  
+     this.props.onTeamChange(teamIdValue, gameIdValue);
   }
 
 }

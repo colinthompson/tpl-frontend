@@ -11,7 +11,7 @@ class Scoreboard extends Component {
 
     const gameEventArray = gameLog.map((val, idx) => 
       <div className="floatDiv" key={idx}>
-        {val.player.nickname}<br />{val.eventType}
+        {val.player.nickname}<br />{val.eventType}{val.sequence}
       </div>
     );
 

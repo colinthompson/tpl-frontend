@@ -102,7 +102,7 @@ class PlayersList extends Component {
     if (this.props.teamStore.removeMode) {
       this.props.teamStore.moveTrackPlayerToSubPlayer(playerValue.playerId);
     } else {
-      const gameEvent = this.props.teamStore.createNewGameEvent(this.props.teamStore, playerValue, "");
+      const gameEvent = this.props.teamStore.createNewGameEvent(this.props.teamStore, playerValue, "", false);
       this.props.teamStore.addGameEvent(gameEvent);
     }
   }
