@@ -85,6 +85,14 @@ class Player {
 	@observable teamId;
 	@observable leagueId;
 
+	@observable statGoal;
+	@observable statAssist;
+	@observable stat2Assist;
+	@observable statD;
+	@observable statTA;
+	@observable statDrop;
+	@observable statPass;
+
 	constructor(store, playerId, playerName, gender, nickname, teamId, leagueId) {
 		this.playerId = playerId;
 		this.playerName = playerName;
@@ -92,11 +100,24 @@ class Player {
 		this.nickname = nickname;
 		this.teamId = teamId;
 		this.leagueId = leagueId
+
+		this.clearStatistics();
 	}
 
 	@action setNickname(nickname) {
 		this.nickname = nickname;
 	}
+
+	@action clearStatistics() {
+		this.statGoal = 0;
+		this.statAssist = 0;
+		this.stat2Assist = 0;
+		this.statD = 0;
+		this.statTA = 0;
+		this.statDrop = 0;
+		this.statPass = 0;
+	}
+
 }
 
 class GameEvent {
@@ -143,6 +164,7 @@ export class TeamStore {
 	@observable teamScore = 0;
 	@observable opponentScore = 0;
 	@observable allPlayersList = [];
+	@observable viewStatsMode = false;
 
 	@computed get isLoading() {
 		return this.pendingRequestCount > 0;
@@ -260,6 +282,48 @@ export class TeamStore {
 					for (const gameEventData of data) {
 						const gameEvent = new GameEvent(this, gameEventData.gameId, gameEventData.teamId, gameEventData.sequence, gameEventData.player, gameEventData.eventType, true); 
 						this.gameLog = this.gameLog.concat(gameEvent);
+						if (gameEventData.eventType === "Goal"){
+							this.teamScore++;
+						}
+
+						// Find the player (if the player is on the sub list, add player to the trackingplayerlist)
+						// update the stat
+						let player = this.trackingPlayersArray.find(player => player.playerId === gameEventData.player.playerId);
+						if (!player) {
+							player = this.subPlayersArray.find(player => player.playerId === gameEventData.player.playerId);
+							if (player) {
+								this.moveSubPlayerToTrackPlayer(player.playerId);
+							}
+						} 
+						if (player) {
+							switch (gameEventData.eventType) {
+								case "":
+								case "Pass":
+									player.statPass++;
+									break;
+								case "Goal":
+									player.statGoal++;
+									break;
+								case "Assist":
+									player.statAssist++;
+									break;
+								case "2nd Assist":
+									player.stat2Assist++;
+									break;
+								case "TA":
+									player.statTA++;
+									break;
+								case "Drop":
+									player.statDrop++;
+									break;
+								case "D":
+									player.statD++;
+									break;
+								default:
+									break;
+							}
+						}
+
 					}
 				}
 				//this.hasLoadedInitialGameData = true;
@@ -449,6 +513,51 @@ export class TeamStore {
 
 	@action setRemoveMode(value) {
 		this.removeMode = value;
+	}
+
+	@action setViewStatsMode(value) {
+		this.viewStatsMode = value;
+	}
+
+	@action recalculatStatistics() {
+
+		// clear the stats for the tracking players		
+		for (const player of this.trackingPlayersArray) {
+			player.clearStatistics();
+		}
+
+		// run through gameLog to calculate stats
+		for (const gameEvent of this.gameLog) {
+			let player = this.trackingPlayersArray.find(player => player.playerId === gameEvent.player.playerId);
+			switch (gameEvent.eventType) {
+				case "":
+				case "Pass":
+					player.statPass++;
+					break;
+				case "Goal":
+					player.statGoal++;
+					break;
+				case "Assist":
+					player.statAssist++;
+					break;
+				case "2nd Assist":
+					player.stat2Assist++;
+					break;
+				case "TA":
+					player.statTA++;
+					break;
+				case "Drop":
+					player.statDrop++;
+					break;
+				case "D":
+					player.statD++;
+					break;
+				default:
+					break;
+			}
+		}
+
+
 	}
 
 	getTeams() {
