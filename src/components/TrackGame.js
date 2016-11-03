@@ -8,6 +8,7 @@ import { action } from 'mobx';
 import PlayersList from './PlayersList.js';
 import Scoreboard from './Scoreboard.js';
 import LeagueSchedule from './LeagueSchedule.js';
+import GameStatistics from './GameStatistics.js';
 import { TeamStore } from '../stores/team-store';
 
 const muiTheme = getMuiTheme({
@@ -34,7 +35,7 @@ class TrackGame extends Component {
 				<div>
 					{ teamStore.selectedTeam === '' ?
 						<LeagueSchedule teams={teamStore.scheduleGamesArray}  onTeamChange={this.onTeamChange} />  :
-						<ShowTeam teamStore={teamStore} playersList={teamStore.trackingPlayersArray} subsList={teamStore.subPlayersArray} gameLog={teamStore.gameLogList} removeMode={teamStore.removeMode} teamName={teamStore.selectedTeamName} teamScore={teamStore.teamScore} opponentScore={teamStore.opponentScore} />
+						<ShowTeam teamStore={teamStore} playersList={teamStore.trackingPlayersArray} subsList={teamStore.subPlayersArray} gameLog={teamStore.gameLogList} removeMode={teamStore.removeMode} teamName={teamStore.selectedTeamName} teamScore={teamStore.teamScore} opponentScore={teamStore.opponentScore} viewStatsMode={teamStore.viewStatsMode} />
 					}	
 				</div>
 			</MuiThemeProvider>
@@ -45,8 +46,8 @@ class TrackGame extends Component {
   		teamStore.resetToMain();
   	}
 
-	@action onTeamChange = (value) => {
-		teamStore.selectTeam(value);
+	@action onTeamChange = (teamIdValue, gameIdValue) => {
+		teamStore.selectTeam(teamIdValue, gameIdValue);
 	}
 
 }
@@ -66,10 +67,16 @@ const SelectTeam = (props) =>	(<DropDownMenu
   												primaryText='Select Team' />
   											{props.teamsMenuItems}
   									</DropDownMenu>); */
-const ShowTeam = (props) =>		(<div className="ui grid container">
-									<Scoreboard gameLog={props.gameLog} teamName={props.teamName} teamScore={props.teamScore} opponentScore={props.opponentScore} />
-									<PlayersList teamStore={ props.teamStore } players={ props.playersList } subs={props.subsList} removeMode={props.removeMode} />
-								</div>);
+
+									  //GameStatistics doesn't need viewStatsMode... nor should it need the whole teamstore'
+const ShowTeam = (props) =>		(	teamStore.viewStatsMode === true ?
+									<GameStatistics viewStatsMode={props.viewStatsMode} teamStore={ props.teamStore }/> :
+									<div className="ui grid container">
+										<Scoreboard gameLog={props.gameLog} teamName={props.teamName} teamScore={props.teamScore} opponentScore={props.opponentScore} />
+										<PlayersList teamStore={ props.teamStore } players={ props.playersList } subs={props.subsList} removeMode={props.removeMode} />
+									</div> 
+									
+								);
 
 
 export default TrackGame;

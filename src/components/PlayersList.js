@@ -34,7 +34,7 @@ class PlayersList extends Component {
           </select>
         </div>
         <div className="three wide column">
-          <button className="ui brown button mini actionButton" onTouchTap={this.handleGameEventTap.bind(this, "Undo")}>Undo</button>
+          <button className="ui red button mini actionButton" onTouchTap={this.handleGameEventTap.bind(this, "Undo")}>Undo</button>
         </div>
 
         <div className="six wide column vertical buttons">
@@ -59,19 +59,24 @@ class PlayersList extends Component {
           )}
         </div>
         <div className="four wide column vertical buttons">
-          <button className="ui black button rightButton fluid" onTouchTap={this.handleOpponentScoreTap.bind(this, "+")}>Opp +</button>
-          <button className="ui black button rightButton fluid" onTouchTap={this.handleOpponentScoreTap.bind(this, "-")}>Opp -</button>
-          <button className="ui black button rightButton fluid" onTouchTap={this.handleRemoveTap.bind(this)}>
+          <button className="ui brown button rightButton fluid" onTouchTap={this.handleRemoveTap.bind(this)}>
           { removeMode === true ?
             "Return"  :
             "Remove Player"
           } 
           </button>
+          <br />
+          Opp Score
+          <button className="ui black button rightButton fluid" onTouchTap={this.handleOpponentScoreTap.bind(this, "+")}>Opp +</button>
+          <button className="ui black button rightButton fluid" onTouchTap={this.handleOpponentScoreTap.bind(this, "-")}>Opp -</button>
+          <br />
+          <button className="ui black button rightButton fluid" onTouchTap={this.handleStatsTap.bind(this)}>Stats</button>
+          <br />
+          <br />
+          <br />
           <button className="ui red button rightButton fluid" onTouchTap={this.handleGameEventTap.bind(this, "Reset")}>Reset</button>
-
         </div>
 
-        
       </div>
 
 
@@ -102,13 +107,18 @@ class PlayersList extends Component {
     if (this.props.teamStore.removeMode) {
       this.props.teamStore.moveTrackPlayerToSubPlayer(playerValue.playerId);
     } else {
-      const gameEvent = this.props.teamStore.createNewGameEvent(this.props.teamStore, playerValue, "");
+      const gameEvent = this.props.teamStore.createNewGameEvent(this.props.teamStore, playerValue, "", false);
       this.props.teamStore.addGameEvent(gameEvent);
     }
   }
 
   handleOpponentScoreTap(mode, event) {
     this.props.teamStore.setOpponentScore(mode);
+  }
+
+  handleStatsTap(event) {
+    this.props.teamStore.recalculatStatistics();
+    this.props.teamStore.setViewStatsMode(true);
   }
 
 }

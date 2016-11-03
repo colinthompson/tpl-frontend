@@ -85,6 +85,14 @@ class Player {
 	@observable teamId;
 	@observable leagueId;
 
+	@observable statGoal;
+	@observable statAssist;
+	@observable stat2Assist;
+	@observable statD;
+	@observable statTA;
+	@observable statDrop;
+	@observable statPass;
+
 	constructor(store, playerId, playerName, gender, nickname, teamId, leagueId) {
 		this.playerId = playerId;
 		this.playerName = playerName;
@@ -92,30 +100,60 @@ class Player {
 		this.nickname = nickname;
 		this.teamId = teamId;
 		this.leagueId = leagueId
+
+		this.clearStatistics();
 	}
 
 	@action setNickname(nickname) {
 		this.nickname = nickname;
 	}
-}
 
-class GameEvent {
-	@observable player;
-	@observable eventType;
-
-	constructor(store, player, eventType) {
-		this.player = player;
-		this.eventType = eventType;
+	@action clearStatistics() {
+		this.statGoal = 0;
+		this.statAssist = 0;
+		this.stat2Assist = 0;
+		this.statD = 0;
+		this.statTA = 0;
+		this.statDrop = 0;
+		this.statPass = 0;
 	}
 
 }
 
+class GameEvent {
+	@observable gameId;
+	@observable teamId;
+	@observable sequence;
+	@observable player;
+	@observable eventType;
+	@observable synchronized;
 
+	constructor(store, gameId, teamId, sequence, player, eventType, synchronized) {
+		this.gameId = gameId;
+		this.teamId = teamId;
+		this.sequence = sequence;
+		this.player = player;
+		this.eventType = eventType;
+		this.synchronized = synchronized;
+	}
+
+	@computed get asJSON() {
+		return {
+			gameId: this.gameId,
+			teamId: this.teamId,
+			sequence: this.sequence,
+			player: this.player,
+			eventType: this.eventType
+		}
+	}
+
+}
 
 export class TeamStore {
 	@observable teams = [];
 	@observable games = [];
 	@observable selectedTeam = '';
+	@observable selectedGame = '';
 	@observable pendingRequestCount = 0;
 	@observable hasLoadedInitialData = false;
 	@observable hasLoadedInitialGameData = false;
@@ -125,8 +163,8 @@ export class TeamStore {
 	@observable removeMode = false;
 	@observable teamScore = 0;
 	@observable opponentScore = 0;
-
 	@observable allPlayersList = [];
+	@observable viewStatsMode = false;
 
 	@computed get isLoading() {
 		return this.pendingRequestCount > 0;
@@ -183,6 +221,14 @@ export class TeamStore {
 		return this.subPlayersList.slice();
 	}
 
+	@computed get currentGameEventSequence() {
+		if (this.gameLog.length === 0){
+			return 0;
+		} else {
+			return this.gameLog[this.gameLog.length - 1].sequence;
+		}
+	}
+
 	@action loadTeams(leagueId) {
 		superagent
 			.get(HOST_URL + 'teams/' + leagueId)
@@ -224,6 +270,66 @@ export class TeamStore {
 			}))
 	}
 
+	@action loadGameEvents(gameId, teamId) {
+		superagent
+			.get(HOST_URL + 'gameEvents/' + gameId + '/' + teamId)
+			.set('Accept', 'application/json')
+			.end(action("loadGameEvents-callback", (error, results) => {
+				if (error)
+					console.error(error);
+				else {
+					const data = JSON.parse(results.text);
+					for (const gameEventData of data) {
+						const gameEvent = new GameEvent(this, gameEventData.gameId, gameEventData.teamId, gameEventData.sequence, gameEventData.player, gameEventData.eventType, true); 
+						this.gameLog = this.gameLog.concat(gameEvent);
+						if (gameEventData.eventType === "Goal"){
+							this.teamScore++;
+						}
+
+						// Find the player (if the player is on the sub list, add player to the trackingplayerlist)
+						// update the stat
+						let player = this.trackingPlayersArray.find(player => player.playerId === gameEventData.player.playerId);
+						if (!player) {
+							player = this.subPlayersArray.find(player => player.playerId === gameEventData.player.playerId);
+							if (player) {
+								this.moveSubPlayerToTrackPlayer(player.playerId);
+							}
+						} 
+						if (player) {
+							switch (gameEventData.eventType) {
+								case "":
+								case "Pass":
+									player.statPass++;
+									break;
+								case "Goal":
+									player.statGoal++;
+									break;
+								case "Assist":
+									player.statAssist++;
+									break;
+								case "2nd Assist":
+									player.stat2Assist++;
+									break;
+								case "TA":
+									player.statTA++;
+									break;
+								case "Drop":
+									player.statDrop++;
+									break;
+								case "D":
+									player.statD++;
+									break;
+								default:
+									break;
+							}
+						}
+
+					}
+				}
+				//this.hasLoadedInitialGameData = true;
+			}))
+	}
+
 	@action updateTeams() {
 
 		for (const team of this.teams) {
@@ -242,12 +348,44 @@ export class TeamStore {
 		
 	}
 
+	@action updateGameEvents() {		
+		const unsynchronizedGameEvents = this.gameLog.filter(gameEvent => gameEvent.synchronized === false);
+		for (const gameEvent of unsynchronizedGameEvents){
+			superagent
+				.put(HOST_URL + 'gameEvent/' + gameEvent.gameId + '/' + gameEvent.teamId + '/' + gameEvent.sequence)
+				.set('Accept', 'application/json')
+				.send(gameEvent.asJSON)
+				.end(action("updateGameEvents-callback", (error, result) => {
+					if (error)
+						console.error(error);
+					else {
+						gameEvent.synchronized = true;
+					}
+				}))
+		}
+	}
+
+	@action deleteGameEvent(gameId, teamId, sequence) {
+		superagent
+			.del(HOST_URL + 'gameEvent/' + gameId + '/' + teamId + '/' + sequence)
+			.set('Accept', 'application/json')
+			.end(action("deleteGameEvents-callback", (error, result) => {
+				if (error)
+					console.error(error);
+				else {
+					
+				}
+			}))
+
+	}
+
 	@action addGameEvent(nextEvent) {
 		this.gameLog = this.gameLog.concat(nextEvent);
 	}
 
-	@action createNewGameEvent(store, player, eventType){
-		return new GameEvent(store, player, eventType);
+	@action createNewGameEvent(store, player, eventType, synchronized){
+		const nextGameSequence = parseInt(this.currentGameEventSequence, 10) + 1;
+		return new GameEvent(store, this.selectedGame, this.selectedTeam, nextGameSequence, player, eventType, synchronized);
 	}
 
 	@action updateGameEventType(eventType) {
@@ -270,10 +408,12 @@ export class TeamStore {
 					const previousEvent = this.gameLog[this.gameLog.length - 2];
 					if (previousEvent.eventType === '' && previousEvent.player !== goalEvent.player){
 						previousEvent.eventType = 'Assist';
+						previousEvent.synchronized = false;
 						if (this.gameLog.length > 2) {
 							const previous2Event = this.gameLog[this.gameLog.length - 3];
 							if (previous2Event.eventType === '' && previous2Event.player !== goalEvent.player) {
 								previous2Event.eventType = '2nd Assist';
+								previous2Event.synchronized = false;
 							}
 						}
 					}
@@ -284,15 +424,18 @@ export class TeamStore {
 					const previousGameEvent = this.gameLog[this.gameLog.length - 2];
 					if (previousGameEvent.eventType === 'Assist') {
 						previousGameEvent.eventType = '';
+						previousGameEvent.synchronized = false;
 						if (this.gameLog.length > 2) {
 							const previous2GameEvent = this.gameLog[this.gameLog.length - 3];
 							if (previous2GameEvent.eventType === '2nd Assist') {
 								previous2GameEvent.eventType = '';
+								previous2GameEvent.synchronized = false;
 							}
 						}
 					}
 				}
 			}
+			this.updateGameEvents();
 		}
 	}
 
@@ -302,15 +445,20 @@ export class TeamStore {
 		// If the 2nd previous one is a 2nd assist, clear it
 		if (this.gameLog.length === 0) return;
 		const poppedGameEvent = this.gameLog.pop();
+		this.deleteGameEvent(poppedGameEvent.gameId, poppedGameEvent.teamId, poppedGameEvent.sequence);
 		if (poppedGameEvent.eventType === 'Goal') {
 			if (this.gameLog.length > 0) {
 				const previousGameEvent = this.gameLog[this.gameLog.length - 1];
 				if (previousGameEvent.eventType === 'Assist') {
 					previousGameEvent.eventType = '';
+					previousGameEvent.synchronized = false
+					this.deleteGameEvent(previousGameEvent.gameId, previousGameEvent.teamId, previousGameEvent.sequence);
 					if (this.gameLog.length > 1) {
 						const previous2GameEvent = this.gameLog[this.gameLog.length - 2];
 						if (previous2GameEvent.eventType === '2nd Assist') {
 							previous2GameEvent.eventType = '';
+							previous2GameEvent.synchronized = false;
+							this.deleteGameEvent(previous2GameEvent.gameId, previous2GameEvent.teamId, previous2GameEvent.sequence);
 						}
 					}
 				}
@@ -319,13 +467,15 @@ export class TeamStore {
 		} 
 	}
 
-	@action selectTeam(teamId) {
+	@action selectTeam(teamId, gameId) {
 		this.trackingPlayersList = this.allPlayersList.filter(player => player.teamId === teamId);
 		this.subPlayersList = this.allPlayersList.filter(player => player.teamId !== teamId);
 		this.selectedTeam = teamId;
+		this.selectedGame = gameId;
 		this.removeMode = false;
 		this.teamScre = 0;
 		this.opponentScore = 0;
+		this.loadGameEvents(gameId, teamId);
 	}
 
 	@action setOpponentScore(mode) {
@@ -353,6 +503,9 @@ export class TeamStore {
 
 	@action resetToMain() {
 		this.selectedTeam = '';
+		this.selectedGame = '';
+		this.teamScore = 0;
+		this.opponentScore = 0;
 		this.gameLog = [];
 		this.trackingPlayersList = [];
 		this.subPlayersList = [];
@@ -360,6 +513,51 @@ export class TeamStore {
 
 	@action setRemoveMode(value) {
 		this.removeMode = value;
+	}
+
+	@action setViewStatsMode(value) {
+		this.viewStatsMode = value;
+	}
+
+	@action recalculatStatistics() {
+
+		// clear the stats for the tracking players		
+		for (const player of this.trackingPlayersArray) {
+			player.clearStatistics();
+		}
+
+		// run through gameLog to calculate stats
+		for (const gameEvent of this.gameLog) {
+			let player = this.trackingPlayersArray.find(player => player.playerId === gameEvent.player.playerId);
+			switch (gameEvent.eventType) {
+				case "":
+				case "Pass":
+					player.statPass++;
+					break;
+				case "Goal":
+					player.statGoal++;
+					break;
+				case "Assist":
+					player.statAssist++;
+					break;
+				case "2nd Assist":
+					player.stat2Assist++;
+					break;
+				case "TA":
+					player.statTA++;
+					break;
+				case "Drop":
+					player.statDrop++;
+					break;
+				case "D":
+					player.statD++;
+					break;
+				default:
+					break;
+			}
+		}
+
+
 	}
 
 	getTeams() {
