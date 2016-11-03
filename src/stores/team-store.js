@@ -206,7 +206,7 @@ export class TeamStore {
 	}
 
 	@computed get scheduleGamesArray() {
-		return this.games.slice();
+		return this.games.reverse().slice();
 	}
 
 	@computed get gameLogList() {
