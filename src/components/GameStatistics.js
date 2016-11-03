@@ -39,7 +39,7 @@ class GameStatistics extends Component {
 		return (
 			<div className="ui grid container">
                 <div className="four wide column">
-                    <button className="ui red button" onTouchTap={this.handleReturnTap.bind(this)}>Return to Track Game</button>
+                    <button className="ui red button" onTouchTap={this.handleReturnTap.bind(this)}>Return</button>
                 </div>
 
                 <div className="row"> 

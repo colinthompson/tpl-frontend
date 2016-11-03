@@ -516,6 +516,7 @@ export class TeamStore {
 	}
 
 	@action setViewStatsMode(value) {
+		console.log("setting view stats mode to: ", value);
 		this.viewStatsMode = value;
 	}
 

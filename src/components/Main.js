@@ -10,7 +10,8 @@ class Main extends Component {
 		return (
 			<div>
 				<Link to="/trackGame">Track Game</Link><br />
-				<Link to="/admin">Admin</Link>
+				<Link to="/admin">Admin</Link><br />
+				<Link to="/leagueResults">Result</Link>
 			</div>
 		)
 	}
