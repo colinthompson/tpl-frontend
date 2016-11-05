@@ -10,6 +10,7 @@ import Scoreboard from './Scoreboard.js';
 import LeagueSchedule from './LeagueSchedule.js';
 import GameStatistics from './GameStatistics.js';
 import { TeamStore } from '../stores/team-store';
+import DevTools from 'mobx-react-devtools';
 
 const muiTheme = getMuiTheme({
 	palette: {
@@ -33,9 +34,10 @@ class TrackGame extends Component {
 		return (
 			<MuiThemeProvider muiTheme={muiTheme}>
 				<div>
+				<DevTools />
 					{ teamStore.selectedTeam === '' ?
 						<LeagueSchedule teams={teamStore.scheduleGamesArray}  onTeamChange={this.onTeamChange} />  :
-						<ShowTeam teamStore={teamStore} playersList={teamStore.trackingPlayersArray} subsList={teamStore.subPlayersArray} gameLog={teamStore.gameLogList} removeMode={teamStore.removeMode} teamName={teamStore.selectedTeamName} teamScore={teamStore.teamScore} opponentScore={teamStore.opponentScore} viewStatsMode={teamStore.viewStatsMode} />
+						<ShowTeam teamStore={teamStore} playersList={teamStore.trackingPlayersArray} subsList={teamStore.subPlayersArray} gameLog={teamStore.gameLogList} removeMode={teamStore.removeMode} teamName={teamStore.selectedTeamName} teamScore={teamStore.teamScore} opponentScore={teamStore.opponentScore} viewStatsMode={teamStore.viewStatsMode} onReturn={this.onReturn} />
 					}	
 				</div>
 			</MuiThemeProvider>
@@ -48,6 +50,10 @@ class TrackGame extends Component {
 
 	@action onTeamChange = (teamIdValue, gameIdValue) => {
 		teamStore.selectTeam(teamIdValue, gameIdValue);
+	}
+
+	@action onReturn = () => {
+		teamStore.setViewStatsMode(false);
 	}
 
 }
@@ -70,10 +76,10 @@ const SelectTeam = (props) =>	(<DropDownMenu
 
 									  //GameStatistics doesn't need viewStatsMode... nor should it need the whole teamstore'
 const ShowTeam = (props) =>		(	teamStore.viewStatsMode === true ?
-									<GameStatistics viewStatsMode={props.viewStatsMode} teamStore={ props.teamStore }/> :
+									<GameStatistics viewStatsMode={props.viewStatsMode} teamStore={ props.teamStore } onReturn={props.onReturn} /> :
 									<div className="ui grid container">
 										<Scoreboard gameLog={props.gameLog} teamName={props.teamName} teamScore={props.teamScore} opponentScore={props.opponentScore} />
-										<PlayersList teamStore={ props.teamStore } players={ props.playersList } subs={props.subsList} removeMode={props.removeMode} />
+										<PlayersList teamStore={ props.teamStore } players={ props.playersList } subs={props.subsList} removeMode={props.removeMode} onReturn={props.onReturn} />
 									</div> 
 									
 								);
