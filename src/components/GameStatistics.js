@@ -73,7 +73,9 @@ class GameStatistics extends Component {
 	}
 
     handleReturnTap(event) {
-        this.props.teamStore.setViewStatsMode(false);
+        //this.props.teamStore.setViewStatsMode(false);
+        this.props.onReturn();
+
     }
 
 }
