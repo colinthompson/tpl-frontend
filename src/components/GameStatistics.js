@@ -12,7 +12,7 @@ class GameStatistics extends Component {
 
         const statistics = trackingPlayers.map(val =>
             <div className="row" key={val.playerId}> 
-                <div className="four wide column">
+                <div className="two wide column">
                     {val.nickname}
                 </div>
                 <div className="two wide column">
@@ -28,10 +28,13 @@ class GameStatistics extends Component {
                     {val.statD}
                 </div>
                 <div className="two wide column">
-                    {val.statTA} ({val.statPass})
+                    {val.statDrop}
                 </div>
                 <div className="two wide column">
-                    {val.statDrop}
+                    {val.statTA} 
+                </div>
+                <div className="two wide column">
+                    {val.statPassMale} : {val.statPassFemale }
                 </div>
             </div>
         );
@@ -43,7 +46,7 @@ class GameStatistics extends Component {
                 </div>
 
                 <div className="row"> 
-                    <div className="four wide column">
+                    <div className="two wide column">
                         Player
                     </div>
                     <div className="two wide column">
@@ -58,11 +61,15 @@ class GameStatistics extends Component {
                     <div className="two wide column">
                         D
                     </div>
-                    <div className="two wide column">
-                        TA (Pass)
-                    </div>
+                    
                     <div className="two wide column">
                         Drop
+                    </div>
+                    <div className="two wide column">
+                        TA 
+                    </div>
+                    <div className="two wide column">
+                        Pass (M : F) 
                     </div>
                 </div>
 

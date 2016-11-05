@@ -92,6 +92,8 @@ class Player {
 	@observable statTA;
 	@observable statDrop;
 	@observable statPass;
+	@observable statPassMale;
+	@observable statPassFemale;
 
 	constructor(store, playerId, playerName, gender, nickname, teamId, leagueId) {
 		this.playerId = playerId;
@@ -116,6 +118,8 @@ class Player {
 		this.statTA = 0;
 		this.statDrop = 0;
 		this.statPass = 0;
+		this.statPassMale = 0;
+		this.statPassFemale = 0;
 	}
 
 }
@@ -295,36 +299,8 @@ export class TeamStore {
 								this.moveSubPlayerToTrackPlayer(player.playerId);
 							}
 						} 
-						if (player) {
-							switch (gameEventData.eventType) {
-								case "":
-								case "Pass":
-									player.statPass++;
-									break;
-								case "Goal":
-									player.statGoal++;
-									break;
-								case "Assist":
-									player.statAssist++;
-									break;
-								case "2nd Assist":
-									player.stat2Assist++;
-									break;
-								case "TA":
-									player.statTA++;
-									break;
-								case "Drop":
-									player.statDrop++;
-									break;
-								case "D":
-									player.statD++;
-									break;
-								default:
-									break;
-							}
-						}
-
 					}
+					this.recalculatStatistics();
 				}
 				//this.hasLoadedInitialGameData = true;
 			}))
@@ -516,7 +492,6 @@ export class TeamStore {
 	}
 
 	@action setViewStatsMode(value) {
-		console.log("setting view stats mode to: ", value);
 		this.viewStatsMode = value;
 	}
 
@@ -524,25 +499,41 @@ export class TeamStore {
 
 		// clear the stats for the tracking players		
 		for (const player of this.trackingPlayersArray) {
+			console.log("clear");
 			player.clearStatistics();
 		}
 
+		let previousPassPlayer = null;
+
 		// run through gameLog to calculate stats
 		for (const gameEvent of this.gameLog) {
+			console.log("event");
 			let player = this.trackingPlayersArray.find(player => player.playerId === gameEvent.player.playerId);
+			if (previousPassPlayer !== null) {
+				if (player.gender === "Male") {
+					previousPassPlayer.statPassMale++;
+				} else {
+					previousPassPlayer.statPassFemale++;
+				}
+			}
+			
+			previousPassPlayer = null;
 			switch (gameEvent.eventType) {
 				case "":
 				case "Pass":
 					player.statPass++;
+					previousPassPlayer = player;
 					break;
 				case "Goal":
 					player.statGoal++;
 					break;
 				case "Assist":
 					player.statAssist++;
+					previousPassPlayer = player;
 					break;
 				case "2nd Assist":
 					player.stat2Assist++;
+					previousPassPlayer = player;
 					break;
 				case "TA":
 					player.statTA++;
