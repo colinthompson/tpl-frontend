@@ -75,6 +75,7 @@ class PlayersList extends Component {
           <br />
           <br />
           <button className="ui red button rightButton fluid" onTouchTap={this.handleGameEventTap.bind(this, "Reset")}>Reset</button>
+          <button className="ui red button rightButton fluid" onTouchTap={this.handleGameEventTap.bind(this, "Schedule")}>Schedule</button>
         </div>
 
       </div>
@@ -92,8 +93,16 @@ class PlayersList extends Component {
   }
   
   handleGameEventTap(eventType){
-    if (eventType === "Reset") {
+    if (eventType === "Schedule") {
       this.props.teamStore.resetToMain();
+    }
+    if (eventType === "Reset") {
+      if (confirm("Reset will clear the stats.  Are you sure?") === true) {
+        // reset the gamelog
+        this.props.teamStore.clearStats();
+      } else {
+        // do nothing
+      }
     }
 
     if (eventType === 'Undo') {

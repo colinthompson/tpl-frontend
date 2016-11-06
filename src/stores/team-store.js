@@ -480,6 +480,11 @@ export class TeamStore {
 		this.subPlayersList = this.subPlayersList.concat(movePlayer);
 	}
 
+	@action clearStats() {
+		console.log(this.selectedGame, this.selectedTeam);
+		this.gameLog = [];
+	}
+
 	@action resetToMain() {
 		this.selectedTeam = '';
 		this.selectedGame = '';
@@ -499,6 +504,10 @@ export class TeamStore {
 	}
 
 	@action recalculatStatistics() {
+
+		this.gameLog = this.gameLog.sort(function (a, b) {
+			return (a.sequence - b.sequence);
+		});
 
 		// clear the stats for the tracking players		
 		for (const player of this.trackingPlayersArray) {
