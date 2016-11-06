@@ -36,7 +36,7 @@ class LeagueResult extends Component {
 
 
   @action onTeamChange = (teamIdValue, gameIdValue) => {
-	teamStore.selectTeam(teamIdValue, gameIdValue);
+	  teamStore.selectTeam(teamIdValue, gameIdValue);
     teamStore.setViewStatsMode(true);
   }
 

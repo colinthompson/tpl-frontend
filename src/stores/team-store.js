@@ -451,7 +451,10 @@ export class TeamStore {
 		this.removeMode = false;
 		this.teamScre = 0;
 		this.opponentScore = 0;
-		this.loadGameEvents(gameId, teamId);
+		this.gameLog = [];
+		if (gameId !== '') {
+			this.loadGameEvents(gameId, teamId);
+		}
 	}
 
 	@action setOpponentScore(mode) {
@@ -499,15 +502,14 @@ export class TeamStore {
 
 		// clear the stats for the tracking players		
 		for (const player of this.trackingPlayersArray) {
-			console.log("clear");
 			player.clearStatistics();
 		}
 
 		let previousPassPlayer = null;
 
 		// run through gameLog to calculate stats
+
 		for (const gameEvent of this.gameLog) {
-			console.log("event");
 			let player = this.trackingPlayersArray.find(player => player.playerId === gameEvent.player.playerId);
 			if (previousPassPlayer !== null) {
 				if (player.gender === "Male") {
