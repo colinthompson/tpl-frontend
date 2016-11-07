@@ -9,8 +9,17 @@ class PlayersList extends Component {
       <option value={val.playerId} key={val.playerId}>{val.nickname}</option>
     );
 
-    const malePlayers = players.filter(player => player.gender === 'Male');
-    const femalePlayers = players.filter(player => player.gender === 'Female')
+
+    var malePlayers = players.filter(player => player.gender === 'Male');
+    malePlayers = malePlayers.sort(function(a,b) {
+      return (a.nickname > b.nickname);
+    });
+
+    var femalePlayers = players.filter(player => player.gender === 'Female');
+    femalePlayers = femalePlayers.sort(function(a,b) {
+      return (a.nickname > b.nickname);
+    });
+
 
     return (
       <div className="ui grid container">
@@ -74,7 +83,7 @@ class PlayersList extends Component {
           <br />
           <br />
           <br />
-          <button className="ui red button rightButton fluid" onTouchTap={this.handleGameEventTap.bind(this, "Reset")}>Reset</button>
+          
           <button className="ui red button rightButton fluid" onTouchTap={this.handleGameEventTap.bind(this, "Schedule")}>Schedule</button>
         </div>
 
@@ -83,6 +92,10 @@ class PlayersList extends Component {
 
     )
   }
+
+
+  //<button className="ui red button rightButton fluid" onTouchTap={this.handleGameEventTap.bind(this, "Reset")}>Reset</button>
+          
 
   handleRemoveTap(event) {
     this.props.teamStore.setRemoveMode(!this.props.teamStore.removeMode);
