@@ -222,7 +222,23 @@ export class TeamStore {
 	}
 
 	@computed get subPlayersArray() {
-		return this.subPlayersList.slice();
+		var tempArray = this.subPlayersList.slice();
+		tempArray = tempArray.sort(function(a,b){
+			if (a.gender < b.gender) {
+				return -1;
+			}
+			if (a.gender > b.gender) {
+				return 1;
+			}
+			if (a.nickname.trim() < b.nickname.trim()){
+				return -1;
+			}
+			if (a.nickname.trim() > b.nickname.trim()){
+				return 1;
+			}
+			return 0;
+		});
+		return tempArray;
 	}
 
 	@computed get currentGameEventSequence() {
