@@ -128,6 +128,7 @@ class PlayersList extends Component {
   handleOnTouchTap(playerValue, event){    
     if (this.props.teamStore.removeMode) {
       this.props.teamStore.moveTrackPlayerToSubPlayer(playerValue.playerId);
+      this.props.teamStore.setRemoveMode(!this.props.teamStore.removeMode);
     } else {
       const gameEvent = this.props.teamStore.createNewGameEvent(this.props.teamStore, playerValue, "", false);
       this.props.teamStore.addGameEvent(gameEvent);
