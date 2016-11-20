@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
+import GameChart from './GameChart.js';
 
 @observer
 class GameStatistics extends Component {
@@ -75,6 +76,10 @@ class GameStatistics extends Component {
 
                 {statistics}
 				
+                <div className="row">
+                    <GameChart />
+                </div>
+
 			</div>
 		)
 	}
