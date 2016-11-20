@@ -249,6 +249,28 @@ export class TeamStore {
 		}
 	}
 
+	@computed get chartData() {
+		var chartData = [];
+		var possessionData = [];
+		var possessionCount = 1;
+		console.log(this.gameLog);
+		for (const gameEvent of this.gameLog) {
+			if (!possessionData[3]) possessionData[3] = [];
+			possessionData[3] = possessionData[3].concat(gameEvent.player.nickname);
+			if (gameEvent.eventType === "Goal" || gameEvent.eventType === "Drop" || gameEvent.eventType === "TA") {
+				possessionData[0] = "#" + possessionCount;
+				possessionData[1] = possessionData[3].length;
+				if (gameEvent.eventType === "Goal") possessionData[2] = "Score!";
+				if (gameEvent.eventType === "Drop") possessionData[2] = "Drop";
+				if (gameEvent.eventType === "TA") possessionData[2] = "Throw Away";
+				chartData = chartData.concat([possessionData]);
+				possessionData = [];
+				possessionCount++;
+			} 
+		}
+		return chartData;
+	}
+
 	@action loadTeams(leagueId) {
 		superagent
 			.get(HOST_URL + 'teams/' + leagueId)

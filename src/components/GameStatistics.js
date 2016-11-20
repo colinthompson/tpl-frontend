@@ -77,7 +77,7 @@ class GameStatistics extends Component {
                 {statistics}
 				
                 <div className="row">
-                    <GameChart />
+                    <GameChart chartData={teamStore.chartData} />
                 </div>
 
 			</div>
