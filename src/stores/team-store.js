@@ -222,7 +222,23 @@ export class TeamStore {
 	}
 
 	@computed get subPlayersArray() {
-		return this.subPlayersList.slice();
+		var tempArray = this.subPlayersList.slice();
+		tempArray = tempArray.sort(function(a,b){
+			if (a.gender < b.gender) {
+				return -1;
+			}
+			if (a.gender > b.gender) {
+				return 1;
+			}
+			if (a.nickname.trim() < b.nickname.trim()){
+				return -1;
+			}
+			if (a.nickname.trim() > b.nickname.trim()){
+				return 1;
+			}
+			return 0;
+		});
+		return tempArray;
 	}
 
 	@computed get currentGameEventSequence() {
@@ -231,6 +247,28 @@ export class TeamStore {
 		} else {
 			return this.gameLog[this.gameLog.length - 1].sequence;
 		}
+	}
+
+	@computed get chartData() {
+		var chartData = [];
+		var possessionData = [];
+		var possessionCount = 1;
+		console.log(this.gameLog);
+		for (const gameEvent of this.gameLog) {
+			if (!possessionData[3]) possessionData[3] = [];
+			possessionData[3] = possessionData[3].concat(gameEvent.player.nickname);
+			if (gameEvent.eventType === "Goal" || gameEvent.eventType === "Drop" || gameEvent.eventType === "TA") {
+				possessionData[0] = "#" + possessionCount;
+				possessionData[1] = possessionData[3].length;
+				if (gameEvent.eventType === "Goal") possessionData[2] = "Score!";
+				if (gameEvent.eventType === "Drop") possessionData[2] = "Drop";
+				if (gameEvent.eventType === "TA") possessionData[2] = "Throw Away";
+				chartData = chartData.concat([possessionData]);
+				possessionData = [];
+				possessionCount++;
+			} 
+		}
+		return chartData;
 	}
 
 	@action loadTeams(leagueId) {
@@ -480,6 +518,11 @@ export class TeamStore {
 		this.subPlayersList = this.subPlayersList.concat(movePlayer);
 	}
 
+	@action clearStats() {
+		console.log(this.selectedGame, this.selectedTeam);
+		this.gameLog = [];
+	}
+
 	@action resetToMain() {
 		this.selectedTeam = '';
 		this.selectedGame = '';
@@ -499,6 +542,10 @@ export class TeamStore {
 	}
 
 	@action recalculatStatistics() {
+
+		this.gameLog = this.gameLog.sort(function (a, b) {
+			return (a.sequence - b.sequence);
+		});
 
 		// clear the stats for the tracking players		
 		for (const player of this.trackingPlayersArray) {

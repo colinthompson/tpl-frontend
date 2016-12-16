@@ -10,7 +10,7 @@ import Scoreboard from './Scoreboard.js';
 import LeagueSchedule from './LeagueSchedule.js';
 import GameStatistics from './GameStatistics.js';
 import { TeamStore } from '../stores/team-store';
-import DevTools from 'mobx-react-devtools';
+//import DevTools from 'mobx-react-devtools';
 
 const muiTheme = getMuiTheme({
 	palette: {
@@ -34,7 +34,6 @@ class TrackGame extends Component {
 		return (
 			<MuiThemeProvider muiTheme={muiTheme}>
 				<div>
-				<DevTools />
 					{ teamStore.selectedTeam === '' ?
 						<LeagueSchedule teams={teamStore.scheduleGamesArray}  onTeamChange={this.onTeamChange} />  :
 						<ShowTeam teamStore={teamStore} playersList={teamStore.trackingPlayersArray} subsList={teamStore.subPlayersArray} gameLog={teamStore.gameLogList} removeMode={teamStore.removeMode} teamName={teamStore.selectedTeamName} teamScore={teamStore.teamScore} opponentScore={teamStore.opponentScore} viewStatsMode={teamStore.viewStatsMode} onReturn={this.onReturn} />

@@ -9,8 +9,17 @@ class PlayersList extends Component {
       <option value={val.playerId} key={val.playerId}>{val.nickname}</option>
     );
 
-    const malePlayers = players.filter(player => player.gender === 'Male');
-    const femalePlayers = players.filter(player => player.gender === 'Female')
+
+    var malePlayers = players.filter(player => player.gender === 'Male');
+    malePlayers = malePlayers.sort(function(a,b) {
+      return (a.nickname > b.nickname);
+    });
+
+    var femalePlayers = players.filter(player => player.gender === 'Female');
+    femalePlayers = femalePlayers.sort(function(a,b) {
+      return (a.nickname > b.nickname);
+    });
+
 
     return (
       <div className="ui grid container">
@@ -74,7 +83,8 @@ class PlayersList extends Component {
           <br />
           <br />
           <br />
-          <button className="ui red button rightButton fluid" onTouchTap={this.handleGameEventTap.bind(this, "Reset")}>Reset</button>
+          
+          <button className="ui red button rightButton fluid" onTouchTap={this.handleGameEventTap.bind(this, "Schedule")}>Schedule</button>
         </div>
 
       </div>
@@ -82,6 +92,10 @@ class PlayersList extends Component {
 
     )
   }
+
+
+  //<button className="ui red button rightButton fluid" onTouchTap={this.handleGameEventTap.bind(this, "Reset")}>Reset</button>
+          
 
   handleRemoveTap(event) {
     this.props.teamStore.setRemoveMode(!this.props.teamStore.removeMode);
@@ -92,8 +106,16 @@ class PlayersList extends Component {
   }
   
   handleGameEventTap(eventType){
-    if (eventType === "Reset") {
+    if (eventType === "Schedule") {
       this.props.teamStore.resetToMain();
+    }
+    if (eventType === "Reset") {
+      if (confirm("Reset will clear the stats.  Are you sure?") === true) {
+        // reset the gamelog
+        this.props.teamStore.clearStats();
+      } else {
+        // do nothing
+      }
     }
 
     if (eventType === 'Undo') {
@@ -106,6 +128,7 @@ class PlayersList extends Component {
   handleOnTouchTap(playerValue, event){    
     if (this.props.teamStore.removeMode) {
       this.props.teamStore.moveTrackPlayerToSubPlayer(playerValue.playerId);
+      this.props.teamStore.setRemoveMode(!this.props.teamStore.removeMode);
     } else {
       const gameEvent = this.props.teamStore.createNewGameEvent(this.props.teamStore, playerValue, "", false);
       this.props.teamStore.addGameEvent(gameEvent);

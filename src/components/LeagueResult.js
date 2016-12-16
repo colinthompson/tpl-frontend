@@ -3,7 +3,7 @@ import { TeamStore } from '../stores/team-store';
 import { observer } from 'mobx-react';
 import { action } from 'mobx';
 import GameStatistics from './GameStatistics.js';
-import DevTools from 'mobx-react-devtools';
+//import DevTools from 'mobx-react-devtools';
 import LeagueSchedule from './LeagueSchedule.js';
 
 
@@ -24,7 +24,6 @@ class LeagueResult extends Component {
     return (
 
         <div className="ui grid container">
-        <DevTools />
         { teamStore.selectedTeam === '' && teamStore.viewStatsMode === false ?
             <LeagueSchedule teams={teamStore.scheduleGamesArray}  onTeamChange={this.onTeamChange} />  : 
 			<ShowStatistics teamStore={teamStore} viewStatsMode={teamStore.viewStatsMode} onReturn={this.onReturn} />
