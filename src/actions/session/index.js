@@ -1,9 +1,11 @@
 import sessionStore from '../../stores/sessionStore';
 import leagueStore from '../../stores/leagueStore';
+import gameStore from '../../stores/gameStore';
 import { fetchGames, fetchTeams } from '../../actions/league';
 
 export function resetSession() {
     sessionStore.reset();
+    gameStore.reset();
 }
 
 export function setTrackStatsMode(mode) {

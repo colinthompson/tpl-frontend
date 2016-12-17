@@ -4,14 +4,15 @@ import * as actions from '../actions/index';
 import { Navbar, Nav, NavItem, Button, Grid, Row, Col } from 'react-bootstrap';
 import Loading from 'react-loading';
 import LeagueSchedule from './LeagueSchedule';
+import GameView from './GameView';
 
 
-@inject('sessionStore') @observer
+@inject('sessionStore', 'gameStore') @observer
 export default class App extends React.Component {
 
   render() {
 
-    const { sessionStore } = this.props;
+    const { sessionStore, gameStore } = this.props;
 
     if (sessionStore.getNumberOfPendingRequests() > 0) {
         return (
@@ -52,6 +53,7 @@ export default class App extends React.Component {
                 isTrackStatsMode={sessionStore.getTrackStatsMode()}
                 isViewResultsMode={sessionStore.getViewResultsMode()}
                 isMaintainMode={sessionStore.getMaintainMode()}
+                isGameSelected={gameStore.isGameSelected()}
             /> 
           </Navbar.Collapse>
         </Navbar>
@@ -59,6 +61,7 @@ export default class App extends React.Component {
             isTrackStatsMode={sessionStore.getTrackStatsMode()}
             isViewResultsMode={sessionStore.getViewResultsMode()}
             isMaintainMode={sessionStore.getMaintainMode()}
+            isGameSelected={gameStore.isGameSelected()}
         /> 
       </div>
 
@@ -68,10 +71,12 @@ export default class App extends React.Component {
 }
 
 function MainContent(props) {
-    const centerContainer = {maxWidth: 400, margin: '0 auto 10px'};
+    const centerContainer = {maxWidth: 400, margin: '0 5px 5px'};
     if (props.isTrackStatsMode || props.isViewResultsMode) {
         return (
-            <LeagueSchedule />
+            <div>
+            { props.isGameSelected ? <GameView /> : <LeagueSchedule />}
+            </div>
         );
     }
 
@@ -131,6 +136,7 @@ function handleReturn() {
 function handleClear() {
     //actions. ...
     console.log("Are you sure you want to clear stats?");
+    actions.resetGameStats();
 }
 
 function handleTrackStats() {
