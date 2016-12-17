@@ -1,5 +1,5 @@
 import { observable, action } from 'mobx';
-import { forEach } from 'lodash';
+import { forEach, groupBy } from 'lodash';
 
 class LeagueStore {
 
@@ -40,6 +40,15 @@ class LeagueStore {
 
     getGamesList() {
         return this.gamesList;
+    }
+
+    getGamesListGroupByDate() {
+        const groupByDate = groupBy(this.gamesList, 'date');
+        const groupedList = [];
+        forEach(groupByDate, (value,key) => {
+            groupedList.push(value);
+        })
+        return groupedList;
     }
 
     getTeamsList() {

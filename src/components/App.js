@@ -69,13 +69,7 @@ export default class App extends React.Component {
 
 function MainContent(props) {
     const centerContainer = {maxWidth: 400, margin: '0 auto 10px'};
-    if (props.isTrackStatsMode) {
-        return (
-            <LeagueSchedule />
-        );
-    }
-
-    if (props.isViewResultsMode) {
+    if (props.isTrackStatsMode || props.isViewResultsMode) {
         return (
             <LeagueSchedule />
         );
