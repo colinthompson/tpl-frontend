@@ -1,7 +1,10 @@
 import React from 'react';
 import {observer, inject} from 'mobx-react';
 import * as actions from '../actions/index';
-import { Navbar, Nav, NavItem, Button } from 'react-bootstrap';
+import { Navbar, Nav, NavItem, Button, Grid, Row, Col } from 'react-bootstrap';
+import Loading from 'react-loading';
+import LeagueSchedule from './LeagueSchedule';
+
 
 @inject('sessionStore') @observer
 export default class App extends React.Component {
@@ -9,6 +12,30 @@ export default class App extends React.Component {
   render() {
 
     const { sessionStore } = this.props;
+
+    if (sessionStore.getNumberOfPendingRequests() > 0) {
+        return (
+            <div>
+                <Navbar collapseOnSelect>
+                <Navbar.Header>
+                    <Navbar.Brand>
+                    Parity League
+                    </Navbar.Brand>
+                    <Navbar.Toggle />
+                </Navbar.Header>
+                </Navbar>
+                <Grid fluid={true}>
+                    <Row>
+                        <Col xs={5} md={5}></Col>
+                        <Col md={2} xs={2}>
+                            <Loading type='bubbles' color='#999999' />
+                        </Col>
+                        <Col xs={5} md={5}></Col>
+                    </Row>
+                </Grid>
+            </div>
+        );
+    }
 
     return (
 
@@ -44,13 +71,13 @@ function MainContent(props) {
     const centerContainer = {maxWidth: 400, margin: '0 auto 10px'};
     if (props.isTrackStatsMode) {
         return (
-            <div>Track Stats - this should be the schedule page</div>
+            <LeagueSchedule />
         );
     }
 
     if (props.isViewResultsMode) {
         return (
-            <div>View Results - this should be the schedule page</div>
+            <LeagueSchedule />
         );
     }
 

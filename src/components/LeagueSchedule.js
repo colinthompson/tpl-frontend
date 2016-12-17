@@ -1,34 +1,48 @@
-import React, { Component } from 'react';
+import React from 'react';
+import { observer, inject } from 'mobx-react';
+//import * as actions from '../actions/index';
 
-class LeagueSchedule extends Component {
+@inject('sessionStore', 'leagueStore') @observer
+class LeagueSchedule extends React.Component {
   
   render() {
-    const { teams } = this.props;
 
-    return (
-        <div className="ui grid container">
-          { teams.map(teamValue =>
-              <div key={teamValue.gameId} className="row">
-                <div className="six wide column">
-                  {teamValue.date}
-                </div>
-                <div className="five wide column">
-                  <button className="ui blue button small playerButton fluid"
-                    onTouchTap={this.handleOnTouchTap.bind(this, teamValue.homeTeamId, teamValue.gameId)}>
-                    {teamValue.homeTeam}
-                  </button>
-                </div>
-                <div className="five wide column">
-                  <button className="ui pink button small playerButton fluid"
-                    onTouchTap={this.handleOnTouchTap.bind(this, teamValue.awayTeamId, teamValue.gameId)}>
-                    {teamValue.awayTeam}
-                  </button>
-                </div>
+    const { sessionStore, leagueStore } = this.props;
+
+    const games = leagueStore.getGamesList();
+
+    
+
+    if (sessionStore.getTrackStatsMode()){
+      return (
+        <div>
+          <div>Schedule - Track Stats Mode</div>
+          {
+            games.map(game =>
+              <div key={game.id} >
+                {game.homeTeam} vs {game.awayTeam} - {game.id}
               </div>
-          )}
+            )
+          }
         </div>
+      )
+    }
 
-    )
+    if (sessionStore.getViewResultsMode()){
+      return (
+        <div>
+          <div>Schedule - View Results Mode</div>
+          {
+            games.map(game =>
+              <div key={game.id} >
+                {game.homeTeam} vs {game.awayTeam} - {game.id}
+              </div>
+            )
+          }
+        </div>
+      )
+    }
+
   }
 
   handleOnTouchTap(teamIdValue, gameIdValue, event){  
@@ -37,13 +51,6 @@ class LeagueSchedule extends Component {
 
 }
 
-LeagueSchedule.propTypes = {
-  teams: React.PropTypes.array
-};
-
-LeagueSchedule.defaultProps = {
-  teams: []
-};
 
 export default LeagueSchedule;
 

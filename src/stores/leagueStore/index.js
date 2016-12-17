@@ -7,14 +7,12 @@ class LeagueStore {
     @observable gamesList;
     @observable teamsList;
     @observable playersList;
-    @observable numberOfPendingRequests;
 
     constructor() {
-        this.leagueId = null;
+        this.leagueId = 463;
         this.gamesList = [];
         this.teamsList = [];
         this.playersList = [];
-        this.numberOfPendingRequests = 0;
     }
 
     @action reset = () => {
@@ -22,7 +20,6 @@ class LeagueStore {
         this.gameList = [];
         this.teamsList = [];
         this.playersList = [];
-        this.numberOfPendingRequests = 0; 
     }
 
     @action mergeGames = (objs) => {
@@ -52,11 +49,6 @@ class LeagueStore {
     getPlayersList() {
         return this.playersList;
     }
-
-    getNumberOfPendingRequests() {
-        return this.numberOfPendingRequests;
-    }
-
 
 }
 

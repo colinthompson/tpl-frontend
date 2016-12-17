@@ -5,17 +5,20 @@ class SessionStore {
     @observable isTrackStatsMode;
     @observable isViewResultsMode;
     @observable isMaintainMode;
+    @observable numberOfPendingRequests;
     
     constructor() {
         this.isTrackStatsMode = false;
         this.isViewResultsMode = false;
         this.isMaintainMode = false;
+        this.numberOfPendingRequests = 0;
     }
 
     @action reset = () => {
         this.isTrackStatsMode = false;
         this.isViewResultsMode = false;
         this.isMaintainMode = false;
+        this.numberOfPendingRequests = 0;
     }
 
     @action setTrackStatsMode(mode) {
@@ -30,6 +33,16 @@ class SessionStore {
         this.isMaintainMode = mode;
     }
 
+    @action startRequest = () => {
+        this.numberOfPendingRequests++;
+    }
+
+    @action finishRequest = () => {
+        if (this.numberOfPendingRequests > 0){
+            this.numberOfPendingRequests--;
+        }
+    }
+
     getTrackStatsMode() {
         return this.isTrackStatsMode;
     }
@@ -40,6 +53,10 @@ class SessionStore {
 
     getMaintainMode() {
         return this.isMaintainMode;
+    }
+
+    getNumberOfPendingRequests() {
+        return this.numberOfPendingRequests;
     }
 }
 
