@@ -1,16 +1,24 @@
 import React from 'react';
-import {render} from 'react-dom';
+import ReactDOM from 'react-dom';
+import { Provider } from 'mobx-react';
+import { Router, Route, IndexRedirect, browserHistory } from 'react-router';
+import * as stores from './stores';
+//import * as actions from './actions/index';
 import {useStrict} from 'mobx';
 import injectTapEventPlugin from 'react-tap-event-plugin';
-import App from './App';
-import './www/style/index.css';
+import App from './components/App';
 
 useStrict(true);
-
-//Needed for onTouchTap
 injectTapEventPlugin();
 
-render(
-  <App />,
+ReactDOM.render(
+  <Provider { ...stores }>
+    <Router history={browserHistory}>
+      <Route path='/'>
+        <IndexRedirect to="/home" />
+        <Route path="home" component={App} />
+      </Route>
+    </Router>
+  </Provider>,
   document.getElementById('root')
 );
