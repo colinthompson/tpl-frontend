@@ -16,10 +16,27 @@ class GameView extends React.Component {
     
     return (
       <div style={centerContainer}>
+        <h1>EVENTS</h1>
         {
           gameStore.getEventsList().map(event =>
             <div key={event.sequence}>
                 {event.player.nickname} - {event.eventType}
+            </div>
+          )
+        }
+        <h1>PLAYERS ON TEAM</h1>
+        {
+          gameStore.getTrackingList().map(player =>
+            <div key={player.id}>
+              {player.nickname}
+            </div>
+          )
+        }
+        <h1>SUBS FOR TEAM</h1>
+        {
+          gameStore.getSubList().map(player =>
+            <div key={player.id}>
+              {player.nickname}
             </div>
           )
         }

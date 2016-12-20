@@ -16,9 +16,11 @@ export function setGameTeam(gameId, teamId) {
     fetchGameTeamEvents(gameId, teamId);
 
     // Reload the player list and sub list from leagueStore
-    leagueStore.getPlayersByTeam(gameStore.getTeamId());
-    leagueStore.getPlayersNotOnTeam(gameStore.getTeamId());
+    const trackingPlayers = leagueStore.getPlayersByTeam(teamId);
+    const subs = leagueStore.getPlayersNotOnTeam(teamId);
 
+    gameStore.mergeTracking(trackingPlayers);
+    gameStore.mergeSubs(subs);
 }
 
 export function fetchGameTeamEvents(gameId, teamId) {
