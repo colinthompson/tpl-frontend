@@ -33,9 +33,7 @@ function BuildSchedule(props) {
         groupedSchedule.map(days =>
           <Grid fluid={true} key={days[0].date} style={dayContainer}>
             <Row style={dayContainer}>
-              
               <Col xs={12} md={6} mdOffset={3} className="text-center">{days[0].date}</Col>
-              
             </Row>
             {
               days.map(game => 
