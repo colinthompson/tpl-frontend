@@ -71,7 +71,7 @@ export default class App extends React.Component {
 }
 
 function MainContent(props) {
-    const centerContainer = {maxWidth: 400, margin: '0 5px 5px'};
+    const rowMargins = {padding: '5px 5px'};
     if (props.isTrackStatsMode || props.isViewResultsMode) {
         return (
             <div>
@@ -87,11 +87,13 @@ function MainContent(props) {
     }
 
     return (
-        <div style={centerContainer}>
-            <Button bsStyle="primary" bsSize="large" block onClick={handleTrackStats}>Record Stats</Button>
-            <Button bsStyle="primary" bsSize="large" block onClick={handleViewResults}>View Results</Button>
-            <Button bsStyle="info" bsSize="large" block onClick={handleAdmin}>Maintain League</Button>
-        </div>
+        <Grid fluid={true} >
+            <Row >
+                <Col style={rowMargins} xs={12} md={4} mdOffset={4}><Button bsStyle="primary" bsSize="large" block onClick={handleTrackStats}>Record Stats</Button></Col>
+                <Col style={rowMargins} xs={12} md={4} mdOffset={4}><Button bsStyle="primary" bsSize="large" block onClick={handleViewResults}>View Results</Button></Col>
+                <Col style={rowMargins} xs={12} md={4} mdOffset={4}><Button bsStyle="info" bsSize="large" block onClick={handleAdmin}>Maintain League</Button></Col>
+            </Row>
+        </Grid>
     );
 }
 

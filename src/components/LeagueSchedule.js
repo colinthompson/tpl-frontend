@@ -11,13 +11,11 @@ class LeagueSchedule extends React.Component {
   }
 
   render() {
-    const centerContainer = {maxWidth: 400, margin: '0 2px 2px'};
-    
     const { leagueStore } = this.props;
     const groupedSchedule = leagueStore.getGamesListGroupByDate();
 
     return (
-      <div style={centerContainer}>
+      <div >
         {
           <BuildSchedule groupedSchedule={groupedSchedule} handleSelectGameTeam={this.handleSelectGameTeam} />
         }
@@ -35,15 +33,17 @@ function BuildSchedule(props) {
         groupedSchedule.map(days =>
           <Grid fluid={true} key={days[0].date} style={dayContainer}>
             <Row style={dayContainer}>
-              <Col xs={12} md={12} className="text-center">{days[0].date}</Col>
+              
+              <Col xs={12} md={6} mdOffset={3} className="text-center">{days[0].date}</Col>
+              
             </Row>
             {
               days.map(game => 
                 <Row key={game.id} style={dayContainer}>
-                  <Col xs={6} md={6}>
+                  <Col xs={6} md={3} mdOffset={3}>
                     <Button bsStyle="info" bsSize="small" block onClick={() => props.handleSelectGameTeam(game.id, game.homeTeamId)}>{game.homeTeam}</Button>
                   </Col>
-                  <Col xs={6} md={6}>
+                  <Col xs={6} md={3}>
                     <Button bsStyle="info" bsSize="small" block onClick={() => props.handleSelectGameTeam(game.id, game.awayTeamId)}>{game.awayTeam}</Button>
                   </Col>
                 </Row>
