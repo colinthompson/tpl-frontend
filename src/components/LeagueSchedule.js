@@ -15,6 +15,7 @@ class LeagueSchedule extends React.Component {
     
     const { leagueStore } = this.props;
     const groupedSchedule = leagueStore.getGamesListGroupByDate();
+
     return (
       <div style={centerContainer}>
         {

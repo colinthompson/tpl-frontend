@@ -59,6 +59,18 @@ class LeagueStore {
         return this.playersList;
     }
 
+    getPlayersByTeam(teamId) {
+        const myTeam = this.teamsList.find(team => team.id === teamId);
+        forEach(myTeam.players, (player) => console.log(player.nickname));
+    }
+
+    getPlayersNotOnTeam(teamId) {
+        const otherTeams = this.teamsList.filter(team => team.id !== teamId);
+        forEach(otherTeams, (team) => {
+            forEach(team.players, (player) => console.log(team.teamName, player.nickname));
+        });
+    }
+
 }
 
 const leagueStore = new LeagueStore();

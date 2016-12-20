@@ -11,6 +11,9 @@ class GameView extends React.Component {
     
     const { gameStore } = this.props;
     
+    //leagueStore.getPlayersByTeam(gameStore.getTeamId());
+    //leagueStore.getPlayersNotOnTeam(gameStore.getTeamId());
+    
     return (
       <div style={centerContainer}>
         {
