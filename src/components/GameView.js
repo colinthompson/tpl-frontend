@@ -7,28 +7,17 @@ import { observer, inject } from 'mobx-react';
 class GameView extends React.Component {
 
   render() {
-    const centerContainer = {maxWidth: 400, margin: '0 2px 2px'};
     
     const { gameStore } = this.props;
     
-    //leagueStore.getPlayersByTeam(gameStore.getTeamId());
-    //leagueStore.getPlayersNotOnTeam(gameStore.getTeamId());
-    
     return (
-      <div style={centerContainer}>
-        <h1>EVENTS</h1>
-        {
-          gameStore.getEventsList().map(event =>
-            <div key={event.sequence}>
-                {event.player.nickname} - {event.eventType}
-            </div>
-          )
-        }
+      <div>
+        
         <h1>PLAYERS ON TEAM</h1>
         {
           gameStore.getTrackingList().map(player =>
             <div key={player.id}>
-              {player.nickname}
+              {player.nickname} - {player.gender}
             </div>
           )
         }
@@ -36,7 +25,16 @@ class GameView extends React.Component {
         {
           gameStore.getSubList().map(player =>
             <div key={player.id}>
-              {player.nickname}
+              {player.nickname} - {player.gender}
+            </div>
+          )
+        }
+
+        <h1>EVENTS</h1>
+        {
+          gameStore.getEventsList().map(event =>
+            <div key={event.sequence}>
+                {event.sequence} - {event.player.nickname} - {event.eventType}
             </div>
           )
         }

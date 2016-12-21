@@ -31,14 +31,34 @@ class GameStore {
 
     @action mergeTracking = (objs) => {
         forEach(objs, (obj) => this.trackingList.push(obj));
+        // Sort by Gender / Nickname
+        this.trackingList = this.trackingList.sort(function (a,b){
+            if (a.gender < b.gender) { return 1; }
+            if (a.gender > b.gender) { return -1; }
+            if (a.nickname.trim() < b.nickname.trim()) { return -1; }
+            if (a.nickname.trim() > b.nickname.trim()) { return 1; }
+            return 0;
+        })
     }
 
     @action mergeSubs = (objs) => {
         forEach(objs, (obj) => this.subList.push(obj));
+        // Sort by Gender / Nickname
+        this.subList = this.subList.sort(function (a,b){
+            if (a.gender < b.gender) { return 1; }
+            if (a.gender > b.gender) { return -1; }
+            if (a.nickname.trim() < b.nickname.trim()) { return -1; }
+            if (a.nickname.trim() > b.nickname.trim()) { return 1; }
+            return 0;
+        })
     }
 
     @action mergeEvents = (objs) => {
         forEach(objs, (obj) => this.eventsList.push(obj));
+        // Sort the events by sequence number
+        this.eventsList = this.eventsList.sort(function (a,b) {
+            return (a.sequence - b.sequence);
+        })
     }
 
     @action setGameTeam(gameId, teamId) {
