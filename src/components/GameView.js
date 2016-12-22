@@ -1,6 +1,6 @@
 import React from 'react';
 import { observer, inject } from 'mobx-react';
-import {Grid, Row, Col, Button } from 'react-bootstrap';
+import {Grid, Row, Col, Button, Glyphicon } from 'react-bootstrap';
 //import * as actions from '../actions/index';
 import SelectSub from './SelectSub';
 
@@ -15,18 +15,35 @@ class GameView extends React.Component {
   render() {
     
     const { gameStore } = this.props;
+
+    const gameEvents = gameStore.getEventsList().slice(-5);
     
     return (
       <Grid fluid={true}>
+        
+        <Row>
+          <Col xs={12} md={6} mdOffset={3}>
+            <div className="eventsLog">
+              {
+                gameEvents.map(event =>
+                  <EventBox event={event} key={event.sequence} />
+                )
+              }
+            </div>
+          </Col>
+
+        </Row>
+
         <Row>
           <Col xs={12} md={6} mdOffset={3} className="text-center">
             <SelectSub />
           </Col>
         </Row>
+        
 
         <Row>
-          <Col xs={12} md={6} mdOffset={3}>
-            <div  className="masonry">
+          <Col xs={8} md={4} mdOffset={3}>
+            <div className="masonry2">
               {
                 gameStore.getTrackingList().map(player =>
                   <div key={player.id} className="item">
@@ -39,25 +56,32 @@ class GameView extends React.Component {
               }
             </div>
           </Col>
+          <Col xs={4} md={2}>
+            <div className="masonry1">
+              <div className="item">
+                <Button block bsSize="small" bsStyle={null} className="btn-event">Goal</Button>
+              </div>
+              <div className="item">
+                <Button block bsSize="small" bsStyle={null} className="btn-event">Drop</Button>
+              </div>
+              <div className="item">
+                <Button block bsSize="small" bsStyle={null} className="btn-event">TA</Button>
+              </div>
+              <div className="item">
+                <Button block bsSize="small" bsStyle={null} className="btn-event">D</Button>
+              </div>
+              <div className="item">
+                <Button block bsSize="small" bsStyle={null} className="btn-event">Undo</Button>
+              </div>
+              <div className="item">
+                <Button block bsSize="small" bsStyle={null} className="btn-event">+</Button>
+              </div>
+              <div className="item">
+                <Button block bsSize="small" bsStyle={null} className="btn-event">-</Button>
+              </div>
+            </div>
+          </Col>
         </Row>
-
-        <h1>SUBS FOR TEAM</h1>
-        {
-          gameStore.getSubList().map(player =>
-            <div key={player.id}>
-              {player.nickname} - {player.gender}
-            </div>
-          )
-        }
-
-        <h1>EVENTS</h1>
-        {
-          gameStore.getEventsList().map(event =>
-            <div key={event.sequence}>
-                {event.sequence} - {event.player.nickname} - {event.eventType}
-            </div>
-          )
-        }
       </Grid>
     )
   }
@@ -65,25 +89,38 @@ class GameView extends React.Component {
 
 function PlayerButton(props) {
 
-  const {player, onTapPlayer} = props
+  const {player, onTapPlayer} = props;
 
-  const disabled = (player.id==='38869' ? true : false);
-  console.log(player.id)
-  console.log(disabled)
+  const disabled = ((player.id==='38135' || player.id==='38869') ? true : false);
+  const buttonClass = (player.gender === "Male" ? "btn-male btn-text" : "btn-female btn-text");
 
   return (
   
     <Button 
-      bsStyle={player.gender === "Male" ? "info" : "warning"} 
+      bsStyle={null}
+      className={buttonClass}
       bsSize="small" 
+      block
       disabled={disabled}
       onClick={() => onTapPlayer(player.id)}
     >
-        {player.nickname} - {player.id} - {player.gender}
+        {player.nickname}
     </Button>
 
   );
 }
 
-//<Button bsStyle="info" bsSize="small" block onClick={() => this.handleTapPlayer(player.id)}>{player.nickname} - {player.id}</Button>
+function EventBox(props) {
+
+  const {event} = props;
+
+  const glyphClass = (event.player.gender === "Male" ? "event-male" : "event-female");
+
+  return (
+    <div className="eventBox">
+      <Glyphicon className={glyphClass} glyph="user" />{event.player.nickname}<br />{event.eventType}
+    </div>
+  );
+}
+
 export default GameView;

@@ -19,7 +19,7 @@ class SelectSub extends React.Component {
     const options = gameStore.getSubList().map(player => {
         return {
             value: player.id,
-            label: player.playerName + ' - ' + player.nickname + ' - ' + player.id,
+            label: player.playerName + ' (' + player.nickname + ')',
             gender: player.gender
         }
     });

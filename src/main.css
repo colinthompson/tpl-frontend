@@ -2,12 +2,68 @@
     margin: 0 0 10px;
 }
 
+.eventsLog {
+    width: 100%;
+    background-color: #cde364;
+	border-top: 2px dotted #999;
+	border-bottom: 2px dotted #999;
+	margin-bottom: 5px;
+    height: 42px;
+}
+
+.eventBox {
+    font-size: 10px;
+    float: left;
+    margin: 1px;
+    height: 38px;
+    border: 1px dotted #ccc;
+    width: 55px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: left;
+}
+
+.event-male {
+    color: #3366cc;
+}
+
+.event-female {
+    color: #ff66cc;
+}
+
+.btn-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: left;
+}
+
+.btn-event {
+    background-color: #9966cc;
+    color: white;
+}
+
+.btn-male {
+    background-color: #3366cc;
+    color: white;
+}
+.btn-female {
+    background-color: #ff66cc;
+    color: white;
+}
+
 .scheduleTable {
     border-spacing: 2px;
     border-collapse: separate;
 }
 
-.masonry { /* Masonry container */
+.masonry1 { /* Masonry container */
+    column-count: 1;
+    column-gap: 10px;
+}
+
+.masonry2 { /* Masonry container */
     column-count: 2;
     column-gap: 10px;
 }
@@ -15,6 +71,6 @@
 .item { /* Masonry bricks or child elements */
     background-color: #eee;
     display: inline-block;
-    margin: 0 0 10px;
+    margin: 0 0 12px;
     width: 100%;
 }
