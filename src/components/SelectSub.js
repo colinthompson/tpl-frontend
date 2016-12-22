@@ -30,6 +30,7 @@ class SelectSub extends React.Component {
             placeholder="Search for sub name (or nickname)"
             options={options}
             onChange={this.handleChange}
+            className="dropdown"
         />
       </div>
     )

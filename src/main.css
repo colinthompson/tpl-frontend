@@ -1,3 +1,15 @@
-.mytext {
-    font-size: 30pt
+.dropdown {
+    margin: 0 0 10px;
+}
+
+.masonry { /* Masonry container */
+    column-count: 2;
+    column-gap: 10px;
+}
+
+.item { /* Masonry bricks or child elements */
+    background-color: #eee;
+    display: inline-block;
+    margin: 0 0 10px;
+    width: 100%;
 }
