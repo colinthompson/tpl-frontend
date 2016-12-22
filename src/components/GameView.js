@@ -8,6 +8,10 @@ import SelectSub from './SelectSub';
 @inject('gameStore') @observer
 class GameView extends React.Component {
 
+  handleTapPlayer(playerId) {
+    console.log("tapped on playerid: " + playerId);
+  }
+
   render() {
     
     const { gameStore } = this.props;
@@ -26,16 +30,17 @@ class GameView extends React.Component {
               {
                 gameStore.getTrackingList().map(player =>
                   <div key={player.id} className="item">
-                    <Button bsStyle="info" bsSize="small" block onClick={(val) => console.log(val)}>{player.nickname} - {player.gender}</Button>
+                    <PlayerButton 
+                      player={player}
+                      onTapPlayer={this.handleTapPlayer}
+                      />
                   </div>
                 )
               }
             </div>
           </Col>
         </Row>
-        
 
-        
         <h1>SUBS FOR TEAM</h1>
         {
           gameStore.getSubList().map(player =>
@@ -58,4 +63,27 @@ class GameView extends React.Component {
   }
 }
 
+function PlayerButton(props) {
+
+  const {player, onTapPlayer} = props
+
+  const disabled = (player.id==='38869' ? true : false);
+  console.log(player.id)
+  console.log(disabled)
+
+  return (
+  
+    <Button 
+      bsStyle={player.gender === "Male" ? "info" : "warning"} 
+      bsSize="small" 
+      disabled={disabled}
+      onClick={() => onTapPlayer(player.id)}
+    >
+        {player.nickname} - {player.id} - {player.gender}
+    </Button>
+
+  );
+}
+
+//<Button bsStyle="info" bsSize="small" block onClick={() => this.handleTapPlayer(player.id)}>{player.nickname} - {player.id}</Button>
 export default GameView;

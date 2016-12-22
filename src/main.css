@@ -2,6 +2,11 @@
     margin: 0 0 10px;
 }
 
+.scheduleTable {
+    border-spacing: 2px;
+    border-collapse: separate;
+}
+
 .masonry { /* Masonry container */
     column-count: 2;
     column-gap: 10px;
