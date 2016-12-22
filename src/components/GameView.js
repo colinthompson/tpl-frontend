@@ -2,6 +2,8 @@ import React from 'react';
 import { observer, inject } from 'mobx-react';
 //import {Grid, Row, Col, Button } from 'react-bootstrap';
 //import * as actions from '../actions/index';
+import SelectSub from './SelectSub';
+
 
 @inject('gameStore') @observer
 class GameView extends React.Component {
@@ -12,7 +14,7 @@ class GameView extends React.Component {
     
     return (
       <div>
-        
+        <SelectSub />
         <h1>PLAYERS ON TEAM</h1>
         {
           gameStore.getTrackingList().map(player =>

@@ -57,6 +57,7 @@
     "react-google-charts": "^1.2.1",
     "react-loading": "0.0.9",
     "react-router": "^2.7.0",
+    "react-select": "^1.0.0-rc.2",
     "react-tap-event-plugin": "^1.0.0",
     "superagent": "^2.2.0"
   },

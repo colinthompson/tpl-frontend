@@ -8,6 +8,8 @@ import {useStrict} from 'mobx';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import App from './components/App';
 
+import 'react-select/dist/react-select.css';
+
 useStrict(true);
 injectTapEventPlugin();
 
