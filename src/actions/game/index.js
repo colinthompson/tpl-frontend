@@ -36,3 +36,6 @@ export function fetchGameTeamEvents(gameId, teamId) {
         });
 }
 
+export function toggleEditPlayerMode() {
+    gameStore.toggleEditPlayerMode();
+}

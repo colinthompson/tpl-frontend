@@ -24,6 +24,10 @@
     text-align: left;
 }
 
+.eventButtonContainer {
+    padding-right: 0px;
+}
+
 .event-male {
     color: #3366cc;
 }
@@ -50,6 +54,11 @@
 }
 .btn-female {
     background-color: #ff66cc;
+    color: white;
+}
+
+.btn-edit {
+    background-color: #666;
     color: white;
 }
 

@@ -12,51 +12,177 @@ class GameView extends React.Component {
     console.log("tapped on playerid: " + playerId);
   }
 
+  handleTapEvent(event) {
+    console.log(event);
+  }
+
   render() {
     
     const { gameStore } = this.props;
 
     const gameEvents = gameStore.getEventsList().slice(-5);
-    
+
     return (
       <Grid fluid={true}>
         
-        <Row>
-          <Col xs={12} md={6} mdOffset={3}>
-            <div className="eventsLog">
-              {
-                gameEvents.map(event =>
-                  <EventBox event={event} key={event.sequence} />
-                )
-              }
-            </div>
-          </Col>
+        <ShowEventsLog isEditPlayerMode={gameStore.isEditPlayerMode} gameEvents={gameEvents} />
 
-        </Row>
+        <ShowEventButtons isEditPlayerMode={gameStore.isEditPlayerMode} handleTapEvent={this.handleTapEvent} />
 
-        <Row>
-          <Col xs={12} md={6} mdOffset={3} className="text-center">
-            <SelectSub />
-          </Col>
-        </Row>
-        
+        <ShowSelectSubs isEditPlayerMode={gameStore.isEditPlayerMode} />
 
-        <Row>
-          <Col xs={8} md={4} mdOffset={3}>
-            <div className="masonry2">
-              {
-                gameStore.getTrackingList().map(player =>
-                  <div key={player.id} className="item">
-                    <PlayerButton 
-                      player={player}
-                      onTapPlayer={this.handleTapPlayer}
-                      />
-                  </div>
-                )
-              }
-            </div>
-          </Col>
-          <Col xs={4} md={2}>
+        <ShowTrackingPlayers 
+          isEditPlayerMode={gameStore.isEditPlayerMode} 
+          trackingList={gameStore.getTrackingList()}
+          handleTapPlayer={this.handleTapPlayer}
+          />
+
+      </Grid>
+    )
+  }
+}
+
+/* Event Log Container */
+
+function ShowEventsLog(props) {
+  const {gameEvents, isEditPlayerMode} = props;
+  if (isEditPlayerMode) {
+    return (
+      <div></div>
+    );
+  }
+  return (
+    <Row>
+      <Col xs={12} md={6} mdOffset={3}>
+        <div className="eventsLog">
+          {
+            gameEvents.map(event =>
+              <EventBox event={event} key={event.sequence} />
+            )
+          }
+        </div>
+      </Col>
+    </Row>
+  );
+}
+
+function EventBox(props) {
+
+  const {event} = props;
+
+  const glyphClass = (event.player.gender === "Male" ? "event-male" : "event-female");
+
+  return (
+    <div className="eventBox">
+      <Glyphicon className={glyphClass} glyph="user" />{event.player.nickname}<br />{event.eventType}
+    </div>
+  );
+}
+
+/* Event Buttons */
+
+function ShowEventButtons(props) {
+  const {isEditPlayerMode, handleTapEvent} = props;
+  if (isEditPlayerMode) {
+    return (
+      <div></div>
+    );
+  }
+  return(
+    <Row>
+      <Col xs={2} md={1} mdOffset={3} className="eventButtonContainer">
+          <Button onClick={() => handleTapEvent('Goal')} block bsSize="small" bsStyle={null} className="btn-event">Goal</Button>
+      </Col>
+      <Col xs={2} md={1} className="eventButtonContainer">
+          <Button block bsSize="small" bsStyle={null} className="btn-event">Drop</Button>
+      </Col>    
+      <Col xs={2} md={1} className="eventButtonContainer">
+          <Button block bsSize="small" bsStyle={null} className="btn-event">TA</Button>
+      </Col>    
+      <Col xs={2} md={1} className="eventButtonContainer">
+          <Button block bsSize="small" bsStyle={null} className="btn-event">D</Button>
+      </Col>    
+      <Col xs={2} md={1} className="eventButtonContainer">
+          <Button block bsSize="small" bsStyle={null} className="btn-event">Undo</Button>
+      </Col>    
+    </Row>
+  );
+}
+
+/* Select Subs */
+
+function ShowSelectSubs(props) {
+  const {isEditPlayerMode} = props;
+  if (!isEditPlayerMode) {
+    return (
+      <div></div>
+    );
+  }
+  return (
+    <Row>
+      <Col xs={12} md={6} mdOffset={3} className="text-center">
+        <SelectSub />
+      </Col>
+    </Row>
+  );
+}
+
+/* Tracking Players */
+
+function ShowTrackingPlayers(props) {
+  const {isEditPlayerMode, handleTapPlayer, trackingList } = props;
+
+  return (
+    <Row>
+      <Col xs={12} md={6} mdOffset={3}>
+        <div className="masonry2">
+          {
+            trackingList.map(player =>
+              <div key={player.id} className="item">
+                <PlayerButton 
+                  player={player}
+                  onTapPlayer={handleTapPlayer}
+                  isEditPlayerMode={isEditPlayerMode}
+                  />
+              </div>
+            )
+          }
+        </div>
+      </Col>
+      
+    </Row>
+  );
+}
+
+function PlayerButton(props) {
+
+  const {player, onTapPlayer, isEditPlayerMode} = props;
+
+  const disabled = ((player.id==='38135' || player.id==='38869') ? true : false);
+  const buttonClass = (isEditPlayerMode ? 
+                        "btn-edit btn-text":
+                        (player.gender === "Male" ? "btn-male btn-text" : "btn-female btn-text"));
+
+  return (
+  
+    <Button 
+      bsStyle={null}
+      className={buttonClass}
+      bsSize="small" 
+      block
+      disabled={disabled}
+      onClick={() => onTapPlayer(player.id)}
+    >
+        {player.nickname}
+    </Button>
+
+  );
+}
+
+export default GameView;
+
+/*
+<Col xs={4} md={2}>
             <div className="masonry1">
               <div className="item">
                 <Button block bsSize="small" bsStyle={null} className="btn-event">Goal</Button>
@@ -81,46 +207,4 @@ class GameView extends React.Component {
               </div>
             </div>
           </Col>
-        </Row>
-      </Grid>
-    )
-  }
-}
-
-function PlayerButton(props) {
-
-  const {player, onTapPlayer} = props;
-
-  const disabled = ((player.id==='38135' || player.id==='38869') ? true : false);
-  const buttonClass = (player.gender === "Male" ? "btn-male btn-text" : "btn-female btn-text");
-
-  return (
-  
-    <Button 
-      bsStyle={null}
-      className={buttonClass}
-      bsSize="small" 
-      block
-      disabled={disabled}
-      onClick={() => onTapPlayer(player.id)}
-    >
-        {player.nickname}
-    </Button>
-
-  );
-}
-
-function EventBox(props) {
-
-  const {event} = props;
-
-  const glyphClass = (event.player.gender === "Male" ? "event-male" : "event-female");
-
-  return (
-    <div className="eventBox">
-      <Glyphicon className={glyphClass} glyph="user" />{event.player.nickname}<br />{event.eventType}
-    </div>
-  );
-}
-
-export default GameView;
+          */

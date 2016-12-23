@@ -8,6 +8,7 @@ class GameStore {
     @observable trackingList;
     @observable subList;
     @observable eventsList;
+    @observable isEditPlayerMode;
 
     constructor() {
         this.gameId = null;
@@ -15,6 +16,7 @@ class GameStore {
         this.trackingList = [];
         this.subList = [];
         this.eventsList = [];
+        this.isEditPlayerMode = false;
     }
 
     @action reset = () => {
@@ -23,6 +25,7 @@ class GameStore {
         this.trackingList = [];
         this.subList = [];
         this.eventsList = [];
+        this.isEditPlayerMode = false;
     }
 
     @action resetGameStats = () => {
@@ -66,6 +69,10 @@ class GameStore {
         this.teamId = teamId;
     }
 
+    @action toggleEditPlayerMode() {
+        this.isEditPlayerMode = !this.isEditPlayerMode;
+    }
+
     getGameId() {
         return this.gameId;
     }
@@ -88,6 +95,10 @@ class GameStore {
 
     isGameSelected() {
         return !!this.gameId && !!this.teamId;
+    }
+
+    isEditPlayerMode() {
+        return this.isEditPlayerMode;
     }
 
 }

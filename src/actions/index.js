@@ -1,6 +1,6 @@
 import { resetSession, setTrackStatsMode, setViewResultsMode, setMaintainMode } from './session';
 import { fetchGames, fetchTeams } from './league';
-import { setGameTeam, resetGameStats, fetchGameTeamEvents } from './game';
+import { setGameTeam, resetGameStats, fetchGameTeamEvents, toggleEditPlayerMode } from './game';
 
 export {
     // Session
@@ -17,5 +17,6 @@ export {
     // Game
     setGameTeam,
     resetGameStats,
-    fetchGameTeamEvents
+    fetchGameTeamEvents,
+    toggleEditPlayerMode
 };

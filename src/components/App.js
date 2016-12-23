@@ -103,6 +103,8 @@ function CustomMenu(props) {
         return (
             <Nav pullRight>
                 <NavItem onClick={handleReturn}>Return to Main</NavItem>
+                <NavItem onClick={handleSchedule}>Return to Schedule</NavItem>
+                <NavItem onClick={handleEditPlayers}>Setup Players / Subs</NavItem>
                 <NavItem onClick={handleClear}>Clear Stats</NavItem>
             </Nav>
         );
@@ -151,5 +153,13 @@ function handleViewResults() {
 
 function handleAdmin() {
     actions.setMaintainMode(true);
+}
+
+function handleEditPlayers() {
+    actions.toggleEditPlayerMode();
+}
+
+function handleSchedule() {
+    console.log("Go back to schedule");
 }
 
