@@ -158,10 +158,14 @@ function PlayerButton(props) {
 
   const {player, onTapPlayer, isEditPlayerMode} = props;
 
-  const disabled = ((player.id==='38135' || player.id==='38869') ? true : false);
+  const disabled = false;// ((player.id==='38135' || player.id==='38869') ? true : false);
+  /*
   const buttonClass = (isEditPlayerMode ? 
                         "btn-edit btn-text":
                         (player.gender === "Male" ? "btn-male btn-text" : "btn-female btn-text"));
+  */
+  const buttonClass =  (player.gender === "Male" ? "btn-male btn-text" : "btn-female btn-text");
+
 
   return (
   
@@ -173,7 +177,8 @@ function PlayerButton(props) {
       disabled={disabled}
       onClick={() => onTapPlayer(player.id)}
     >
-        {player.nickname}
+      { isEditPlayerMode ? <Glyphicon className="remove-icon" glyph="remove" /> : ""}
+      { player.nickname }
     </Button>
 
   );

@@ -58,8 +58,13 @@
 }
 
 .btn-edit {
-    background-color: #666;
+    background-color: #ff3333;
     color: white;
+}
+
+.remove-icon {
+    margin-right: 2px;
+    color: #ff3333;
 }
 
 .scheduleTable {
