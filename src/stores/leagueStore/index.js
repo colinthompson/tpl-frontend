@@ -52,11 +52,11 @@ class LeagueStore {
     }
 
     getTeamsList() {
-        return this.teamsList;
+        return this.teamsList.slice();
     }
 
     getPlayersList() {
-        return this.playersList;
+        return this.playersList.slice();
     }
 
     getPlayersByTeam(teamId) {

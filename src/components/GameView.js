@@ -1,7 +1,7 @@
 import React from 'react';
 import { observer, inject } from 'mobx-react';
 import {Grid, Row, Col, Button, Glyphicon } from 'react-bootstrap';
-//import * as actions from '../actions/index';
+import * as actions from '../actions/index';
 import SelectSub from './SelectSub';
 
 
@@ -9,7 +9,7 @@ import SelectSub from './SelectSub';
 class GameView extends React.Component {
 
   handleTapPlayer(playerId) {
-    console.log("tapped on playerid: " + playerId);
+    actions.tapPlayerButton(playerId);
   }
 
   handleTapEvent(event) {
@@ -21,19 +21,21 @@ class GameView extends React.Component {
     const { gameStore } = this.props;
 
     const gameEvents = gameStore.getEventsList().slice(-5);
+    const trackingList = gameStore.getTrackingList();
+    const isEditPlayerMode = gameStore.getEditPlayerMode();
 
     return (
       <Grid fluid={true}>
         
-        <ShowEventsLog isEditPlayerMode={gameStore.isEditPlayerMode} gameEvents={gameEvents} />
+        <ShowEventsLog isEditPlayerMode={isEditPlayerMode} gameEvents={gameEvents} />
 
-        <ShowEventButtons isEditPlayerMode={gameStore.isEditPlayerMode} handleTapEvent={this.handleTapEvent} />
+        <ShowEventButtons isEditPlayerMode={isEditPlayerMode} handleTapEvent={this.handleTapEvent} />
 
-        <ShowSelectSubs isEditPlayerMode={gameStore.isEditPlayerMode} />
+        <ShowSelectSubs isEditPlayerMode={isEditPlayerMode} />
 
         <ShowTrackingPlayers 
-          isEditPlayerMode={gameStore.isEditPlayerMode} 
-          trackingList={gameStore.getTrackingList()}
+          isEditPlayerMode={isEditPlayerMode} 
+          trackingList={trackingList}
           handleTapPlayer={this.handleTapPlayer}
           />
 

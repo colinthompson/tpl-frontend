@@ -39,3 +39,15 @@ export function fetchGameTeamEvents(gameId, teamId) {
 export function toggleEditPlayerMode() {
     gameStore.toggleEditPlayerMode();
 }
+
+export function tapPlayerButton(playerId) {
+    if (gameStore.isEditPlayerMode) {
+        gameStore.moveTrackToSub(playerId);
+    } else {
+        console.log("this is when player button is tapped in tracking mode: ", playerId);
+    }
+}
+
+export function moveSubToTrack(playerId) {
+    gameStore.moveSubToTrack(playerId);
+}
