@@ -1,6 +1,6 @@
 import { resetSession, setTrackStatsMode, setViewResultsMode, setMaintainMode } from './session';
 import { fetchGames, fetchTeams } from './league';
-import { setGameTeam, resetGameStats, fetchGameTeamEvents, toggleEditPlayerMode, moveSubToTrack, tapPlayerButton, setEventType } from './game';
+import { setGameTeam, resetGameStats, fetchGameTeamEvents, toggleEditPlayerMode, moveSubToTrack, tapPlayerButton, setEventType, undoEvent } from './game';
 
 export {
     // Session
@@ -21,5 +21,6 @@ export {
     toggleEditPlayerMode,
     moveSubToTrack,
     tapPlayerButton,
-    setEventType
+    setEventType,
+    undoEvent
 };

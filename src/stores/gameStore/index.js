@@ -119,9 +119,50 @@ class GameStore {
     @action setEventType(eventType) {
         let currentEvent = this.eventsList.length === 0 ? null : this.eventsList[this.eventsList.length -1];
         if (!currentEvent) return;
+
+        // If the current eventType is a Goal and changing it to a non-Goal 
+        // then clean up the "Assist" and "2nd Assist" of the previous events
+        if (currentEvent.eventType === "Goal" && eventType !== "Goal") {
+            let previousEvent = this.eventsList.length > 1 ?
+                                    (this.eventsList[this.eventsList.length - 2].eventType === "Assist" ? 
+                                        this.eventsList[this.eventsList.length - 2] : 
+                                        null) :
+                                    null;
+            let previous2Event = this.eventsList.length > 2 ?
+                                    (this.eventsList[this.eventsList.length - 3].eventType === "2nd Assist" ?
+                                        this.eventsList[this.eventsList.length - 3] :
+                                        null) :
+                                    null;
+            if (previousEvent) previousEvent.eventType = "";
+            if (previous2Event) previous2Event.eventType = "";
+        }
+
+        // If current eventType is a non-Goal and changing/setting it to a Goal
+        // then set the "Assist" and "2nd Assist" of the previous events 
+        if (currentEvent.eventType !== "Goal" && eventType === "Goal") {
+            let previousEvent = this.eventsList.length > 1 ?
+                                    (this.eventsList[this.eventsList.length -2].eventType === "" ?
+                                        this.eventsList[this.eventsList.length -2] :
+                                        null) :
+                                    null;
+            let previous2Event = this.eventsList.length > 2 ?
+                                    ((this.eventsList[this.eventsList.length - 3].eventType === "" && previousEvent) ?
+                                        this.eventsList[this.eventsList.length - 3] :
+                                        null) :
+                                    null;
+            if (previousEvent) previousEvent.eventType = "Assist";
+            if (previous2Event) previous2Event.eventType = "2nd Assist";
+        }
+
         currentEvent.eventType = eventType;
         // Need to do this to have mobx observe a change in the array
         this.eventsList = this.eventsList.slice();
+    }
+
+    @action undoEvent() {
+        // Do a dummy set eventType of the current event to blank (this will handle setting the cleaning up of assist and 2nd assists)
+        this.setEventType("");
+        this.eventsList.pop();
     }
 
     getGameId() {

@@ -16,6 +16,10 @@ class GameView extends React.Component {
     actions.setEventType(event);
   }
 
+  handleUndoEvent() {
+    actions.undoEvent();
+  }
+
   render() {
     
     const { gameStore } = this.props;
@@ -31,7 +35,7 @@ class GameView extends React.Component {
         
         <ShowEventsLog isEditPlayerMode={isEditPlayerMode} gameEvents={gameEvents} />
 
-        <ShowEventButtons isEditPlayerMode={isEditPlayerMode} handleTapEvent={this.handleTapEvent} />
+        <ShowEventButtons isEditPlayerMode={isEditPlayerMode} handleTapEvent={this.handleTapEvent} handleUndoEvent={this.handleUndoEvent} />
 
         <ShowSelectSubs isEditPlayerMode={isEditPlayerMode} />
 
@@ -86,7 +90,7 @@ function EventBox(props) {
 /* Event Buttons */
 
 function ShowEventButtons(props) {
-  const {isEditPlayerMode, handleTapEvent} = props;
+  const {isEditPlayerMode, handleTapEvent, handleUndoEvent} = props;
   if (isEditPlayerMode) {
     return (
       <div></div>
@@ -107,7 +111,7 @@ function ShowEventButtons(props) {
           <Button onClick={() => handleTapEvent('D')} block bsSize="small" bsStyle={null} className="btn-event">D</Button>
       </Col>    
       <Col xs={2} md={1} className="eventButtonContainer">
-          <Button block bsSize="small" bsStyle={null} className="btn-event">Undo</Button>
+          <Button onClick={() => handleUndoEvent()} block bsSize="small" bsStyle={null} className="btn-event">Undo</Button>
       </Col>    
     </Row>
   );

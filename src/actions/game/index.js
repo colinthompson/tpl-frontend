@@ -56,3 +56,7 @@ export function moveSubToTrack(playerId) {
 export function setEventType(eventType) {
     gameStore.setEventType(eventType)
 }
+
+export function undoEvent() {
+    gameStore.undoEvent();
+}
