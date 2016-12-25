@@ -27,7 +27,7 @@ class GameView extends React.Component {
     const gameEvents = gameStore.getEventsList().slice(-5);
     const trackingList = gameStore.getTrackingList();
     const isEditPlayerMode = gameStore.getEditPlayerMode();
-
+    const playerIdToDisable = gameStore.getPlayerIdToDisable();
 
 
     return (
@@ -43,6 +43,7 @@ class GameView extends React.Component {
           isEditPlayerMode={isEditPlayerMode} 
           trackingList={trackingList}
           handleTapPlayer={this.handleTapPlayer}
+          playerIdToDisable={playerIdToDisable}
           />
 
       </Grid>
@@ -111,7 +112,7 @@ function ShowEventButtons(props) {
           <Button onClick={() => handleTapEvent('D')} block bsSize="small" bsStyle={null} className="btn-event">D</Button>
       </Col>    
       <Col xs={2} md={1} className="eventButtonContainer">
-          <Button onClick={() => handleUndoEvent()} block bsSize="small" bsStyle={null} className="btn-event">Undo</Button>
+          <Button onClick={() => handleUndoEvent()} block bsSize="small" bsStyle={null} className="btn-undo">Undo</Button>
       </Col>    
     </Row>
   );
@@ -138,7 +139,7 @@ function ShowSelectSubs(props) {
 /* Tracking Players */
 
 function ShowTrackingPlayers(props) {
-  const {isEditPlayerMode, handleTapPlayer, trackingList } = props;
+  const {isEditPlayerMode, handleTapPlayer, trackingList, playerIdToDisable } = props;
 
   return (
     <Row>
@@ -151,6 +152,7 @@ function ShowTrackingPlayers(props) {
                   player={player}
                   onTapPlayer={handleTapPlayer}
                   isEditPlayerMode={isEditPlayerMode}
+                  playerIdToDisable={playerIdToDisable}
                   />
               </div>
             )
@@ -164,19 +166,16 @@ function ShowTrackingPlayers(props) {
 
 function PlayerButton(props) {
 
-  const {player, onTapPlayer, isEditPlayerMode} = props;
+  const {player, onTapPlayer, isEditPlayerMode, playerIdToDisable} = props;
 
-  const disabled = false;// ((player.id==='38135' || player.id==='38869') ? true : false);
-  /*
-  const buttonClass = (isEditPlayerMode ? 
-                        "btn-edit btn-text":
-                        (player.gender === "Male" ? "btn-male btn-text" : "btn-female btn-text"));
-  */
-  const buttonClass =  (player.gender === "Male" ? "btn-male btn-text" : "btn-female btn-text");
-
+  const disabled = (player.id === playerIdToDisable ? true : false);
+  const buttonClass = (disabled ? 
+                        "btn-disabled btn-text" : 
+                        (player.gender === "Male" ? 
+                          "btn-male btn-text" : 
+                          "btn-female btn-text"));
 
   return (
-  
     <Button 
       bsStyle={null}
       className={buttonClass}

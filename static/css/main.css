@@ -26,6 +26,7 @@
 
 .eventButtonContainer {
     padding-right: 0px;
+    margin-bottom: 10px;
 }
 
 .event-male {
@@ -44,8 +45,15 @@
 }
 
 .btn-event {
-    background-color: #9966cc;
+    background-color: #006633;
     color: white;
+    padding-right: 38px;
+}
+
+.btn-undo {
+    background-color: red;
+    color: white;
+    padding-right: 38px;
 }
 
 .btn-male {
@@ -60,6 +68,10 @@
 .btn-edit {
     background-color: #ff3333;
     color: white;
+}
+
+.btn-disabled {
+    background-color: #999999;
 }
 
 .remove-icon {
@@ -80,6 +92,7 @@
 .masonry2 { /* Masonry container */
     column-count: 2;
     column-gap: 10px;
+    margin-top: 5px;
 }
 
 .item { /* Masonry bricks or child elements */

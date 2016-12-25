@@ -107,6 +107,7 @@ class GameStore {
         if (playerIndex === -1) return;
         const player = this.trackingList[playerIndex];
         let newEvent = {};
+        newEvent.timestamp = new Date();
         newEvent.gameId = this.gameId;
         newEvent.teamId = this.teamId;
         newEvent.sequence = this.eventsList.length === 0 ? 1 : (parseInt(this.eventsList[this.eventsList.length - 1].sequence, 10) + 1)
@@ -191,6 +192,18 @@ class GameStore {
     
     getEditPlayerMode() {
         return !!this.isEditPlayerMode;
+    }
+
+    // This is the playerId button to disable
+    // Only for when the last event does not have an eventType yet
+    getPlayerIdToDisable() {
+        const lastEvent = (this.eventsList.length > 0 ? this.eventsList[this.eventsList.length - 1] : null);
+        if (lastEvent) {
+            if (lastEvent.eventType === "") {
+                return lastEvent.player.id;
+            }
+        }
+        return "";
     }
     
 
