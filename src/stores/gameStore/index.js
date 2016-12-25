@@ -101,6 +101,29 @@ class GameStore {
         })
     }
 
+    // Add a new event for playerId
+    @action addNewEvent(playerId) {
+        const playerIndex = this.trackingList.findIndex(player => player.id === playerId);
+        if (playerIndex === -1) return;
+        const player = this.trackingList[playerIndex];
+        let newEvent = {};
+        newEvent.gameId = this.gameId;
+        newEvent.teamId = this.teamId;
+        newEvent.sequence = this.eventsList.length === 0 ? 1 : (parseInt(this.eventsList[this.eventsList.length - 1].sequence, 10) + 1)
+        newEvent.eventType = "";
+        newEvent.player = player;
+        this.eventsList.push(newEvent);
+    }
+
+    // Set the event type for the latest event
+    @action setEventType(eventType) {
+        let currentEvent = this.eventsList.length === 0 ? null : this.eventsList[this.eventsList.length -1];
+        if (!currentEvent) return;
+        currentEvent.eventType = eventType;
+        // Need to do this to have mobx observe a change in the array
+        this.eventsList = this.eventsList.slice();
+    }
+
     getGameId() {
         return this.gameId;
     }

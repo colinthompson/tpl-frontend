@@ -13,7 +13,7 @@ class GameView extends React.Component {
   }
 
   handleTapEvent(event) {
-    console.log(event);
+    actions.setEventType(event);
   }
 
   render() {
@@ -23,6 +23,8 @@ class GameView extends React.Component {
     const gameEvents = gameStore.getEventsList().slice(-5);
     const trackingList = gameStore.getTrackingList();
     const isEditPlayerMode = gameStore.getEditPlayerMode();
+
+
 
     return (
       <Grid fluid={true}>
@@ -96,13 +98,13 @@ function ShowEventButtons(props) {
           <Button onClick={() => handleTapEvent('Goal')} block bsSize="small" bsStyle={null} className="btn-event">Goal</Button>
       </Col>
       <Col xs={2} md={1} className="eventButtonContainer">
-          <Button block bsSize="small" bsStyle={null} className="btn-event">Drop</Button>
+          <Button onClick={() => handleTapEvent('Drop')} block bsSize="small" bsStyle={null} className="btn-event">Drop</Button>
       </Col>    
       <Col xs={2} md={1} className="eventButtonContainer">
-          <Button block bsSize="small" bsStyle={null} className="btn-event">TA</Button>
+          <Button onClick={() => handleTapEvent('TA')} block bsSize="small" bsStyle={null} className="btn-event">TA</Button>
       </Col>    
       <Col xs={2} md={1} className="eventButtonContainer">
-          <Button block bsSize="small" bsStyle={null} className="btn-event">D</Button>
+          <Button onClick={() => handleTapEvent('D')} block bsSize="small" bsStyle={null} className="btn-event">D</Button>
       </Col>    
       <Col xs={2} md={1} className="eventButtonContainer">
           <Button block bsSize="small" bsStyle={null} className="btn-event">Undo</Button>

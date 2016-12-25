@@ -45,9 +45,14 @@ export function tapPlayerButton(playerId) {
         gameStore.moveTrackToSub(playerId);
     } else {
         console.log("this is when player button is tapped in tracking mode: ", playerId);
+        gameStore.addNewEvent(playerId);
     }
 }
 
 export function moveSubToTrack(playerId) {
     gameStore.moveSubToTrack(playerId);
+}
+
+export function setEventType(eventType) {
+    gameStore.setEventType(eventType)
 }
