@@ -5,8 +5,16 @@ import * as actions from '../actions/index';
 import SelectSub from './SelectSub';
 
 
-@inject('gameStore') @observer
+@inject('sessionStore', 'gameStore') @observer
 class GameView extends React.Component {
+
+  componentDidMount() {
+    const {sessionStore} = this.props;
+    if (!sessionStore.getProvidedInstructions()) {
+      sessionStore.setProvidedInstructions(true);
+      alert('Select "Setup Players / Subs" from the menu to prepare your game.');
+    }
+  }
 
   handleTapPlayer(playerId) {
     actions.tapPlayerButton(playerId);

@@ -29,3 +29,7 @@ function fetchLeague(leagueId) {
         fetchTeams(leagueId);
     }
 }
+
+export function setProvidedInstructions(flag) {
+    sessionStore.setProvidedInstructions(flag);
+}
