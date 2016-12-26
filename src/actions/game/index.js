@@ -54,8 +54,28 @@ export function moveSubToTrack(playerId) {
 
 export function setEventType(eventType) {
     gameStore.setEventType(eventType)
+    saveAllEvents();
 }
 
 export function undoEvent() {
     gameStore.undoEvent();
+}
+
+function saveAllEvents() {
+    let eventsListJson = gameStore.getEventsListJson();
+    
+    const initUrl = 'gameEvents/' + gameStore.getGameId() + '/' + gameStore.getTeamId();
+    const url = '//tuc-tpl.herokuapp.com/' + initUrl;
+
+    eventsListJson = JSON.stringify(eventsListJson);
+
+    return fetch(url, {
+            method: "POST",
+            body: eventsListJson
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+        });
+
 }

@@ -108,6 +108,7 @@ class GameStore {
         const player = this.trackingList[playerIndex];
         let newEvent = {};
         newEvent.timestamp = new Date();
+        newEvent.isUpdated = false;
         newEvent.gameId = this.gameId;
         newEvent.teamId = this.teamId;
         newEvent.sequence = this.eventsList.length === 0 ? 1 : (parseInt(this.eventsList[this.eventsList.length - 1].sequence, 10) + 1)
@@ -184,6 +185,26 @@ class GameStore {
 
     getEventsList() {
         return this.eventsList.slice();
+    }
+
+    getEventsListJson() {
+        return {
+            gameEvents: this.eventsList.map(event => {
+                return {
+                    gameId: event.gameId,
+                    teamId: event.teamId,
+                    sequence: event.sequence,
+                    timestamp: event.timestamp,
+                    eventType: event.eventType,
+                    player: {
+                        id: event.player.id,
+                        nickname: event.player.nickname,
+                        playerName: event.player.playerName,
+                        gender: event.player.gender
+                        }
+                }
+            })
+        };
     }
 
     isGameSelected() {
