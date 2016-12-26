@@ -4,7 +4,12 @@ import gameStore from '../../stores/gameStore';
 
 export function resetGameStats() {
     gameStore.resetGameStats();
-    //[ToDo] - do we also delete from server?
+    saveAllEvents();
+}
+
+// This will clear the game store -- taking you back to the schedule mode
+export function resetGameStore() {
+    gameStore.reset();
 }
 
 export function setGameTeam(gameId, teamId) {
@@ -59,6 +64,7 @@ export function setEventType(eventType) {
 
 export function undoEvent() {
     gameStore.undoEvent();
+    saveAllEvents();
 }
 
 function saveAllEvents() {
@@ -66,7 +72,7 @@ function saveAllEvents() {
     
     const initUrl = 'gameEvents/' + gameStore.getGameId() + '/' + gameStore.getTeamId();
     const url = '//tuc-tpl.herokuapp.com/' + initUrl;
-
+    
     eventsListJson = JSON.stringify(eventsListJson);
 
     return fetch(url, {
@@ -75,7 +81,7 @@ function saveAllEvents() {
         })
         .then(response => response.json())
         .then(data => {
-            console.log(data);
+            //console.log(data);
         });
 
 }

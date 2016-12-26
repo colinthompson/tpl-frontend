@@ -100,20 +100,27 @@ function MainContent(props) {
 
 function CustomMenu(props) {
     if (props.isTrackStatsMode) {
-        return (
-            <Nav pullRight>
-                <NavItem onClick={handleReturn}>Return to Main</NavItem>
-                <NavItem onClick={handleSchedule}>Return to Schedule</NavItem>
-                <NavItem onClick={handleEditPlayers}>Setup Players / Subs</NavItem>
-                <NavItem onClick={handleClear}>Clear Stats</NavItem>
-            </Nav>
-        );
+        if (props.isGameSelected) {
+            return (
+                <Nav pullRight>
+                    <NavItem onClick={handleSchedule}>Schedule</NavItem>
+                    <NavItem onClick={handleEditPlayers}>Setup Players / Subs</NavItem>
+                    <NavItem onClick={handleClear}>Clear Stats</NavItem>
+                </Nav>
+            );
+        } else {
+            return (
+                <Nav pullRight>
+                    <NavItem onClick={handleReturn}>Home</NavItem>
+                </Nav>
+            );
+        }
     }
 
     if (props.isViewResultsMode) {
         return (
             <Nav pullRight>
-                <NavItem onClick={handleReturn}>Return to Main</NavItem>
+                <NavItem onClick={handleReturn}>Home</NavItem>
             </Nav>
         );
     }
@@ -121,14 +128,14 @@ function CustomMenu(props) {
     if (props.isMaintainMode) {
         return (
             <Nav pullRight>
-                <NavItem onClick={handleReturn}>Return to Main</NavItem>
+                <NavItem onClick={handleReturn}>Home</NavItem>
             </Nav>
         );
     }
 
     return (
         <Nav pullRight>
-
+            <NavItem onClick={handleReturn}>Home</NavItem>
         </Nav>
     );
 }
@@ -138,9 +145,9 @@ function handleReturn() {
 }
 
 function handleClear() {
-    //actions. ...
-    console.log("Are you sure you want to clear stats?");
-    actions.resetGameStats();
+    if (confirm("This will delete the stats for this game / team on the server.  Are you sure?")) {
+        actions.resetGameStats();
+    }
 }
 
 function handleTrackStats() {
@@ -160,6 +167,6 @@ function handleEditPlayers() {
 }
 
 function handleSchedule() {
-    console.log("Go back to schedule");
+    actions.resetGameStore();
 }
 
