@@ -9,6 +9,7 @@ class GameStore {
     @observable subList;
     @observable eventsList;
     @observable isEditPlayerMode;
+    @observable isScoreboardMode;
 
     constructor() {
         this.gameId = null;
@@ -17,6 +18,7 @@ class GameStore {
         this.subList = [];
         this.eventsList = [];
         this.isEditPlayerMode = false;
+        this.isScoreboardMode = false;
     }
 
     @action reset = () => {
@@ -26,6 +28,7 @@ class GameStore {
         this.subList = [];
         this.eventsList = [];
         this.isEditPlayerMode = false;
+        this.isScoreboardMode = false;
     }
 
     @action resetGameStats = () => {
@@ -167,6 +170,10 @@ class GameStore {
         this.eventsList.pop();
     }
 
+    @action toggleScoreboard() {
+        this.isScoreboardMode = !this.isScoreboardMode;
+    }
+
     getGameId() {
         return this.gameId;
     }
@@ -213,6 +220,10 @@ class GameStore {
     
     getEditPlayerMode() {
         return !!this.isEditPlayerMode;
+    }
+
+    getScoreboardMode() {
+        return !!this.isScoreboardMode;
     }
 
     // This is the playerId button to disable

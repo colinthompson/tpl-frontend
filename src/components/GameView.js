@@ -1,6 +1,6 @@
 import React from 'react';
 import { observer, inject } from 'mobx-react';
-import {Grid, Row, Col, Button, Glyphicon } from 'react-bootstrap';
+import {Grid, Row, Col, Button, Glyphicon, Table } from 'react-bootstrap';
 import * as actions from '../actions/index';
 import SelectSub from './SelectSub';
 
@@ -37,7 +37,15 @@ class GameView extends React.Component {
     const isEditPlayerMode = gameStore.getEditPlayerMode();
     const playerIdToDisable = gameStore.getPlayerIdToDisable();
     const teamScore = gameStore.getTeamScore();
+    const isScoreboardMode = gameStore.getScoreboardMode();
 
+    if (isScoreboardMode) {
+      return (
+        <Grid fluid={true}>
+          <ShowScorebord isScoreboardMode={isScoreboardMode} />
+        </Grid>
+      );
+    }
 
     return (
       <Grid fluid={true}>
@@ -60,6 +68,47 @@ class GameView extends React.Component {
       </Grid>
     )
   }
+}
+
+/* Scoreboard */
+
+function ShowScorebord(props) {
+  const {isScoreboardMode} = props;
+  if (!isScoreboardMode) {
+    return (
+      <div></div>
+    );
+  }
+  return (
+    <Col xs={12} md={6} mdOffset={3}>
+      <Table responsive>
+        <thead>
+          <tr>
+            <th>Player</th>
+            <th>G</th>
+            <th>A</th>
+            <th>2A</th>
+            <th>D!</th>
+            <th>Drop</th>
+            <th>TA</th>
+            <th>Pass</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Bill</td>
+            <td>1</td>
+            <td>2</td>
+            <td>3</td>
+            <td>4</td>
+            <td>5</td>
+            <td>6</td>
+            <td>7 (10:20)</td>
+          </tr>
+        </tbody>
+      </Table>
+    </Col>
+  );
 }
 
 /* Team Score */

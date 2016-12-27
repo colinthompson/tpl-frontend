@@ -67,6 +67,11 @@ export function undoEvent() {
     saveAllEvents();
 }
 
+export function toggleScoreboard() {
+    // Do the calcs?
+    gameStore.toggleScoreboard();
+}
+
 function saveAllEvents() {
     let eventsListJson = gameStore.getEventsListJson();
     

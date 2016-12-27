@@ -54,6 +54,8 @@ export default class App extends React.Component {
                 isViewResultsMode={sessionStore.getViewResultsMode()}
                 isMaintainMode={sessionStore.getMaintainMode()}
                 isGameSelected={gameStore.isGameSelected()}
+                isScoreboardMode={gameStore.getScoreboardMode()}
+                isEditPlayerMode={gameStore.getEditPlayerMode()}
             /> 
           </Navbar.Collapse>
         </Navbar>
@@ -101,13 +103,30 @@ function MainContent(props) {
 function CustomMenu(props) {
     if (props.isTrackStatsMode) {
         if (props.isGameSelected) {
-            return (
-                <Nav pullRight>
-                    <NavItem onClick={handleSchedule}>Schedule</NavItem>
-                    <NavItem onClick={handleEditPlayers}>Setup Players / Subs</NavItem>
-                    <NavItem onClick={handleClear}>Clear Stats</NavItem>
-                </Nav>
-            );
+            if (props.isScoreboardMode) {
+                return (
+                    <Nav pullRight>
+                        <NavItem onClick={handleScoreboard}>Return</NavItem>
+                    </Nav>
+                );
+            } else {
+                if (props.isEditPlayerMode) {
+                    return (
+                        <Nav pullRight>
+                            <NavItem onClick={handleEditPlayers}>Return</NavItem>
+                        </Nav>
+                    );
+                } else {
+                    return (
+                        <Nav pullRight>
+                            <NavItem onClick={handleSchedule}>Schedule</NavItem>
+                            <NavItem onClick={handleEditPlayers}>Setup Players / Subs</NavItem>
+                            <NavItem onClick={handleScoreboard}>Scoreboard</NavItem>
+                            <NavItem onClick={handleClear}>Clear Stats</NavItem>
+                        </Nav>
+                    );
+                }
+            }
         } else {
             return (
                 <Nav pullRight>
@@ -170,3 +189,6 @@ function handleSchedule() {
     actions.resetGameStore();
 }
 
+function handleScoreboard() {
+    actions.toggleScoreboard();
+}
