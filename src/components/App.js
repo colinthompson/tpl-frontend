@@ -90,8 +90,8 @@ function MainContent(props) {
         <Grid fluid={true} >
             <Row >
                 <Col style={rowMargins} xs={12} md={4} mdOffset={4}><Button bsStyle="primary" bsSize="large" block onClick={handleTrackStats}>Record Stats</Button></Col>
-                <Col style={rowMargins} xs={12} md={4} mdOffset={4}><Button bsStyle="primary" bsSize="large" block onClick={handleViewResults}>View Results</Button></Col>
-                <Col style={rowMargins} xs={12} md={4} mdOffset={4}><Button bsStyle="info" bsSize="large" block onClick={handleAdmin}>Maintain League</Button></Col>
+                <Col style={rowMargins} xs={12} md={4} mdOffset={4}><Button disabled bsStyle="primary" bsSize="large" block onClick={handleViewResults}>View Results (coming soon)</Button></Col>
+                <Col style={rowMargins} xs={12} md={4} mdOffset={4}><Button disabled bsStyle="info" bsSize="large" block onClick={handleAdmin}>Maintain League (coming soon)</Button></Col>
             </Row>
         </Grid>
     );

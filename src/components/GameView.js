@@ -36,14 +36,17 @@ class GameView extends React.Component {
     const trackingList = gameStore.getTrackingList();
     const isEditPlayerMode = gameStore.getEditPlayerMode();
     const playerIdToDisable = gameStore.getPlayerIdToDisable();
+    const teamScore = gameStore.getTeamScore();
 
 
     return (
       <Grid fluid={true}>
         
+        <ShowTeamScore isEditPlayerMode={isEditPlayerMode} teamScore={teamScore} />
+
         <ShowEventsLog isEditPlayerMode={isEditPlayerMode} gameEvents={gameEvents} />
 
-        <ShowEventButtons isEditPlayerMode={isEditPlayerMode} handleTapEvent={this.handleTapEvent} handleUndoEvent={this.handleUndoEvent} />
+        <ShowEventButtons isEditPlayerMode={isEditPlayerMode} handleTapEvent={this.handleTapEvent} handleUndoEvent={this.handleUndoEvent} teamScore={teamScore} />
 
         <ShowSelectSubs isEditPlayerMode={isEditPlayerMode} />
 
@@ -57,6 +60,24 @@ class GameView extends React.Component {
       </Grid>
     )
   }
+}
+
+/* Team Score */
+
+function ShowTeamScore(props) {
+  const {isEditPlayerMode, teamScore} = props;
+  if (isEditPlayerMode) {
+    return (
+      <div></div>
+    );
+  }
+  return (
+    <Row>
+      <Col xs={12} md={6} mdOffset={3}>
+        Score: {teamScore}
+      </Col>
+    </Row>
+  );
 }
 
 /* Event Log Container */
@@ -121,7 +142,7 @@ function ShowEventButtons(props) {
       </Col>    
       <Col xs={2} md={1} className="eventButtonContainer">
           <Button onClick={() => handleUndoEvent()} block bsSize="small" bsStyle={null} className="btn-undo">Undo</Button>
-      </Col>    
+      </Col>  
     </Row>
   );
 }

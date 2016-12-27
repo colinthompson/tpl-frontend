@@ -226,6 +226,10 @@ class GameStore {
         }
         return "";
     }
+
+    getTeamScore() {
+        return this.eventsList.filter(event => event.eventType === "Goal").length;
+    }
     
 
 }
