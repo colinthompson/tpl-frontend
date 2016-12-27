@@ -48,7 +48,7 @@ class LeagueStore {
         forEach(groupByDate, (value,key) => {
             groupedList.push(value);
         })
-        return groupedList;
+        return groupedList.reverse();
     }
 
     getTeamsList() {
