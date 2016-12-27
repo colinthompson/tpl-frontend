@@ -40,9 +40,10 @@ class GameView extends React.Component {
     const isScoreboardMode = gameStore.getScoreboardMode();
 
     if (isScoreboardMode) {
+      const statisticsData = gameStore.getStatistics();
       return (
         <Grid fluid={true}>
-          <ShowScorebord isScoreboardMode={isScoreboardMode} />
+          <ShowScorebord statisticsData={statisticsData} />
         </Grid>
       );
     }
@@ -73,15 +74,11 @@ class GameView extends React.Component {
 /* Scoreboard */
 
 function ShowScorebord(props) {
-  const {isScoreboardMode} = props;
-  if (!isScoreboardMode) {
-    return (
-      <div></div>
-    );
-  }
+  const {statisticsData} = props;
+
   return (
     <Col xs={12} md={6} mdOffset={3}>
-      <Table responsive>
+      <Table responsive striped condensed>
         <thead>
           <tr>
             <th>Player</th>
@@ -95,16 +92,20 @@ function ShowScorebord(props) {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Bill</td>
-            <td>1</td>
-            <td>2</td>
-            <td>3</td>
-            <td>4</td>
-            <td>5</td>
-            <td>6</td>
-            <td>7 (10:20)</td>
-          </tr>
+          {
+            statisticsData.map(player =>
+              <tr key={player.id}>
+                <td>{player.nickname}</td>
+                <td>{player.statGoal}</td>
+                <td>{player.statAssist}</td>
+                <td>{player.stat2Assist}</td>
+                <td>{player.statD}</td>
+                <td>{player.statDrop}</td>
+                <td>{player.statTA}</td>
+                <td>{player.statsPass} ({player.statsPassMale}:{player.statsPassFemale})</td>    
+              </tr>
+            )
+          }
         </tbody>
       </Table>
     </Col>
