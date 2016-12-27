@@ -122,6 +122,7 @@ function CustomMenu(props) {
                             <NavItem onClick={handleSchedule}>Schedule</NavItem>
                             <NavItem onClick={handleEditPlayers}>Setup Players / Subs</NavItem>
                             <NavItem onClick={handleScoreboard}>Scoreboard</NavItem>
+                            <NavItem onClick={handleSubmitStats}>Submit Stats</NavItem>
                             <NavItem onClick={handleClear}>Clear Stats</NavItem>
                         </Nav>
                     );
@@ -191,4 +192,9 @@ function handleSchedule() {
 
 function handleScoreboard() {
     actions.toggleScoreboard();
+}
+
+function handleSubmitStats() {
+    actions.submitEvents();
+    alert("Thank you.  The stats has been submitted.")
 }

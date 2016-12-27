@@ -72,6 +72,10 @@ export function toggleScoreboard() {
     gameStore.toggleScoreboard();
 }
 
+export function submitEvents() {
+    saveAllEvents();
+}
+
 function saveAllEvents() {
     let eventsListJson = gameStore.getEventsListJson();
     
