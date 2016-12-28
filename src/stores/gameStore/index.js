@@ -318,6 +318,40 @@ class GameStore {
         return statisticsData;
 
     }
+
+    getChartData() {
+        //Should be an array in the following format:
+        //{"name": 1, "passes": 6, "result": "Goal", "sequence": "Bill1, Darren, Shar"},
+
+        let chartData = [];
+        let possessionNumber = 1;
+        let possession = null;
+
+        for (const gameEvent of this.eventsList) {
+            if (!possession) {
+                possession = {};
+                possession.name = possessionNumber;
+                possession.passes = 0;
+                possession.result = "";
+                possession.sequence = "";
+                possession.sequencePlayers = [];
+                possessionNumber++;
+            }
+            if (gameEvent.eventType !== "D") {
+                possession.sequencePlayers.push(gameEvent.player.nickname);
+                if (gameEvent.eventType !== "Drop" && gameEvent.eventType !== "TA") {
+                    possession.passes++;
+                }
+                if (gameEvent.eventType === "Goal" || gameEvent.eventType === "Drop" || gameEvent.eventType === "TA") {
+                    possession.result = gameEvent.eventType;
+                    possession.sequence = possession.sequencePlayers.join(', ');
+                    chartData.push(possession);
+                    possession = null;
+                }
+            }
+        }
+        return chartData;
+    }
     
 
 }

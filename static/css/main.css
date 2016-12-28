@@ -105,3 +105,38 @@
 .table {
     font-size: 9pt;
 }
+
+.gameChart {
+    height: 400px;
+}
+
+.legendList {
+    display: inline;
+    list-style-type: none;
+}
+
+.legendItem {
+    display: inline;
+    margin-right: 10px;
+}
+
+.custom-tooltip {
+    width: 250px;
+    margin: 0;
+    line-height: 24px;
+    border: 1px solid #333333;
+    background-color: rgba(255, 255, 255, 0.95);
+    padding: 10px;
+}
+.custom-tooltip .label {
+  margin: 0;
+  color: #666;
+  font-weight: 700;
+  font-size: 10pt;
+}
+.custom-tooltip  .desc {
+  margin: 0 0 0 10px;
+  color: #999;
+  font-size: 8pt;
+  
+}

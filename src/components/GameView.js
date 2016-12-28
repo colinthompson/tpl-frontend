@@ -1,8 +1,10 @@
 import React from 'react';
 import { observer, inject } from 'mobx-react';
 import {Grid, Row, Col, Button, Glyphicon, Table } from 'react-bootstrap';
+import { ResponsiveContainer, BarChart, XAxis, YAxis, Tooltip, Legend, Bar, Cell } from 'recharts';
 import * as actions from '../actions/index';
 import SelectSub from './SelectSub';
+
 
 
 @inject('sessionStore', 'gameStore') @observer
@@ -41,9 +43,11 @@ class GameView extends React.Component {
 
     if (isScoreboardMode) {
       const statisticsData = gameStore.getStatistics();
+      const chartData = gameStore.getChartData();
       return (
         <Grid fluid={true}>
           <ShowScorebord statisticsData={statisticsData} />
+          <ShowChart chartData={chartData} />
         </Grid>
       );
     }
@@ -111,6 +115,136 @@ function ShowScorebord(props) {
     </Col>
   );
 }
+
+function ShowChart(props) {
+
+  const {chartData} = props;
+/*
+  const data = [
+                  {"name": 1, "passes": 6, "result": "Goal", "sequence": "Bill1, Darren, Shar"},
+                  {"name": 2, "passes": 4, "result": "Drop", "sequence": "Bill2, Darren, Shar"},
+                  {"name": 3, "passes": 7, "result": "TA", "sequence": "Bill3, Darren, Shar"},
+                  {"name": 4, "passes": 4, "result": "Goal", "sequence": "Bill4, Darren, Shar"},
+                  {"name": 5, "passes": 16, "result": "Goal", "sequence": "Bill5, Darren, Shar, Darren, Shar, Darren, Shar, Darren, Shar, Darren, Shar, Darren, Shar, Darren, Shar, Darren, Shar"},
+                  {"name": 6, "passes": 5, "result": "Drop", "sequence": "Bill6, Darren, Shar"},
+                  {"name": 7, "passes": 2, "result": "TA", "sequence": "Bill7, Darren, Shar"},
+                  {"name": 8, "passes": 8, "result": "Drop", "sequence": "Bill8, Darren, Shar"},
+                  {"name": 9, "passes": 8, "result": "Goal", "sequence": "Bill9, Darren, Shar"},
+                  {"name": 10, "passes": 8, "result": "Goal", "sequence": "Bill10, Darren, Shar"},
+                  {"name": 11, "passes": 6, "result": "Goal", "sequence": "Bill11, Darren, Shar"},
+                  {"name": 12, "passes": 4, "result": "Drop", "sequence": "Bill12, Darren, Shar"},
+                  {"name": 13, "passes": 7, "result": "TA", "sequence": "Bill13, Darren, Shar"},
+                  {"name": 14, "passes": 4, "result": "Goal", "sequence": "Bill14, Darren, Shar"},
+                  {"name": 15, "passes": 36, "result": "Goal", "sequence": "Bill15, Darren, Shar, Darren, Shar, Darren, Shar, Darren, Shar, Darren, Shar, Darren, Shar, Darren, Shar, Darren, Shar"},
+                  {"name": 16, "passes": 5, "result": "Drop", "sequence": "Bill16, Darren, Shar"},
+                  {"name": 17, "passes": 2, "result": "TA", "sequence": "Bill17, Darren, Shar"},
+                  {"name": 18, "passes": 8, "result": "Drop", "sequence": "Bill18, Darren, Shar"},
+                  {"name": 19, "passes": 8, "result": "Goal", "sequence": "Bill19, Darren, Shar"},
+                  {"name": 20, "passes": 8, "result": "Goal", "sequence": "Bill20, Darren, Shar"},
+                  {"name": 16, "passes": 5, "result": "Drop", "sequence": "Bill16, Darren, Shar"},
+                  {"name": 17, "passes": 2, "result": "TA", "sequence": "Bill17, Darren, Shar"},
+                  {"name": 18, "passes": 8, "result": "Drop", "sequence": "Bill18, Darren, Shar"},
+                  {"name": 19, "passes": 8, "result": "Goal", "sequence": "Bill19, Darren, Shar"},
+                  {"name": 20, "passes": 5, "result": "Drop", "sequence": "Bill16, Darren, Shar"},
+                  {"name": 21, "passes": 2, "result": "TA", "sequence": "Bill17, Darren, Shar"},
+                  {"name": 22, "passes": 8, "result": "Drop", "sequence": "Bill18, Darren, Shar"},
+                  {"name": 23, "passes": 8, "result": "Goal", "sequence": "Bill19, Darren, Shar"},
+                  {"name": 24, "passes": 8, "result": "Goal", "sequence": "Bill20, Darren, Shar"},
+                  {"name": 25, "passes": 5, "result": "Drop", "sequence": "Bill16, Darren, Shar"},
+                  {"name": 26, "passes": 2, "result": "TA", "sequence": "Bill17, Darren, Shar"},
+                  {"name": 27, "passes": 8, "result": "Drop", "sequence": "Bill18, Darren, Shar"},
+                  {"name": 28, "passes": 8, "result": "Goal", "sequence": "Bill19, Darren, Shar"},
+                  {"name": 29, "passes": 5, "result": "Drop", "sequence": "Bill16, Darren, Shar"},
+                  {"name": 30, "passes": 2, "result": "TA", "sequence": "Bill17, Darren, Shar"},
+                  {"name": 31, "passes": 8, "result": "Drop", "sequence": "Bill18, Darren, Shar"},
+                  {"name": 32, "passes": 8, "result": "Goal", "sequence": "Bill19, Darren, Shar"},
+                  {"name": 33, "passes": 8, "result": "Goal", "sequence": "Bill20, Darren, Shar"},
+                  {"name": 34, "passes": 5, "result": "Drop", "sequence": "Bill16, Darren, Shar"},
+                  {"name": 35, "passes": 2, "result": "TA", "sequence": "Bill17, Darren, Shar"},
+                  {"name": 36, "passes": 8, "result": "Drop", "sequence": "Bill18, Darren, Shar"},
+                  {"name": 37, "passes": 8, "result": "Goal", "sequence": "Bill19, Darren, Shar"},
+                  {"name": 38, "passes": 5, "result": "Drop", "sequence": "Bill16, Darren, Shar"},
+                  {"name": 39, "passes": 2, "result": "TA", "sequence": "Bill17, Darren, Shar"},
+                  {"name": 40, "passes": 8, "result": "Drop", "sequence": "Bill18, Darren, Shar"},
+                  {"name": 41, "passes": 8, "result": "Goal", "sequence": "Bill19, Darren, Shar"},
+                  {"name": 42, "passes": 8, "result": "Goal", "sequence": "Bill20, Darren, Shar"},
+                  {"name": 43, "passes": 5, "result": "Drop", "sequence": "Bill16, Darren, Shar"},
+                  {"name": 44, "passes": 2, "result": "TA", "sequence": "Bill17, Darren, Shar"},
+                  {"name": 45, "passes": 8, "result": "Drop", "sequence": "Bill18, Darren, Shar"},
+                  {"name": 46, "passes": 8, "result": "Goal", "sequence": "Bill19, Darren, Shar"}
+                ];
+*/
+  const colorGoal = 'green';
+  const colorDrop = 'red';
+  const colorTA = 'orange';
+
+  const renderTooltip = (props) => {
+    const { payload, label} = props;
+    if (payload[0] && payload[0].payload) {
+      return (
+        <div className="custom-tooltip">
+          <p className="label">Possession: {label} - {payload[0].payload.result}</p>
+          <p className="desc">{payload[0].payload.sequence}</p>
+        </div>
+      );
+    }
+    return (
+      <div></div>
+    );
+  }
+  
+  const renderLegend = (props) => {
+    return (
+      <ul className="recharts-default-legend legendList">
+        <li className="recharts-legend-item legend-item-0 legendItem">
+          <svg className="recharts-surface" width="14" height="14" viewBox="0 0 32 32" version="1.1">
+            <path stroke="none" d="M0,4h32v24h-32z" className="recharts-legend-icon" fill={colorGoal}>
+            </path>
+          </svg>
+          <span className="recharts-legend-item-text">Goal</span>
+        </li>
+        <li className="recharts-legend-item legend-item-1 legendItem">
+          <svg className="recharts-surface" width="14" height="14" viewBox="0 0 32 32" version="1.1">
+            <path stroke="none" d="M0,4h32v24h-32z" className="recharts-legend-icon" fill={colorDrop}>
+            </path>
+          </svg>
+          <span className="recharts-legend-item-text">Drop</span>
+        </li>
+        <li className="recharts-legend-item legend-item-2 legendItem">
+          <svg className="recharts-surface" width="14" height="14" viewBox="0 0 32 32" version="1.1">
+            <path stroke="none" d="M0,4h32v24h-32z" className="recharts-legend-icon" fill={colorTA}>
+            </path>
+          </svg>
+          <span className="recharts-legend-item-text">Throw Away</span>
+        </li>
+
+      </ul>
+    );
+  }
+
+  let chartMargin = { top: 20, right: 0, bottom: 0, left: 0};
+
+  return (
+    <Col xs={12} md={6} mdOffset={3} className="gameChart">
+      <ResponsiveContainer>
+        <BarChart data={chartData} margin={chartMargin} layout="vertical" >
+          <XAxis type="number" label="# of Passes" />
+          <YAxis type="category" dataKey="name" width={25} axisLine={false}  />
+          <Tooltip content={renderTooltip} />
+          <Legend verticalAlign="top" content={renderLegend} />
+          <Bar dataKey="passes">
+            {
+              chartData.map((entry, index) => (
+                <Cell key={chartData[index].name} fill={chartData[index].result === "Goal" ? colorGoal : chartData[index].result === "Drop" ? colorDrop : colorTA} />
+              ))
+            }
+          </Bar>
+        </BarChart>
+      </ResponsiveContainer>
+    </Col>
+  );
+}
+
 
 /* Team Score */
 
