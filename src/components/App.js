@@ -4,7 +4,7 @@ import * as actions from '../actions/index';
 import { Navbar, Nav, NavItem, Button, Grid, Row, Col } from 'react-bootstrap';
 import Loading from 'react-loading';
 import LeagueSchedule from './LeagueSchedule';
-import GameView from './GameView';
+import GameTeamView from './GameTeamView';
 
 
 @inject('sessionStore', 'gameStore') @observer
@@ -77,7 +77,7 @@ function MainContent(props) {
     if (props.isTrackStatsMode || props.isViewResultsMode) {
         return (
             <div>
-            { props.isGameSelected ? <GameView /> : <LeagueSchedule />}
+            { props.isGameSelected ? <GameTeamView /> : <LeagueSchedule />}
             </div>
         );
     }
