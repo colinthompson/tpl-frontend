@@ -74,6 +74,10 @@
     background-color: #999999;
 }
 
+.btn-return {
+    margin-bottom: 20px;
+}
+
 .remove-icon {
     margin-right: 2px;
     color: #ff3333;

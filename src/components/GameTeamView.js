@@ -29,6 +29,10 @@ class GameTeamView extends React.Component {
     actions.undoEvent();
   }
 
+  handleExitScoreboard() {
+    actions.toggleScoreboard();
+  }
+
   render() {
     
     const { gameStore } = this.props;
@@ -43,6 +47,9 @@ class GameTeamView extends React.Component {
     if (isScoreboardMode) {
       return (
         <Grid fluid={true}>
+          <Col xs={12} md={6} mdOffset={3}>
+            <Button onClick={() => this.handleExitScoreboard()} block bsStyle="primary" className="btn-return">Return</Button>
+          </Col>
           <Col xs={12} md={6} mdOffset={3}>
             <GameTeamStats />
           </Col>
