@@ -27,11 +27,9 @@ export default class App extends React.Component {
                 </Navbar>
                 <Grid fluid={true}>
                     <Row>
-                        <Col xs={5} md={5}></Col>
-                        <Col md={2} xs={2}>
+                        <Col md={2} xs={2} mdOffset={5} xsOffset={5}>
                             <Loading type='bubbles' color='#999999' />
                         </Col>
-                        <Col xs={5} md={5}></Col>
                     </Row>
                 </Grid>
             </div>
