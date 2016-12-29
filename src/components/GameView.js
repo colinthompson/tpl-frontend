@@ -5,8 +5,6 @@ import { ResponsiveContainer, BarChart, XAxis, YAxis, Tooltip, Legend, Bar, Cell
 import * as actions from '../actions/index';
 import SelectSub from './SelectSub';
 
-
-
 @inject('sessionStore', 'gameStore') @observer
 class GameView extends React.Component {
 
@@ -44,6 +42,7 @@ class GameView extends React.Component {
     if (isScoreboardMode) {
       const statisticsData = gameStore.getStatistics();
       const chartData = gameStore.getChartData();
+
       return (
         <Grid fluid={true}>
           <ShowScorebord statisticsData={statisticsData} />

@@ -151,7 +151,9 @@ class GameStore {
                                         null) :
                                     null;
             let previous2Event = this.eventsList.length > 2 ?
-                                    ((this.eventsList[this.eventsList.length - 3].eventType === "" && previousEvent) ?
+                                    ((this.eventsList[this.eventsList.length - 3].eventType === "" 
+                                        && this.eventsList[this.eventsList.length - 3].player.id !== currentEvent.player.id
+                                        && previousEvent) ?
                                         this.eventsList[this.eventsList.length - 3] :
                                         null) :
                                     null;
