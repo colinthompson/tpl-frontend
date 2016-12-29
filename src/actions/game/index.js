@@ -68,8 +68,12 @@ export function undoEvent() {
 }
 
 export function toggleScoreboard() {
-    // Do the calcs?
+
     gameStore.toggleScoreboard();
+    if (sessionStore.getViewResultsMode()) {
+        // if is viewing results mode, then reset the game info as well.
+        resetGameStore();
+    }
 }
 
 export function submitEvents() {

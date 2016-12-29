@@ -11,7 +11,7 @@ class GameTeamView extends React.Component {
 
   componentDidMount() {
     const {sessionStore} = this.props;
-    if (!sessionStore.getProvidedInstructions()) {
+    if (!sessionStore.getProvidedInstructions() && !sessionStore.getViewResultsMode()) {
       sessionStore.setProvidedInstructions(true);
       alert('Select "Setup Players / Subs" from the menu to prepare your game.');
     }
@@ -35,7 +35,7 @@ class GameTeamView extends React.Component {
 
   render() {
     
-    const { gameStore } = this.props;
+    const { gameStore, sessionStore } = this.props;
 
     const gameEvents = gameStore.getEventsList().slice(-5);
     const trackingList = gameStore.getTrackingList();
@@ -43,8 +43,9 @@ class GameTeamView extends React.Component {
     const playerIdToDisable = gameStore.getPlayerIdToDisable();
     const teamScore = gameStore.getTeamScore();
     const isScoreboardMode = gameStore.getScoreboardMode();
+    const isViewResultsMode = sessionStore.getViewResultsMode();
 
-    if (isScoreboardMode) {
+    if (isScoreboardMode || isViewResultsMode) {
       return (
         <Grid fluid={true}>
           <Col xs={12} md={6} mdOffset={3}>

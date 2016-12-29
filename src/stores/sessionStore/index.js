@@ -26,10 +26,12 @@ class SessionStore {
 
     @action setTrackStatsMode(mode) {
         this.isTrackStatsMode = mode;
+        this.isViewResultsMode = !mode;
     }
 
     @action setViewResultsMode(mode) {
         this.isViewResultsMode = mode;
+        this.isTrackStatsMode = !mode;
     }
 
     @action setMaintainMode(mode) {
