@@ -289,10 +289,12 @@ class GameStore {
 					player.statGoal++;
 					break;
 				case "Assist":
+                    player.statsPass++;
 					player.statAssist++;
 					previousPassPlayer = player;
 					break;
 				case "2nd Assist":
+                    player.statsPass++;
 					player.stat2Assist++;
 					previousPassPlayer = player;
 					break;
