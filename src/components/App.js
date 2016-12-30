@@ -117,10 +117,12 @@ function CustomMenu(props) {
                 } else {
                     return (
                         <Nav pullRight>
-                            <NavItem onClick={handleSchedule}>Schedule</NavItem>
+                            <NavItem onClick={handleSchedule}>Return to Schedule</NavItem>
+                            <NavItem className="divider-vertical"></NavItem>
                             <NavItem onClick={handleEditPlayers}>Setup Players / Subs</NavItem>
                             <NavItem onClick={handleScoreboard}>Scoreboard</NavItem>
                             <NavItem onClick={handleSubmitStats}>Submit Stats</NavItem>
+                            <NavItem className="divider-vertical"></NavItem>
                             <NavItem onClick={handleClear}>Clear Stats</NavItem>
                         </Nav>
                     );

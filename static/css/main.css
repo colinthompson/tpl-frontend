@@ -152,3 +152,8 @@
   font-size: 8pt;
   
 }
+
+.navbar .divider-vertical {
+    height: 15px;
+    margin: 0 2px;
+}
