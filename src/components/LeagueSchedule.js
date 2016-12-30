@@ -13,11 +13,12 @@ class LeagueSchedule extends React.Component {
   render() {
     const { leagueStore } = this.props;
     const groupedSchedule = leagueStore.getGamesListGroupByDate();
+    const leagueId = leagueStore.getLeagueId();
 
     return (
       <div >
         {
-          <BuildSchedule groupedSchedule={groupedSchedule} handleSelectGameTeam={this.handleSelectGameTeam} />
+          <BuildSchedule groupedSchedule={groupedSchedule} handleSelectGameTeam={this.handleSelectGameTeam} leagueId={leagueId} />
         }
       </div>
     )
@@ -26,6 +27,7 @@ class LeagueSchedule extends React.Component {
 
 function BuildSchedule(props) {
     const groupedSchedule = props.groupedSchedule;
+    const leagueId = props.leagueId;
     return (
       <div>
       {
@@ -35,16 +37,21 @@ function BuildSchedule(props) {
               <Col xs={12} md={6} mdOffset={3} className="text-center">{days[0].date}</Col>
             </Row>
             {
-              days.map(game => 
-                <Row key={game.id}>
-                  <Col xs={6} md={3} mdOffset={3}>
-                    <Button bsStyle="info" bsSize="small" block onClick={() => props.handleSelectGameTeam(game.id, game.homeTeamId)}>{game.homeTeam}</Button>
-                  </Col>
-                  <Col xs={6} md={3}>
-                    <Button bsStyle="info" bsSize="small" block onClick={() => props.handleSelectGameTeam(game.id, game.awayTeamId)}>{game.awayTeam}</Button>
-                  </Col>
-                </Row>
+              days.map(game => {
+                const disabled = (game.id < 34540 && leagueId === 473) ? true : false;
+                return (
+                  <Row key={game.id}>
+                    <Col xs={6} md={3} mdOffset={3}>
+                      <Button bsStyle="info" disabled={disabled} bsSize="small" block onClick={() => props.handleSelectGameTeam(game.id, game.homeTeamId)}>{game.homeTeam}</Button>
+                    </Col>
+                    <Col xs={6} md={3}>
+                      <Button bsStyle="info" disabled={disabled} bsSize="small" block onClick={() => props.handleSelectGameTeam(game.id, game.awayTeamId)}>{game.awayTeam}</Button>
+                    </Col>
+                  </Row>
+                );
+              }
               )
+              
             }
           </Grid>
         )
