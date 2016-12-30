@@ -106,8 +106,16 @@
     width: 100%;
 }
 
-.table {
-    font-size: 9pt;
+.table-stats {
+    font-size: 8pt;
+}
+
+.table-stats thead tr th, .table-stats tbody tr td {
+    text-align: right;
+}
+
+.table-stats thead tr th.player-name, .table-stats tbody tr td.player-name {
+    text-align: left;
 }
 
 .gameChart {
