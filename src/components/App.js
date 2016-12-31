@@ -10,68 +10,121 @@ import GameTeamView from './GameTeamView';
 @inject('sessionStore', 'gameStore') @observer
 export default class App extends React.Component {
 
-  render() {
-
-    const { sessionStore, gameStore } = this.props;
-
-    if (sessionStore.getNumberOfPendingRequests() > 0) {
-        return (
-            <div>
-                <Navbar collapseOnSelect>
-                <Navbar.Header>
-                    <Navbar.Brand>
-                    Parity League
-                    </Navbar.Brand>
-                    <Navbar.Toggle />
-                </Navbar.Header>
-                </Navbar>
-                <Grid fluid={true}>
-                    <Row>
-                        <Col md={2} xs={2} mdOffset={5} xsOffset={5}>
-                            <Loading type='bubbles' color='#999999' />
-                        </Col>
-                    </Row>
-                </Grid>
-            </div>
-        );
+    handleReturn() {
+        actions.resetSession();
     }
 
-    return (
+    handleClear() {
+        if (confirm("This will delete the stats for this game / team on the server.  Are you sure?")) {
+            actions.resetGameStats();
+        }
+    }
 
-      <div>
-        <Navbar collapseOnSelect>
-          <Navbar.Header>
-            <Navbar.Brand>
-              Parity League
-            </Navbar.Brand>
-            <Navbar.Toggle />
-          </Navbar.Header>
-          <Navbar.Collapse>
-            <CustomMenu
+    handleTrackStats() {
+        actions.setTrackStatsMode(true);
+    }
+
+    handleViewResults() {
+        actions.setViewResultsMode(true);
+    }
+
+    handleAdmin() {
+        actions.setMaintainMode(true);
+    }
+
+    handleEditPlayers() {
+        actions.toggleEditPlayerMode();
+    }
+
+    handleSchedule() {
+        actions.resetGameStore();
+    }
+
+    handleScoreboard() {
+        actions.toggleScoreboard();
+    }
+
+    handleSubmitStats() {
+        actions.submitEvents();
+        alert("Thank you.  The stats has been submitted.")
+    }
+
+
+    render() {
+
+        const { sessionStore, gameStore } = this.props;
+
+        if (sessionStore.getNumberOfPendingRequests() > 0) {
+            return (
+                <div>
+                    <Navbar collapseOnSelect>
+                    <Navbar.Header>
+                        <Navbar.Brand>
+                        Parity League
+                        </Navbar.Brand>
+                        <Navbar.Toggle />
+                    </Navbar.Header>
+                    </Navbar>
+                    <Grid fluid={true}>
+                        <Row>
+                            <Col md={2} xs={2} mdOffset={5} xsOffset={5}>
+                                <Loading type='bubbles' color='#999999' />
+                            </Col>
+                        </Row>
+                    </Grid>
+                </div>
+            );
+        }
+
+        return (
+
+        <div>
+            <Navbar collapseOnSelect>
+            <Navbar.Header>
+                <Navbar.Brand>
+                Parity League
+                </Navbar.Brand>
+                <Navbar.Toggle />
+            </Navbar.Header>
+            <Navbar.Collapse>
+                <CustomMenu
+                    isTrackStatsMode={sessionStore.getTrackStatsMode()}
+                    isViewResultsMode={sessionStore.getViewResultsMode()}
+                    isMaintainMode={sessionStore.getMaintainMode()}
+                    isGameSelected={gameStore.isGameSelected()}
+                    isScoreboardMode={gameStore.getScoreboardMode()}
+                    isEditPlayerMode={gameStore.getEditPlayerMode()}
+                    handleScoreboard={this.handleScoreboard}
+                    handleEditPlayers={this.handleEditPlayers}
+                    handleSchedule={this.handleSchedule}
+                    handleSubmitStats={this.handleSubmitStats} 
+                    handleClear={this.handleClear} 
+                    handleReturn={this.handleReturn}
+                /> 
+            </Navbar.Collapse>
+            </Navbar>
+            <MainContent
                 isTrackStatsMode={sessionStore.getTrackStatsMode()}
                 isViewResultsMode={sessionStore.getViewResultsMode()}
                 isMaintainMode={sessionStore.getMaintainMode()}
                 isGameSelected={gameStore.isGameSelected()}
-                isScoreboardMode={gameStore.getScoreboardMode()}
-                isEditPlayerMode={gameStore.getEditPlayerMode()}
+                handleTrackStats={this.handleTrackStats} 
+                handleViewResults={this.handleViewResults} 
+                handleAdmin={this.handleAdmin}
             /> 
-          </Navbar.Collapse>
-        </Navbar>
-        <MainContent
-            isTrackStatsMode={sessionStore.getTrackStatsMode()}
-            isViewResultsMode={sessionStore.getViewResultsMode()}
-            isMaintainMode={sessionStore.getMaintainMode()}
-            isGameSelected={gameStore.isGameSelected()}
-        /> 
-      </div>
+        </div>
 
-    );
+        );
 
-  }
+    }
 }
 
 function MainContent(props) {
+    
+    const { handleTrackStats, handleViewResults, handleAdmin } = props;
+
     const rowMargins = {padding: '5px 5px'};
+    
     if (props.isTrackStatsMode || props.isViewResultsMode) {
         return (
             <div>
@@ -99,6 +152,9 @@ function MainContent(props) {
 
 
 function CustomMenu(props) {
+
+    const { handleScoreboard, handleEditPlayers, handleSchedule, handleSubmitStats, handleClear, handleReturn  } = props;
+
     if (props.isTrackStatsMode) {
         if (props.isGameSelected) {
             if (props.isScoreboardMode) {
@@ -168,41 +224,4 @@ function CustomMenu(props) {
     );
 }
 
-function handleReturn() {
-    actions.resetSession();
-}
 
-function handleClear() {
-    if (confirm("This will delete the stats for this game / team on the server.  Are you sure?")) {
-        actions.resetGameStats();
-    }
-}
-
-function handleTrackStats() {
-    actions.setTrackStatsMode(true);
-}
-
-function handleViewResults() {
-    actions.setViewResultsMode(true);
-}
-
-function handleAdmin() {
-    actions.setMaintainMode(true);
-}
-
-function handleEditPlayers() {
-    actions.toggleEditPlayerMode();
-}
-
-function handleSchedule() {
-    actions.resetGameStore();
-}
-
-function handleScoreboard() {
-    actions.toggleScoreboard();
-}
-
-function handleSubmitStats() {
-    actions.submitEvents();
-    alert("Thank you.  The stats has been submitted.")
-}
