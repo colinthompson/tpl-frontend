@@ -1,7 +1,8 @@
 import React from 'react';
 import {observer, inject} from 'mobx-react';
+import { observable, action, runInAction } from 'mobx';
 import * as actions from '../actions/index';
-import { Navbar, Nav, NavItem, Button, Grid, Row, Col } from 'react-bootstrap';
+import { Navbar, Nav, NavItem, Button, Grid, Row, Col, Modal } from 'react-bootstrap';
 import Loading from 'react-loading';
 import LeagueSchedule from './LeagueSchedule';
 import GameTeamView from './GameTeamView';
@@ -10,14 +11,38 @@ import GameTeamView from './GameTeamView';
 @inject('sessionStore', 'gameStore') @observer
 export default class App extends React.Component {
 
+    @observable showSubmittedModal;
+    @observable showClearStatModal;
+
+    constructor(props) {
+        super(props);
+        // Cannot make constructor an @action, therefore, have to assign observable value in runInAction
+        runInAction("set modalVisible", () => {
+            this.showSubmittedModal = false;
+            this.showClearStatModal = false;
+        })
+        this.handleClear = this.handleClear.bind(this);
+        this.clearStats = this.clearStats.bind(this);
+        this.handleSubmitStats = this.handleSubmitStats.bind(this);
+        this.closeModal = this.closeModal.bind(this);
+    }
+
     handleReturn() {
         actions.resetSession();
     }
 
-    handleClear() {
-        if (confirm("This will delete the stats for this game / team on the server.  Are you sure?")) {
-            actions.resetGameStats();
-        }
+    @action handleClear() {
+        this.showClearStatModal = true;
+    }
+
+    clearStats() {
+        actions.resetGameStats();
+        this.closeModal();
+    }
+
+    @action closeModal() {
+        this.showClearStatModal = false;
+        this.showSubmittedModal = false;
     }
 
     handleTrackStats() {
@@ -44,9 +69,9 @@ export default class App extends React.Component {
         actions.toggleScoreboard();
     }
 
-    handleSubmitStats() {
+    @action handleSubmitStats() {
         actions.submitEvents();
-        alert("Thank you.  The stats has been submitted.")
+        this.showSubmittedModal = true;
     }
 
 
@@ -79,6 +104,13 @@ export default class App extends React.Component {
         return (
 
         <div>
+            <ShowModal 
+                showClearStatModal={this.showClearStatModal}
+                showSubmittedModal={this.showSubmittedModal}
+                clearStats={this.clearStats}
+                closeModal={this.closeModal}
+            />
+
             <Navbar collapseOnSelect>
             <Navbar.Header>
                 <Navbar.Brand>
@@ -117,6 +149,50 @@ export default class App extends React.Component {
         );
 
     }
+}
+
+function ShowModal(props) {
+
+    const { showClearStatModal, showSubmittedModal, closeModal, clearStats } = props;
+
+    if (showClearStatModal) {
+        return (
+            <Modal show={true} onHide={closeModal}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Clear Stats</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <h4>Clear Team Stats</h4>
+                    <p>This will delete the stats for this team on the server.  Are you sure?</p>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button bsStyle="primary" onClick={closeModal}>Cancel</Button>
+                    <Button bsStyle="danger" onClick={clearStats}>Clear</Button>
+                </Modal.Footer>
+            </Modal>
+        );
+    }
+
+    if (showSubmittedModal) {
+        return (
+            <Modal show={true} onHide={closeModal}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Submit Stats</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <h4>Thank You</h4>
+                    <p>The stats for this game has been submitted.</p>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button bsStyle="primary" onClick={closeModal}>Close</Button>
+                </Modal.Footer>
+            </Modal>
+        );
+    }
+
+    return (
+        <div></div>
+    );
 }
 
 function MainContent(props) {

@@ -1,6 +1,7 @@
 import React from 'react';
 import { observer, inject } from 'mobx-react';
-import {Grid, Row, Col, Button, Glyphicon } from 'react-bootstrap';
+import { observable, action, runInAction } from 'mobx';
+import {Grid, Row, Col, Button, Glyphicon, Modal } from 'react-bootstrap';
 import * as actions from '../actions/index';
 import SelectSub from './SelectSub';
 import GameTeamStats from './GameTeamStats';
@@ -9,12 +10,33 @@ import GameTeamChart from './GameTeamChart';
 @inject('sessionStore', 'gameStore') @observer
 class GameTeamView extends React.Component {
 
-  componentDidMount() {
+  @observable showInstructionModal;
+
+  constructor(props) {
+    super(props)
+    // Cannot make constructor an @action, therefore, have to assign observable value in runInAction
+    runInAction("set modalVisible", () => {
+        this.showInstructionModal = false;
+    })
+    this.closeModal = this.closeModal.bind(this);
+    this.openModal = this.openModal.bind(this);
+  }
+
+  @action componentDidMount() {
     const {sessionStore} = this.props;
     if (!sessionStore.getProvidedInstructions() && !sessionStore.getViewResultsMode()) {
       sessionStore.setProvidedInstructions(true);
-      alert('Select "Setup Players / Subs" from the menu to prepare your game.');
+      // Cannot directly change the observable variable.  Calling a private @action to do this
+      this.openModal();
     }
+  }
+
+  @action openModal() {
+    this.showInstructionModal = true;
+  }
+
+  @action closeModal() {
+    this.showInstructionModal = false;
   }
 
   handleTapPlayer(playerId) {
@@ -63,7 +85,9 @@ class GameTeamView extends React.Component {
 
     return (
       <Grid fluid={true}>
-        
+
+        <ShowModal showInstructionModal={this.showInstructionModal} closeModal={this.closeModal} />
+
         <ShowTeamScore isEditPlayerMode={isEditPlayerMode} teamScore={teamScore} />
 
         <ShowEventsLog isEditPlayerMode={isEditPlayerMode} gameEvents={gameEvents} />
@@ -83,6 +107,32 @@ class GameTeamView extends React.Component {
     )
   }
 }
+
+/* Instructional Modal */
+
+function ShowModal(props) {
+
+    const { showInstructionModal, closeModal } = props;
+
+    return (
+        <Modal show={showInstructionModal} onHide={closeModal}>
+            <Modal.Header closeButton>
+                <Modal.Title>Record Stats</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <h4>Game Set Up</h4>
+                <p>Select "Setup Players / Subs" from the menu to setup the roster and subsitutes.</p>
+                <hr />
+                <h4>Submit Stats</h4>
+                <p>Select "Submit Stats" from the menu to submit the score at the end of the game.</p>
+            </Modal.Body>
+            <Modal.Footer>
+                <Button bsStyle="primary" onClick={closeModal}>Close</Button>
+            </Modal.Footer>
+        </Modal>
+    );
+}
+
 
 /* Team Score */
 
