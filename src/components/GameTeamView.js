@@ -55,6 +55,10 @@ class GameTeamView extends React.Component {
     actions.toggleScoreboard();
   }
 
+  toggleEditPlayerMode() {
+    actions.toggleEditPlayerMode();
+  }
+
   render() {
     
     const { gameStore, sessionStore } = this.props;
@@ -94,7 +98,7 @@ class GameTeamView extends React.Component {
 
         <ShowEventButtons isEditPlayerMode={isEditPlayerMode} handleTapEvent={this.handleTapEvent} handleUndoEvent={this.handleUndoEvent} teamScore={teamScore} />
 
-        <ShowSelectSubs isEditPlayerMode={isEditPlayerMode} />
+        <ShowSelectSubs isEditPlayerMode={isEditPlayerMode} toggleEditPlayerMode={this.toggleEditPlayerMode} />
 
         <ShowTrackingPlayers 
           isEditPlayerMode={isEditPlayerMode} 
@@ -222,7 +226,7 @@ function ShowEventButtons(props) {
 /* Select Subs */
 
 function ShowSelectSubs(props) {
-  const {isEditPlayerMode} = props;
+  const {isEditPlayerMode, toggleEditPlayerMode} = props;
   if (!isEditPlayerMode) {
     return (
       <div></div>
@@ -230,6 +234,9 @@ function ShowSelectSubs(props) {
   }
   return (
     <Row>
+      <Col xs={12} md={6} mdOffset={3}>
+        <Button onClick={() => toggleEditPlayerMode()} block bsStyle="danger" className="btn-return">Return</Button>
+      </Col>
       <Col xs={12} md={6} mdOffset={3} className="text-center">
         <SelectSub />
       </Col>
