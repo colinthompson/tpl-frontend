@@ -42,10 +42,10 @@ function BuildSchedule(props) {
                 return (
                   <Row key={game.id}>
                     <Col xs={6} md={3} mdOffset={3}>
-                      <Button bsStyle="info" disabled={disabled} bsSize="small" block onClick={() => props.handleSelectGameTeam(game.id, game.homeTeamId)}>{game.homeTeam}</Button>
+                      <Button className="btn-truncate" bsStyle="info" disabled={disabled} bsSize="small" block onClick={() => props.handleSelectGameTeam(game.id, game.homeTeamId)}>{game.homeTeam}</Button>
                     </Col>
                     <Col xs={6} md={3}>
-                      <Button bsStyle="info" disabled={disabled} bsSize="small" block onClick={() => props.handleSelectGameTeam(game.id, game.awayTeamId)}>{game.awayTeam}</Button>
+                      <Button className="btn-truncate" bsStyle="info" disabled={disabled} bsSize="small" block onClick={() => props.handleSelectGameTeam(game.id, game.awayTeamId)}>{game.awayTeam}</Button>
                     </Col>
                   </Row>
                 );

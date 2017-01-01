@@ -78,6 +78,12 @@
     margin-bottom: 20px;
 }
 
+.btn-truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .remove-icon {
     margin-right: 2px;
     color: #ff3333;
