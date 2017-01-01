@@ -71,7 +71,7 @@ class GameTeamView extends React.Component {
       return (
         <Grid fluid={true}>
           <Col xs={12} md={6} mdOffset={3}>
-            <Button onClick={() => this.handleExitScoreboard()} block bsStyle="primary" className="btn-return">Return</Button>
+            <Button onClick={() => this.handleExitScoreboard()} block bsStyle="danger" className="btn-return">Return</Button>
           </Col>
           <Col xs={12} md={6} mdOffset={3}>
             <GameTeamStats />

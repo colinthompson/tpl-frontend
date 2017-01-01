@@ -6,6 +6,7 @@ import { Navbar, Nav, NavItem, Button, Grid, Row, Col, Modal } from 'react-boots
 import Loading from 'react-loading';
 import LeagueSchedule from './LeagueSchedule';
 import GameTeamView from './GameTeamView';
+import MaintainLeague from './MaintainLeague';
 
 
 @inject('sessionStore', 'gameStore') @observer
@@ -13,6 +14,7 @@ export default class App extends React.Component {
 
     @observable showSubmittedModal;
     @observable showClearStatModal;
+    @observable showMaintainModal;
 
     constructor(props) {
         super(props);
@@ -20,11 +22,14 @@ export default class App extends React.Component {
         runInAction("set modalVisible", () => {
             this.showSubmittedModal = false;
             this.showClearStatModal = false;
+            this.showMaintainModal = false;
         })
         this.handleClear = this.handleClear.bind(this);
         this.clearStats = this.clearStats.bind(this);
         this.handleSubmitStats = this.handleSubmitStats.bind(this);
         this.closeModal = this.closeModal.bind(this);
+        this.handleAdmin = this.handleAdmin.bind(this);
+        this.maintainMode = this.maintainMode.bind(this);
     }
 
     handleReturn() {
@@ -43,6 +48,7 @@ export default class App extends React.Component {
     @action closeModal() {
         this.showClearStatModal = false;
         this.showSubmittedModal = false;
+        this.showMaintainModal = false;
     }
 
     handleTrackStats() {
@@ -53,9 +59,15 @@ export default class App extends React.Component {
         actions.setViewResultsMode(true);
     }
 
-    handleAdmin() {
-        actions.setMaintainMode(true);
+    @action handleAdmin() {
+        this.showMaintainModal = true;
     }
+
+    maintainMode() {
+        actions.setMaintainMode(true);
+        this.closeModal();
+    }
+
 
     handleEditPlayers() {
         actions.toggleEditPlayerMode();
@@ -107,8 +119,10 @@ export default class App extends React.Component {
             <ShowModal 
                 showClearStatModal={this.showClearStatModal}
                 showSubmittedModal={this.showSubmittedModal}
+                showMaintainModal={this.showMaintainModal}
                 clearStats={this.clearStats}
                 closeModal={this.closeModal}
+                maintainMode={this.maintainMode}
             />
 
             <Navbar collapseOnSelect>
@@ -153,7 +167,7 @@ export default class App extends React.Component {
 
 function ShowModal(props) {
 
-    const { showClearStatModal, showSubmittedModal, closeModal, clearStats } = props;
+    const { showClearStatModal, showSubmittedModal, showMaintainModal, closeModal, clearStats, maintainMode } = props;
 
     if (showClearStatModal) {
         return (
@@ -190,6 +204,26 @@ function ShowModal(props) {
         );
     }
 
+    if (showMaintainModal) {
+        return (
+            <Modal show={true} onHide={closeModal}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Maintain League</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <h4>Under Construction --This will be a secured area for the admins to:</h4>
+                    <p>Set Player Nicknames</p>
+                    <p>Reload Roster / Schedule</p>
+                    <p>Retrieve Game Stats </p>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button bsStyle="primary" onClick={closeModal}>Close</Button>
+                    <Button bsStyle="primary" onClick={maintainMode}>Enter</Button>
+                </Modal.Footer>
+            </Modal>
+        );
+    }
+
     return (
         <div></div>
     );
@@ -197,11 +231,11 @@ function ShowModal(props) {
 
 function MainContent(props) {
     
-    const { handleTrackStats, handleViewResults, handleAdmin } = props;
+    const { isTrackStatsMode, isViewResultsMode, isMaintainMode, handleTrackStats, handleViewResults, handleAdmin } = props;
 
     const rowMargins = {padding: '5px 5px'};
     
-    if (props.isTrackStatsMode || props.isViewResultsMode) {
+    if (isTrackStatsMode || isViewResultsMode) {
         return (
             <div>
             { props.isGameSelected ? <GameTeamView /> : <LeagueSchedule />}
@@ -209,9 +243,9 @@ function MainContent(props) {
         );
     }
 
-    if (props.isMaintainMode) {
+    if (isMaintainMode) {
         return (
-            <div>Maintain Mode</div>
+            <MaintainLeague />
         );
     }
 
@@ -220,7 +254,7 @@ function MainContent(props) {
             <Row >
                 <Col style={rowMargins} xs={12} md={4} mdOffset={4}><Button bsStyle="primary" bsSize="large" block onClick={handleTrackStats}>Record Stats</Button></Col>
                 <Col style={rowMargins} xs={12} md={4} mdOffset={4}><Button bsStyle="primary" bsSize="large" block onClick={handleViewResults}>View Results</Button></Col>
-                <Col style={rowMargins} xs={12} md={4} mdOffset={4}><Button disabled bsStyle="info" bsSize="large" block onClick={handleAdmin}>Maintain League (coming soon)</Button></Col>
+                <Col style={rowMargins} xs={12} md={4} mdOffset={4}><Button bsStyle="info" bsSize="large" block onClick={handleAdmin}>Maintain League</Button></Col>
             </Row>
         </Grid>
     );
@@ -229,18 +263,18 @@ function MainContent(props) {
 
 function CustomMenu(props) {
 
-    const { handleScoreboard, handleEditPlayers, handleSchedule, handleSubmitStats, handleClear, handleReturn  } = props;
+    const { isTrackStatsMode, isViewResultsMode, isMaintainMode, isGameSelected, isScoreboardMode, isEditPlayerMode, handleScoreboard, handleEditPlayers, handleSchedule, handleSubmitStats, handleClear, handleReturn  } = props;
 
-    if (props.isTrackStatsMode) {
-        if (props.isGameSelected) {
-            if (props.isScoreboardMode) {
+    if (isTrackStatsMode) {
+        if (isGameSelected) {
+            if (isScoreboardMode) {
                 return (
                     <Nav pullRight>
                         <NavItem onClick={handleScoreboard}>Return</NavItem>
                     </Nav>
                 );
             } else {
-                if (props.isEditPlayerMode) {
+                if (isEditPlayerMode) {
                     return (
                         <Nav pullRight>
                             <NavItem onClick={handleEditPlayers}>Return</NavItem>
@@ -269,8 +303,8 @@ function CustomMenu(props) {
         }
     }
 
-    if (props.isViewResultsMode) {
-         if (props.isGameSelected) {
+    if (isViewResultsMode) {
+         if (isGameSelected) {
             return (
                 <Nav pullRight>
                     <NavItem onClick={handleScoreboard}>Return</NavItem>
@@ -285,7 +319,7 @@ function CustomMenu(props) {
          }
     }
 
-    if (props.isMaintainMode) {
+    if (isMaintainMode) {
         return (
             <Nav pullRight>
                 <NavItem onClick={handleReturn}>Home</NavItem>
