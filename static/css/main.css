@@ -47,13 +47,15 @@
 .btn-event {
     background-color: #006633;
     color: white;
-    padding-right: 38px;
+    padding-right: 36px;
+    height: 40px;
 }
 
 .btn-undo {
     background-color: red;
     color: white;
-    padding-right: 38px;
+    padding-right: 40px;
+    height: 40px;
 }
 
 .btn-male {
@@ -101,14 +103,14 @@
 
 .masonry2 { /* Masonry container */
     column-count: 2;
-    column-gap: 10px;
-    margin-top: 5px;
+    column-gap: 20px;
+    margin-top: 10px;
 }
 
 .item { /* Masonry bricks or child elements */
     background-color: #eee;
     display: inline-block;
-    margin: 0 0 12px;
+    margin: 0 0 18px;
     width: 100%;
 }
 
