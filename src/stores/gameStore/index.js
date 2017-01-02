@@ -167,9 +167,19 @@ class GameStore {
     }
 
     @action undoEvent() {
-        // Do a dummy set eventType of the current event to blank (this will handle setting the cleaning up of assist and 2nd assists)
-        this.setEventType("");
-        this.eventsList.pop();
+
+        // If the event type is set, then the undo will just undo that.
+        // If the event type is not set, then undo will undo the play 
+
+        let currentEvent = this.eventsList.length === 0 ? null : this.eventsList[this.eventsList.length -1];
+        if (!currentEvent) return;
+
+        if (currentEvent.eventType === "") {
+            this.eventsList.pop();
+        } else {
+            this.setEventType("");
+        }
+
     }
 
     @action toggleScoreboard() {
