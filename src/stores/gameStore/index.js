@@ -329,8 +329,38 @@ class GameStore {
             return 0;
         });
 
-        return statisticsData;
+        const initObj = {};
+        initObj.nickname = "";
+        initObj.statsPass = 0;
+        initObj.statsPassMale = 0;
+        initObj.statsPassFemale = 0;
+        initObj.statGoal = 0;
+        initObj.statAssist = 0;
+        initObj.stat2Assist = 0;
+        initObj.statTA = 0;
+        initObj.statDrop = 0;
+        initObj.statD = 0;
 
+        const myTotal = statisticsData.reduce(function(a, b) {
+            let totalObj = {};
+            totalObj.nickname="Total";
+            totalObj.statsPass = a.statsPass + b.statsPass;
+            totalObj.statsPassMale = a.statsPassMale + b.statsPassMale;
+            totalObj.statsPassFemale = a.statsPassFemale + b.statsPassFemale;
+            totalObj.statGoal = a.statGoal + b.statGoal;
+            totalObj.statAssist = a.statAssist + b.statAssist;
+            totalObj.stat2Assist = a.stat2Assist + b.stat2Assist;
+            totalObj.statTA = a.statTA + b.statTA;
+            totalObj.statDrop = a.statDrop + b.statDrop;
+            totalObj.statD = a.statD + b.statD;
+            return totalObj;
+        }, initObj);
+
+        myTotal.id=-1;
+
+        statisticsData.push(myTotal);
+
+        return statisticsData;
     }
 
     getChartData() {

@@ -165,3 +165,11 @@
     height: 15px;
     margin: 0 2px;
 }
+
+.tr-total {
+    font-weight: 700;
+}
+
+.table-striped>tbody>tr:nth-of-type(odd) {
+    background-color: #e0e0e0;
+}

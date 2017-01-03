@@ -38,8 +38,10 @@ function ShowScorebord(props) {
         </thead>
         <tbody>
             {
-            statisticsData.map(player =>
-                <tr key={player.id}>
+            statisticsData.map(player => {
+                const rowClass =  player.id === -1 ? "tr-total" : "" ;
+                return (
+                <tr key={player.id} className={rowClass}>
                     <td className="player-name">{player.nickname}</td>
                     <td>{player.statGoal}</td>
                     <td>{player.statAssist}</td>
@@ -51,6 +53,8 @@ function ShowScorebord(props) {
                     <td>{player.statsPassMale}</td>
                     <td>{player.statsPassFemale}</td>
                 </tr>
+                );
+                }
             )
             }
         </tbody>
