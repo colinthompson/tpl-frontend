@@ -180,8 +180,12 @@ function ShowModal(props) {
                     <p>This will delete the stats for this team on the server.  Are you sure?</p>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button bsStyle="primary" onClick={closeModal}>Cancel</Button>
-                    <Button bsStyle="danger" onClick={clearStats}>Clear</Button>
+                    <div className="modal-footer-left">
+                        <Button bsStyle="primary" onClick={closeModal}>Cancel</Button>
+                    </div>
+                    <div className="modal-footer-right">
+                        <Button bsStyle="danger" onClick={clearStats}>Clear Stats</Button>
+                    </div>
                 </Modal.Footer>
             </Modal>
         );

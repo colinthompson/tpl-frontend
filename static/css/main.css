@@ -173,3 +173,11 @@
 .table-striped>tbody>tr:nth-of-type(odd) {
     background-color: #e0e0e0;
 }
+
+.modal-footer-left {
+    float:left;
+}
+
+.modal-footer-right {
+    float:right;
+}
