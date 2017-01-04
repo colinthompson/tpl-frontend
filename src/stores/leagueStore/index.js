@@ -16,7 +16,7 @@ class LeagueStore {
     }
 
     @action reset = () => {
-        this.leqgueId = null;
+        this.leagueId = null;
         this.gameList = [];
         this.teamsList = [];
         this.playersList = [];
