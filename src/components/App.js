@@ -97,7 +97,7 @@ export default class App extends React.Component {
                     <Navbar collapseOnSelect>
                     <Navbar.Header>
                         <Navbar.Brand>
-                        Parity League
+                         { gameStore.isGameSelected() ? gameStore.getTeamName() : "Parity League" }
                         </Navbar.Brand>
                         <Navbar.Toggle />
                     </Navbar.Header>
@@ -128,7 +128,7 @@ export default class App extends React.Component {
             <Navbar collapseOnSelect>
             <Navbar.Header>
                 <Navbar.Brand>
-                Parity League
+                { gameStore.isGameSelected() ? gameStore.getTeamName() : "Parity League" }
                 </Navbar.Brand>
                 <Navbar.Toggle />
             </Navbar.Header>

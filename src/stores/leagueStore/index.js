@@ -75,6 +75,11 @@ class LeagueStore {
         return subs;
     }
 
+    getTeamNameByTeamId(teamId) {
+        const myTeam = this.teamsList.find(team => team.id === teamId);
+        return myTeam.teamName;
+    }
+
 }
 
 const leagueStore = new LeagueStore();

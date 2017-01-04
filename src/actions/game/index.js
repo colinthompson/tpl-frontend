@@ -17,6 +17,10 @@ export function setGameTeam(gameId, teamId) {
     gameStore.reset();
     // Set the gameID and teamID
     gameStore.setGameTeam(gameId, teamId);
+
+    // set the teamName 
+    gameStore.setTeamName(leagueStore.getTeamNameByTeamId(teamId));
+
     // Call API to retrieve game events from server
     fetchGameTeamEvents(gameId, teamId);
 
