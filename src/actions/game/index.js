@@ -1,6 +1,7 @@
 import sessionStore from '../../stores/sessionStore';
 import leagueStore from '../../stores/leagueStore';
 import gameStore from '../../stores/gameStore';
+import { SERVER_URI } from '../../constants/constants';
 
 export function resetGameStats() {
     gameStore.resetGameStats();
@@ -34,7 +35,7 @@ export function setGameTeam(gameId, teamId) {
 
 export function fetchGameTeamEvents(gameId, teamId) {
     const initUrl = 'gameEvents/' + gameId + '/' + teamId;
-    const url = '//tuc-tpl.herokuapp.com/' + initUrl;
+    const url = SERVER_URI + initUrl;
 
     sessionStore.startRequest();
     return fetch(url)
@@ -88,7 +89,7 @@ function saveAllEvents() {
     let eventsListJson = gameStore.getEventsListJson();
     
     const initUrl = 'gameEvents/' + gameStore.getGameId() + '/' + gameStore.getTeamId();
-    const url = '//tuc-tpl.herokuapp.com/' + initUrl;
+    const url = SERVER_URI + initUrl;
     
     eventsListJson = JSON.stringify(eventsListJson);
 
