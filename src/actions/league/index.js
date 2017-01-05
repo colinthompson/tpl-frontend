@@ -1,9 +1,10 @@
 import sessionStore from '../../stores/sessionStore';
 import leagueStore from '../../stores/leagueStore';
+import { SERVER_URI } from '../../constants/constants';
 
 export function fetchGames(leagueId) {
     const initUrl = 'games/' + leagueId;
-    const url = '//tuc-tpl.herokuapp.com/' + initUrl;
+    const url = SERVER_URI + initUrl;
     sessionStore.startRequest();
     return fetch(url)
         .then(response => response.json())
@@ -15,7 +16,7 @@ export function fetchGames(leagueId) {
 
 export function fetchTeams(leagueId) {
     const initUrl = 'teams/' + leagueId;
-    const url = '//tuc-tpl.herokuapp.com/' + initUrl;
+    const url = SERVER_URI + initUrl;
     sessionStore.startRequest();
     return fetch(url)
         .then(response => response.json())
