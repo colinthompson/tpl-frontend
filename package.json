@@ -46,15 +46,20 @@
     "whatwg-fetch": "1.0.0"
   },
   "dependencies": {
+    "lodash": "^4.17.2",
     "material-ui": "^0.15.4",
     "mobx": "^2.4.3",
     "mobx-react": "^3.5.5",
     "react": "^15.2.1",
+    "react-bootstrap": "^0.30.7",
     "react-dom": "^15.2.1",
     "react-dropdown": "^1.1.0",
     "react-google-charts": "^1.2.1",
+    "react-loading": "0.0.9",
     "react-router": "^2.7.0",
+    "react-select": "^1.0.0-rc.2",
     "react-tap-event-plugin": "^1.0.0",
+    "recharts": "^0.20.0",
     "superagent": "^2.2.0"
   },
   "scripts": {

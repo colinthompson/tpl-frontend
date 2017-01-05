@@ -1,49 +1,63 @@
-import React, { Component } from 'react';
+import React from 'react';
+import { observer, inject } from 'mobx-react';
+import {Grid, Row, Col, Button } from 'react-bootstrap';
+import * as actions from '../actions/index';
 
-class LeagueSchedule extends Component {
-  
+@inject('leagueStore') @observer
+class LeagueSchedule extends React.Component {
+
+  handleSelectGameTeam(gameId, teamId) {
+    actions.setGameTeam(gameId, teamId);
+  }
+
   render() {
-    const { teams } = this.props;
+    const { leagueStore } = this.props;
+    const groupedSchedule = leagueStore.getGamesListGroupByDate();
+    const leagueId = leagueStore.getLeagueId();
 
     return (
-        <div className="ui grid container">
-          { teams.map(teamValue =>
-              <div key={teamValue.gameId} className="row">
-                <div className="six wide column">
-                  {teamValue.date}
-                </div>
-                <div className="five wide column">
-                  <button className="ui blue button small playerButton fluid"
-                    onTouchTap={this.handleOnTouchTap.bind(this, teamValue.homeTeamId, teamValue.gameId)}>
-                    {teamValue.homeTeam}
-                  </button>
-                </div>
-                <div className="five wide column">
-                  <button className="ui pink button small playerButton fluid"
-                    onTouchTap={this.handleOnTouchTap.bind(this, teamValue.awayTeamId, teamValue.gameId)}>
-                    {teamValue.awayTeam}
-                  </button>
-                </div>
-              </div>
-          )}
-        </div>
-
+      <div >
+        {
+          <BuildSchedule groupedSchedule={groupedSchedule} handleSelectGameTeam={this.handleSelectGameTeam} leagueId={leagueId} />
+        }
+      </div>
     )
   }
-
-  handleOnTouchTap(teamIdValue, gameIdValue, event){  
-     this.props.onTeamChange(teamIdValue, gameIdValue);
-  }
-
 }
 
-LeagueSchedule.propTypes = {
-  teams: React.PropTypes.array
-};
-
-LeagueSchedule.defaultProps = {
-  teams: []
-};
+function BuildSchedule(props) {
+    const groupedSchedule = props.groupedSchedule;
+    const leagueId = props.leagueId;
+    return (
+      <div>
+      {
+        groupedSchedule.map(days =>
+          <Grid fluid={true} key={days[0].date} className="scheduleTable">
+            <Row>
+              <Col xs={12} md={6} mdOffset={3} className="text-center">{days[0].date}</Col>
+            </Row>
+            {
+              days.map(game => {
+                const disabled = (game.id < 34540 && leagueId === 473) ? true : false;
+                return (
+                  <Row key={game.id}>
+                    <Col xs={6} md={3} mdOffset={3}>
+                      <Button className="btn-truncate" bsStyle="info" disabled={disabled} bsSize="small" block onClick={() => props.handleSelectGameTeam(game.id, game.homeTeamId)}>{game.homeTeam}</Button>
+                    </Col>
+                    <Col xs={6} md={3}>
+                      <Button className="btn-truncate" bsStyle="info" disabled={disabled} bsSize="small" block onClick={() => props.handleSelectGameTeam(game.id, game.awayTeamId)}>{game.awayTeam}</Button>
+                    </Col>
+                  </Row>
+                );
+              }
+              )
+              
+            }
+          </Grid>
+        )
+      }
+      </div>
+    )
+}
 
 export default LeagueSchedule;
-
