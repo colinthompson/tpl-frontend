@@ -2,7 +2,7 @@
 
 __Under active development__
 
-Web application designed specifically to track player statistics in an [Ultimate Frisbee](https://en.wikipedia.org/wiki/Ultimate_(sport)/) game.
+Web application designed specifically to track player statistics in an [Ultimate Frisbee](https://en.wikipedia.org/wiki/Ultimate_(sport)) game.
 
 ## Installation
 
@@ -21,7 +21,7 @@ npm start
 ```
 Runs the application in the development mode.  
 
-Open http://localhost:3000 to view it in the browser.
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 ## Deployment
 
