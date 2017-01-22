@@ -23,7 +23,7 @@ Runs the application in the development mode.
 
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-## Deployment
+## Deployment 
 
 ```sh
 npm run build
@@ -32,4 +32,8 @@ Builds the app for production to the `build` folder.
 
 Your app is ready to be deployed!
 
+## Screenshots
 
+![Alt text](/ss_track.png?raw=true "Record Player Statistics")
+
+![Alt text](/ss_result.png?raw=true "Game Result")
