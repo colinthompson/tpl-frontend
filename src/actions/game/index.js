@@ -25,6 +25,9 @@ export function setGameTeam(gameId, teamId) {
     // Call API to retrieve game events from server
     fetchGameTeamEvents(gameId, teamId);
 
+    // Call API to retrieve playerGameStats from server if exist (if previously calculated and stored)
+    fetchGameTeamPlayerStatistics(gameId, teamId);
+
     // Reload the player list and sub list from leagueStore
     const trackingPlayers = leagueStore.getPlayersByTeam(teamId);
     const subs = leagueStore.getPlayersNotOnTeam(teamId);
@@ -45,6 +48,20 @@ export function fetchGameTeamEvents(gameId, teamId) {
             sessionStore.finishRequest();
         });
 }
+
+function fetchGameTeamPlayerStatistics(gameId, teamId) {
+    const initUrl = 'playerGameStatistics/' + gameId + '/' + teamId;
+    const url = SERVER_URI + initUrl;
+
+    sessionStore.startRequest();
+    return fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            gameStore.mergePlayerStatistics(data);
+            sessionStore.finishRequest();
+        });
+}
+
 
 export function toggleEditPlayerMode() {
     gameStore.toggleEditPlayerMode();

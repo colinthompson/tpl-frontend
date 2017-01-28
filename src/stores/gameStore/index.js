@@ -9,6 +9,7 @@ class GameStore {
     @observable trackingList;
     @observable subList;
     @observable eventsList;
+    @observable playerStatistics;
     @observable isEditPlayerMode;
     @observable isScoreboardMode;
 
@@ -19,6 +20,7 @@ class GameStore {
         this.trackingList = [];
         this.subList = [];
         this.eventsList = [];
+        this.playerStatistics = [];
         this.isEditPlayerMode = false;
         this.isScoreboardMode = false;
     }
@@ -30,6 +32,7 @@ class GameStore {
         this.trackingList = [];
         this.subList = [];
         this.eventsList = [];
+        this.playerStatistics = [];
         this.isEditPlayerMode = false;
         this.isScoreboardMode = false;
     }
@@ -68,6 +71,10 @@ class GameStore {
         this.eventsList = this.eventsList.sort(function (a,b) {
             return (a.sequence - b.sequence);
         })
+    }
+
+    @action mergePlayerStatistics = (objs) => {
+        forEach(objs, (obj) => this.playerStatistics.push(obj));
     }
 
     @action setGameTeam(gameId, teamId) {
@@ -270,68 +277,72 @@ class GameStore {
 
         let statisticsData = [];
 
-        let previousPassPlayer = null;
+        if (this.playerStatistics.length > 0) {
+            statisticsData = this.playerStatistics;
+        } else {
+            let previousPassPlayer = null;
 
-        for (const gameEvent of this.eventsList) {
-            
-            // Find the player in the statistics data array, if not found, add that player
-            let player = statisticsData.find(player => player.id === gameEvent.player.id);
-            if (!player) {
-                player = gameEvent.player;
-                player.statsPass = 0;
-                player.statsPassMale = 0;
-                player.statsPassFemale = 0;
-                player.statGoal = 0;
-                player.statAssist = 0;
-                player.stat2Assist = 0;
-                player.statTA = 0;
-                player.statDrop = 0;
-                player.statD = 0;
-                statisticsData.push(player);
-            }
-            
-            // Add the passing stats
-            if (previousPassPlayer !== null) {
-                if (player.gender === "Male") {
-                    previousPassPlayer.statsPassMale++;
-                } else {
-                    previousPassPlayer.statsPassFemale++;
+            for (const gameEvent of this.eventsList) {
+                
+                // Find the player in the statistics data array, if not found, add that player
+                let player = statisticsData.find(player => player.id === gameEvent.player.id);
+                if (!player) {
+                    player = gameEvent.player;
+                    player.statsPass = 0;
+                    player.statsPassMale = 0;
+                    player.statsPassFemale = 0;
+                    player.statGoal = 0;
+                    player.statAssist = 0;
+                    player.stat2Assist = 0;
+                    player.statTA = 0;
+                    player.statDrop = 0;
+                    player.statD = 0;
+                    statisticsData.push(player);
                 }
-            }
+                
+                // Add the passing stats
+                if (previousPassPlayer !== null) {
+                    if (player.gender === "Male") {
+                        previousPassPlayer.statsPassMale++;
+                    } else {
+                        previousPassPlayer.statsPassFemale++;
+                    }
+                }
 
-            previousPassPlayer = null;
-            switch (gameEvent.eventType) {
-                case "":
-                case "Pass":
-                    player.statsPass++;
-                    previousPassPlayer = player;
-                    break;
-                case "Goal":
-					player.statGoal++;
-					break;
-				case "Assist":
-                    player.statsPass++;
-					player.statAssist++;
-					previousPassPlayer = player;
-					break;
-				case "2nd Assist":
-                    player.statsPass++;
-					player.stat2Assist++;
-					previousPassPlayer = player;
-					break;
-				case "TA":
-					player.statTA++;
-					break;
-				case "Drop":
-					player.statDrop++;
-					break;
-				case "D":
-					player.statD++;
-					break;
-				default:
-					break;
-            }
+                previousPassPlayer = null;
+                switch (gameEvent.eventType) {
+                    case "":
+                    case "Pass":
+                        player.statsPass++;
+                        previousPassPlayer = player;
+                        break;
+                    case "Goal":
+                        player.statGoal++;
+                        break;
+                    case "Assist":
+                        player.statsPass++;
+                        player.statAssist++;
+                        previousPassPlayer = player;
+                        break;
+                    case "2nd Assist":
+                        player.statsPass++;
+                        player.stat2Assist++;
+                        previousPassPlayer = player;
+                        break;
+                    case "TA":
+                        player.statTA++;
+                        break;
+                    case "Drop":
+                        player.statDrop++;
+                        break;
+                    case "D":
+                        player.statD++;
+                        break;
+                    default:
+                        break;
+                }
 
+            }
         }
 
         statisticsData = statisticsData.sort(function (a,b) {

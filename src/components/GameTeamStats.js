@@ -42,7 +42,7 @@ function ShowScorebord(props) {
                 const rowClass =  player.id === -1 ? "tr-total" : "" ;
                 return (
                 <tr key={player.id} className={rowClass}>
-                    <td className="player-name">{player.nickname}</td>
+                    <td className="player-name">{player.isSub ? '(SUB) ' + player.nickname : player.nickname}</td>
                     <td>{player.statGoal}</td>
                     <td>{player.statAssist}</td>
                     <td>{player.stat2Assist}</td>
