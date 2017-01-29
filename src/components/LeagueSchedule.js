@@ -3,7 +3,7 @@ import { observer, inject } from 'mobx-react';
 import {Grid, Row, Col, Button } from 'react-bootstrap';
 import * as actions from '../actions/index';
 
-@inject('leagueStore') @observer
+@inject('leagueStore', 'sessionStore') @observer
 class LeagueSchedule extends React.Component {
 
   handleSelectGameTeam(gameId, teamId) {
@@ -11,14 +11,19 @@ class LeagueSchedule extends React.Component {
   }
 
   render() {
-    const { leagueStore } = this.props;
+    const { leagueStore, sessionStore } = this.props;
     const groupedSchedule = leagueStore.getGamesListGroupByDate();
     const leagueId = leagueStore.getLeagueId();
 
     return (
       <div >
         {
-          <BuildSchedule groupedSchedule={groupedSchedule} handleSelectGameTeam={this.handleSelectGameTeam} leagueId={leagueId} />
+          <BuildSchedule 
+            groupedSchedule={groupedSchedule} 
+            handleSelectGameTeam={this.handleSelectGameTeam} 
+            leagueId={leagueId} 
+            isViewResultsMode={sessionStore.getViewResultsMode()}
+            />
         }
       </div>
     )
@@ -27,6 +32,7 @@ class LeagueSchedule extends React.Component {
 
 function BuildSchedule(props) {
     const groupedSchedule = props.groupedSchedule;
+    const isViewResultsMode = props.isViewResultsMode;
     const leagueId = props.leagueId;
     return (
       <div>
@@ -34,7 +40,13 @@ function BuildSchedule(props) {
         groupedSchedule.map(days =>
           <Grid fluid={true} key={days[0].date} className="scheduleTable">
             <Row>
-              <Col xs={12} md={6} mdOffset={3} className="text-center">{days[0].date}</Col>
+              <Col xs={12} md={6} mdOffset={3} className="text-center">
+                
+                {isViewResultsMode ? 
+                   <Button bsStyle="info" bsSize="small" onClick={() => console.log(days[0].date)}>{days[0].date} Stats</Button> : 
+                   days[0].date}
+              
+              </Col>
             </Row>
             {
               days.map(game => {
