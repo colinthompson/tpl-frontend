@@ -10,6 +10,10 @@ class LeagueSchedule extends React.Component {
     actions.setGameTeam(gameId, teamId);
   }
 
+  handleSelectStatsWeek(week) {
+    actions.setStatsWeek(week);
+  }
+
   render() {
     const { leagueStore, sessionStore } = this.props;
     const groupedSchedule = leagueStore.getGamesListGroupByDate();
@@ -23,6 +27,7 @@ class LeagueSchedule extends React.Component {
             handleSelectGameTeam={this.handleSelectGameTeam} 
             leagueId={leagueId} 
             isViewResultsMode={sessionStore.getViewResultsMode()}
+            handleSelectStatsWeek={this.handleSelectStatsWeek}
             />
         }
       </div>
@@ -43,7 +48,7 @@ function BuildSchedule(props) {
               <Col xs={12} md={6} mdOffset={3} className="text-center">
                 
                 {isViewResultsMode ? 
-                   <Button bsStyle="info" bsSize="small" onClick={() => console.log(days[0].date)}>{days[0].date} Stats</Button> : 
+                   <Button bsStyle="info" bsSize="small" onClick={() => props.handleSelectStatsWeek(days[0].date)}>{days[0].date} Stats</Button> : 
                    days[0].date}
               
               </Col>

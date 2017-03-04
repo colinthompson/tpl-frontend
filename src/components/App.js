@@ -7,9 +7,10 @@ import Loading from 'react-loading';
 import LeagueSchedule from './LeagueSchedule';
 import GameTeamView from './GameTeamView';
 import MaintainLeague from './MaintainLeague';
+import StatsView from './StatsView';
 
 
-@inject('sessionStore', 'gameStore') @observer
+@inject('sessionStore', 'gameStore', 'statsStore') @observer
 export default class App extends React.Component {
 
     @observable showSubmittedModal;
@@ -30,6 +31,7 @@ export default class App extends React.Component {
         this.closeModal = this.closeModal.bind(this);
         this.handleAdmin = this.handleAdmin.bind(this);
         this.maintainMode = this.maintainMode.bind(this);
+        
     }
 
     handleReturn() {
@@ -81,6 +83,10 @@ export default class App extends React.Component {
         actions.toggleScoreboard();
     }
 
+    handleExitStatsMode() {
+        actions.exitStatsMode();
+    }
+
     @action handleSubmitStats() {
         actions.submitEvents();
         this.showSubmittedModal = true;
@@ -89,7 +95,7 @@ export default class App extends React.Component {
 
     render() {
 
-        const { sessionStore, gameStore } = this.props;
+        const { sessionStore, gameStore, statsStore } = this.props;
 
         if (sessionStore.getNumberOfPendingRequests() > 0) {
             return (
@@ -140,6 +146,8 @@ export default class App extends React.Component {
                     isGameSelected={gameStore.isGameSelected()}
                     isScoreboardMode={gameStore.getScoreboardMode()}
                     isEditPlayerMode={gameStore.getEditPlayerMode()}
+                    hasStatsData={statsStore.hasStatsData()}
+                    handleExitStatsMode={this.handleExitStatsMode}
                     handleScoreboard={this.handleScoreboard}
                     handleEditPlayers={this.handleEditPlayers}
                     handleSchedule={this.handleSchedule}
@@ -154,6 +162,7 @@ export default class App extends React.Component {
                 isViewResultsMode={sessionStore.getViewResultsMode()}
                 isMaintainMode={sessionStore.getMaintainMode()}
                 isGameSelected={gameStore.isGameSelected()}
+                hasStatsData={statsStore.hasStatsData()}
                 handleTrackStats={this.handleTrackStats} 
                 handleViewResults={this.handleViewResults} 
                 handleAdmin={this.handleAdmin}
@@ -235,11 +244,18 @@ function ShowModal(props) {
 
 function MainContent(props) {
     
-    const { isTrackStatsMode, isViewResultsMode, isMaintainMode, handleTrackStats, handleViewResults, handleAdmin } = props;
+    const { isTrackStatsMode, isViewResultsMode, isMaintainMode, hasStatsData, handleTrackStats, handleViewResults, handleAdmin } = props;
 
     const rowMargins = {padding: '5px 5px'};
     
     if (isTrackStatsMode || isViewResultsMode) {
+
+        if (hasStatsData) {
+            return (
+                <StatsView />
+            );
+        }
+
         return (
             <div>
             { props.isGameSelected ? <GameTeamView /> : <LeagueSchedule />}
@@ -267,7 +283,7 @@ function MainContent(props) {
 
 function CustomMenu(props) {
 
-    const { isTrackStatsMode, isViewResultsMode, isMaintainMode, isGameSelected, isScoreboardMode, isEditPlayerMode, handleScoreboard, handleEditPlayers, handleSchedule, handleSubmitStats, handleClear, handleReturn  } = props;
+    const { isTrackStatsMode, isViewResultsMode, isMaintainMode, isGameSelected, isScoreboardMode, isEditPlayerMode, hasStatsData, handleExitStatsMode, handleScoreboard, handleEditPlayers, handleSchedule, handleSubmitStats, handleClear, handleReturn  } = props;
 
     if (isTrackStatsMode) {
         if (isGameSelected) {
@@ -315,11 +331,21 @@ function CustomMenu(props) {
                 </Nav>
             );
          } else {
-            return (
-                <Nav pullRight>
-                    <NavItem onClick={handleReturn}>Home</NavItem>
-                </Nav>
+            if (hasStatsData) {
+                return (
+                    <Nav pullRight>
+                        <NavItem onClick={handleExitStatsMode}>Return</NavItem>
+                    </Nav>
+                );
+                
+            } else {
+                return (
+                    <Nav pullRight>
+                        <NavItem onClick={handleReturn}>Home</NavItem>
+                    </Nav>
             );
+            }
+            
          }
     }
 
