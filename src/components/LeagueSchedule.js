@@ -22,10 +22,10 @@ class LeagueSchedule extends React.Component {
     return (
       <div >
         {
-          <BuildSchedule 
-            groupedSchedule={groupedSchedule} 
-            handleSelectGameTeam={this.handleSelectGameTeam} 
-            leagueId={leagueId} 
+          <BuildSchedule
+            groupedSchedule={groupedSchedule}
+            handleSelectGameTeam={this.handleSelectGameTeam}
+            leagueId={leagueId}
             isViewResultsMode={sessionStore.getViewResultsMode()}
             handleSelectStatsWeek={this.handleSelectStatsWeek}
             />
@@ -33,6 +33,13 @@ class LeagueSchedule extends React.Component {
       </div>
     )
   }
+}
+
+function DecodeHtml(html) {
+  var txt = document.createElement("textarea");
+  txt.innerHTML = html;
+  txt.value = txt.value.replace(/\/$/, "");
+  return txt.value;
 }
 
 function BuildSchedule(props) {
@@ -46,11 +53,11 @@ function BuildSchedule(props) {
           <Grid fluid={true} key={days[0].date} className="scheduleTable">
             <Row>
               <Col xs={12} md={6} mdOffset={3} className="text-center">
-                
-                {isViewResultsMode ? 
-                   <Button bsStyle="info" bsSize="small" onClick={() => props.handleSelectStatsWeek(days[0].date)}>{days[0].date} Stats</Button> : 
+
+                {isViewResultsMode ?
+                   <Button bsStyle="info" bsSize="small" onClick={() => props.handleSelectStatsWeek(days[0].date)}>{days[0].date} Stats</Button> :
                    days[0].date}
-              
+
               </Col>
             </Row>
             {
@@ -59,16 +66,16 @@ function BuildSchedule(props) {
                 return (
                   <Row key={game.id}>
                     <Col xs={6} md={3} mdOffset={3}>
-                      <Button className="btn-truncate" bsStyle="info" disabled={disabled} bsSize="small" block onClick={() => props.handleSelectGameTeam(game.id, game.homeTeamId)}>{game.homeTeam}</Button>
+                      <Button className="btn-truncate" bsStyle="info" disabled={disabled} bsSize="small" block onClick={() => props.handleSelectGameTeam(game.id, game.homeTeamId)}>{DecodeHtml(game.homeTeam)}</Button>
                     </Col>
                     <Col xs={6} md={3}>
-                      <Button className="btn-truncate" bsStyle="info" disabled={disabled} bsSize="small" block onClick={() => props.handleSelectGameTeam(game.id, game.awayTeamId)}>{game.awayTeam}</Button>
+                      <Button className="btn-truncate" bsStyle="info" disabled={disabled} bsSize="small" block onClick={() => props.handleSelectGameTeam(game.id, game.awayTeamId)}>{DecodeHtml(game.awayTeam)}</Button>
                     </Col>
                   </Row>
                 );
               }
               )
-              
+
             }
           </Grid>
         )

@@ -29,8 +29,8 @@ function ShowScorebord(props) {
                 <th>A</th>
                 <th>2A</th>
                 <th>D!</th>
-                <th>Drop</th>
                 <th>TA</th>
+                <th>Drop</th>
                 <th>Pass</th>
                 <th>Pass (M)</th>
                 <th>Pass (F)</th>
@@ -47,8 +47,8 @@ function ShowScorebord(props) {
                     <td>{player.statAssist}</td>
                     <td>{player.stat2Assist}</td>
                     <td>{player.statD}</td>
-                    <td>{player.statDrop}</td>
                     <td>{player.statTA}</td>
+                    <td>{player.statDrop}</td>
                     <td>{player.statsPass}</td>    
                     <td>{player.statsPassMale}</td>
                     <td>{player.statsPassFemale}</td>

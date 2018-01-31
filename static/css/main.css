@@ -44,15 +44,22 @@
     text-align: left;
 }
 
-.btn-event {
+.btn-positive-event {
     background-color: #006633;
     color: white;
     padding-right: 36px;
     height: 40px;
 }
 
-.btn-undo {
+.btn-negative-event {
     background-color: red;
+    color: white;
+    padding-right: 36px;
+    height: 40px;
+}
+
+.btn-undo {
+    background-color: orange;
     color: white;
     padding-right: 40px;
     height: 40px;

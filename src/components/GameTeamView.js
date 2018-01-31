@@ -205,16 +205,16 @@ function ShowEventButtons(props) {
   return(
     <Row>
       <Col xs={2} md={1} mdOffset={3} className="eventButtonContainer">
-          <Button onClick={() => handleTapEvent('Goal')} block bsSize="small" bsStyle={null} className="btn-event">Goal</Button>
+          <Button onClick={() => handleTapEvent('Goal')} block bsSize="small" bsStyle={null} className="btn-positive-event">Goal</Button>
       </Col>
       <Col xs={2} md={1} className="eventButtonContainer">
-          <Button onClick={() => handleTapEvent('Drop')} block bsSize="small" bsStyle={null} className="btn-event">Drop</Button>
-      </Col>    
+          <Button onClick={() => handleTapEvent('D')} block bsSize="small" bsStyle={null} className="btn-positive-event">D</Button>
+      </Col>  
       <Col xs={2} md={1} className="eventButtonContainer">
-          <Button onClick={() => handleTapEvent('TA')} block bsSize="small" bsStyle={null} className="btn-event">TA</Button>
-      </Col>    
+          <Button onClick={() => handleTapEvent('TA')} block bsSize="small" bsStyle={null} className="btn-negative-event">TA</Button>
+      </Col>  
       <Col xs={2} md={1} className="eventButtonContainer">
-          <Button onClick={() => handleTapEvent('D')} block bsSize="small" bsStyle={null} className="btn-event">D</Button>
+          <Button onClick={() => handleTapEvent('Drop')} block bsSize="small" bsStyle={null} className="btn-negative-event">Drop</Button>
       </Col>    
       <Col xs={2} md={1} className="eventButtonContainer">
           <Button onClick={() => handleUndoEvent()} block bsSize="small" bsStyle={null} className="btn-undo">Undo</Button>
