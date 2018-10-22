@@ -9,7 +9,7 @@ class LeagueStore {
     @observable playersList;
 
     constructor() {
-        this.leagueId = 538;
+        this.leagueId = 574;
         this.gamesList = [];
         this.teamsList = [];
         this.playersList = [];
@@ -45,7 +45,7 @@ class LeagueStore {
     getGamesListGroupByDate() {
         const groupByDate = groupBy(this.gamesList, 'date');
         const groupedList = [];
-        forEach(groupByDate, (value,key) => {
+        forEach(groupByDate, (value, key) => {
             groupedList.push(value);
         })
         return groupedList.reverse();
