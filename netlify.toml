@@ -1,0 +1,4 @@
+[[redirects]]
+  from = "/home"
+  to = "/"
+  status = 302 # No sense making it permanent until a long-term solution is chosen
