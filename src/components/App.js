@@ -309,7 +309,7 @@ function CustomMenu(props) {
                             <NavItem onClick={handleScoreboard}>Scoreboard</NavItem>
                             <NavItem onClick={handleSubmitStats}>Submit Stats</NavItem>
                             <NavItem className="divider-vertical"></NavItem>
-                            <NavItem onClick={handleClear}>Clear Stats</NavItem>
+                            {/* <NavItem onClick={handleClear}>Clear Stats</NavItem> */}
                         </Nav>
                     );
                 }
