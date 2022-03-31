@@ -63,12 +63,12 @@ function clearConsole() {
 function setupCompiler(port) {
   compiler = webpack(config, handleCompile);
 
-  compiler.plugin('invalid', function() {
+  compiler.plugin('invalid', function () {
     clearConsole();
     console.log('Compiling...');
   });
 
-  compiler.plugin('done', function(stats) {
+  compiler.plugin('done', function (stats) {
     clearConsole();
     var hasErrors = stats.hasErrors();
     var hasWarnings = stats.hasWarnings();
@@ -158,7 +158,7 @@ function runDevServer(port) {
     clearConsole();
     console.log(chalk.cyan('Starting the development server...'));
     console.log();
-    openBrowser(port);
+    // openBrowser(port);
   });
 }
 
