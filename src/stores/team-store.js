@@ -2,10 +2,11 @@ import React from 'react';
 import * as superagent from 'superagent';
 import { observable, computed, action } from 'mobx';
 import { MenuItem } from 'material-ui';
+import { SERVER_URI } from '../constants/constants';
 
 //const STORAGE_PREFIX = 'tuc-tpl.';
 // const HOST_URL = '//tuc-tpl.herokuapp.com/';
-const HOST_URL = '//tplstats.herokuapp.com/';
+const HOST_URL = SERVER_URI;
 
 class Team {
     @observable teamId;
@@ -611,6 +612,3 @@ export class TeamStore {
     }
 
 }
-
-
-
