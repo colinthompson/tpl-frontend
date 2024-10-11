@@ -9,7 +9,7 @@ class LeagueStore {
     @observable playersList;
 
     constructor() {
-        this.leagueId = 778;
+        this.leagueId = 806;
         this.gamesList = [];
         this.teamsList = [];
         this.playersList = [];
